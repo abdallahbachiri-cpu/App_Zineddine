@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed -i \"s|from '../../../types/adminWallet'|from '../../../types/wallet'|g; s|from \\\\\"../../../types/adminWallet\\\\\"|from \\\\\"../../../types/wallet\\\\\"|g\" pages/Admin/AdminWallet/AdminWallet.tsx pages/Admin/AdminWallet/StoreSelector.tsx pages/Admin/AdminWallet/WalletBalance.tsx pages/Admin/AdminWallet/TransactionsList.tsx)",
+      "Bash(sed -i \"s|from '../types/adminWallet'|from '../types/wallet'|g; s|from \\\\\"../types/adminWallet\\\\\"|from \\\\\"../types/wallet\\\\\"|g\" services/walletService.ts)",
+      "Bash(sed -i 's|import API PLACEHOLDER|import API from '\\\\''../services/httpClient'\\\\''|g; s|import api PLACEHOLDER|import api from '\\\\''../services/httpClient'\\\\''|g' pages/PayoutConfiguration.tsx pages/SellerPayout.tsx pages/StripeRefreshUrl.tsx pages/StripeReturnUrl.tsx)",
+      "Bash(sed -i 's|import API PLACEHOLDER|import API from '\\\\''../../services/httpClient'\\\\''|g; s|import api PLACEHOLDER|import api from '\\\\''../../services/httpClient'\\\\''|g' pages/Profile/Profile.tsx pages/Ratings/AdminRating.tsx pages/Ratings/SellerRating.tsx pages/Statistiques/AdminStatistics.tsx pages/Statistiques/Statistiques.tsx pages/Users/Users.tsx pages/Wallet/Wallet.tsx)",
+      "Bash(sed -i 's|import API PLACEHOLDER|import API from '\\\\''../../../services/httpClient'\\\\''|g' pages/Admin/AdminWallet/AdminWallet.tsx)",
+      "Bash(sed -i 's|import API PLACEHOLDER|import API from '\\\\''../services/httpClient'\\\\''|g' hooks/useNotifications.ts)",
+      "Bash(sed -i \"s|from '../services/AuthService'|from '../services/authService'|g\" contexts/AuthContext.tsx)",
+      "Bash(sed -i 's|from \"../../services/adminFoodStoreService\"|from \"../../services/adminStoreService\"|g' pages/Admin/AdminFoodStoreDetail.tsx pages/Admin/AdminFoodStores.tsx pages/Admin/FoodStoreDishes.tsx)",
+      "Bash(sed -i 's|from \"../../services/disheService\"|from \"../../services/menuService\"|g' pages/Dishes/DishDetail.tsx pages/Dishes/Dishes.tsx)",
+      "Bash(sed -i 's|from \"../../services/statisticService\"|from \"../../services/analyticsService\"|g' pages/Statistiques/AdminStatistics.tsx pages/Statistiques/Statistiques.tsx)",
+      "Bash(sed -i 's|// src/services/disheService.ts|// src/services/menuService.ts|g' services/menuService.ts)",
+      "Bash(sed -i 's/const Dashboard: React\\\\.FC/const HomePage: React.FC/g; s/export default Dashboard/export default HomePage/g' pages/Home/HomePage.tsx)",
+      "Bash(sed -i 's/const Login: React\\\\.FC/const LoginPage: React.FC/g; s/export default Login$/export default LoginPage/g' pages/Login/LoginPage.tsx)",
+      "Bash(sed -i 's/const Orders: React\\\\.FC/const OrdersPage: React.FC/g; s/export default Orders$/export default OrdersPage/g' pages/Orders/OrdersPage.tsx)",
+      "Bash(sed -i 's/const Dishes = \\(\\)/const MenuPage = \\(\\)/g; s/export default Dishes$/export default MenuPage/g' pages/Menu/MenuPage.tsx)",
+      "Bash(sed -i 's/const Wallet: React\\\\.FC/const WalletPage: React.FC/g; s/export default Wallet$/export default WalletPage/g' pages/Wallet/WalletPage.tsx)",
+      "Bash(sed -i 's/export default Login;/export default LoginPage;/' pages/Login/LoginPage.tsx)",
+      "Bash(sed -i 's/export default Orders;/export default OrdersPage;/' pages/Orders/OrdersPage.tsx)",
+      "Bash(sed -i 's/export default Dishes;/export default MenuPage;/' pages/Menu/MenuPage.tsx)",
+      "Bash(sed -i 's/export default Wallet;/export default WalletPage;/' pages/Wallet/WalletPage.tsx)",
+      "Bash(sed -i 's/export default Profile;/export default ProfilePage;/' pages/Profile/ProfilePage.tsx)",
+      "Bash(grep -rn \"types/dishes\\\\|types/adminOrder\\\\|types/adminWallet\" --include=\"*.ts\" --include=\"*.tsx\" .)",
+      "Bash(grep -rn \"services/api'\" --include=\"*.ts\" --include=\"*.tsx\" .)",
+      "Bash(grep -rn \"disheService\\\\|AuthService\\\\|adminFoodStoreService\\\\|statisticService\" --include=\"*.ts\" --include=\"*.tsx\" .)",
+      "Bash(grep -rn \"pages/Dashboard/\\\\|pages/VendorDashboard/\\\\|from.*Dishes/Dishes\" --include=\"*.ts\" --include=\"*.tsx\" .)",
+      "Bash(npx tsc *)",
+      "Bash(xargs sed *)",
+      "Bash(cmd.exe /C \"rename cuisinous-app-main_TEST mobile\")",
+      "Bash(cmd.exe /C \"ren \\\\\"C:\\\\Users\\\\Zineddine\\\\Desktop\\\\CUISININOUS_ADBO\\\\cuisinous-app-main_TEST\\\\\" mobile 2>&1\")",
+      "Bash(python3 *)",
+      "Bash(grep -v \"//.*#\\\\[\")",
+      "Bash(grep -v \"//.*public\")",
+      "Bash(rmdir V2)",
+      "Bash(rmdir Webhook)"
+    ]
+  }
+}
