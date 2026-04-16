@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Tabs, Spin, message, Card, InputNumber, Button } from 'antd';
+import { Row, Col, Tabs, message, Card, InputNumber, Button } from 'antd';
 import WalletBalance from './WalletBalance';
 import TransactionsList from './TransactionsList';
 import { WalletDTO, TransactionDTO } from '../../types/wallet';
 import API from '../../services/httpClient';
 import { useTranslation } from 'react-i18next';
 import { Form } from 'antd';
+import EmptyState from '../../components/EmptyState';
+import { SkeletonCard, SkeletonTableRows } from '../../components/SkeletonLoader';
+
+const WalletEmptyIcon = (
+  <svg viewBox="0 0 64 64" fill="none" className="w-full h-full" stroke="currentColor">
+    <rect x="8" y="20" width="48" height="32" rx="4" strokeWidth="3"/>
+    <path strokeLinecap="round" strokeWidth="3" d="M8 28h48"/>
+    <circle cx="42" cy="40" r="6" strokeWidth="3"/>
+    <path strokeLinecap="round" strokeWidth="2" d="M8 12h40a4 4 0 014 4v4"/>
+  </svg>
+);
 
 const { TabPane } = Tabs;
 
@@ -19,6 +30,7 @@ const WalletPage: React.FC = () => {
     transactions: true,
     cards: true,
   });
+  const [walletError, setWalletError] = useState(false);
   const [form] = Form.useForm();
 
 
@@ -33,16 +45,13 @@ const WalletPage: React.FC = () => {
 
   const fetchWallet = async () => {
     try {
+      setWalletError(false);
       const response = await API.get('/seller/food-store/wallet');
       if (!response) throw new Error(t('wallet.messages.fetchWalletError'));
       const data = await response.data;
       setWallet(data);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        message.error(error.message);
-      } else {
-        message.error(t('wallet.messages.unknownError'));
-      }
+    } catch {
+      setWalletError(true);
     } finally {
       setLoading((prev) => ({ ...prev, wallet: false }));
     }
@@ -90,10 +99,22 @@ const WalletPage: React.FC = () => {
 
   if (loading.wallet && !wallet) {
     return (
-      <Spin
-        size="large"
-        style={{ display: 'flex', justifyContent: 'center', marginTop: '20%' }}
-        tip={t('wallet.loading')}
+      <div style={{ padding: '24px' }}>
+        <SkeletonCard height={120} />
+        <div style={{ marginTop: 16 }}>
+          <SkeletonTableRows rows={5} />
+        </div>
+      </div>
+    );
+  }
+
+  if (walletError && !wallet) {
+    return (
+      <EmptyState
+        icon={WalletEmptyIcon}
+        title="Portefeuille indisponible"
+        description="Impossible de charger les données du portefeuille. Le serveur ne répond pas."
+        onRetry={() => { setWalletError(false); fetchWallet(); fetchTransactions(); }}
       />
     );
   }

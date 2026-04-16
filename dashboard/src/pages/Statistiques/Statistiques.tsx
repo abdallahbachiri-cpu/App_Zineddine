@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { 
-  Card, 
-  Row, 
-  Col, 
-  Table, 
-  Spin,
+import {
+  Card,
+  Row,
+  Col,
+  Table,
   Statistic,
   Typography,
   Tag,
@@ -13,6 +12,17 @@ import {
   Space,
   Button
 } from "antd";
+import EmptyState from "../../components/EmptyState";
+import { SkeletonStatCard, SkeletonCard } from "../../components/SkeletonLoader";
+
+const StatsEmptyIcon = (
+  <svg viewBox="0 0 64 64" fill="none" className="w-full h-full" stroke="currentColor">
+    <rect x="8" y="32" width="12" height="24" rx="2" strokeWidth="3"/>
+    <rect x="26" y="20" width="12" height="36" rx="2" strokeWidth="3"/>
+    <rect x="44" y="12" width="12" height="44" rx="2" strokeWidth="3"/>
+    <path strokeLinecap="round" strokeWidth="2.5" d="M8 8l12 8 16-12 12 8"/>
+  </svg>
+);
 import {
   LineChart,
   Line,
@@ -65,6 +75,7 @@ type OrderStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 const SellerStatistics = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
   const [revenueLoading, setRevenueLoading] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
@@ -182,6 +193,7 @@ const fetchRevenueData = async () => {
         }));
       } catch (error) {
         console.error("Failed to fetch stats:", error);
+        setFetchError(true);
       } finally {
         setLoading(false);
       }
@@ -266,9 +278,23 @@ const fetchRevenueData = async () => {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
-        <Spin size="large" tip={t('sellerStats.loading')} />
+      <div style={{ padding: 24 }}>
+        <SkeletonStatCard />
+        <div style={{ marginTop: 16 }}>
+          <SkeletonCard height={260} />
+        </div>
       </div>
+    );
+  }
+
+  if (fetchError) {
+    return (
+      <EmptyState
+        icon={StatsEmptyIcon}
+        title="Statistiques indisponibles"
+        description="Impossible de charger les statistiques. Le serveur ne répond pas."
+        onRetry={() => { setFetchError(false); setLoading(true); }}
+      />
     );
   }
 

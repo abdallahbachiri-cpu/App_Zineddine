@@ -1,5 +1,16 @@
 import { useEffect, useState, useRef } from "react";
 import { Dish } from "../../types/menu";
+import EmptyState from "../../components/EmptyState";
+import { SkeletonTableRows } from "../../components/SkeletonLoader";
+
+const MenuEmptyIcon = (
+  <svg viewBox="0 0 64 64" fill="none" className="w-full h-full" stroke="currentColor">
+    <circle cx="32" cy="32" r="22" strokeWidth="3"/>
+    <path strokeLinecap="round" strokeWidth="3" d="M20 32c0-6.627 5.373-12 12-12"/>
+    <path strokeLinecap="round" strokeWidth="3" d="M44 32c0 6.627-5.373 12-12 12"/>
+    <path strokeLinecap="round" strokeWidth="2" d="M16 40c2-2 4-3 6-3M48 24c-2 2-4 3-6 3"/>
+  </svg>
+);
 import {
   getDishes,
   createDish,
@@ -45,6 +56,7 @@ const { confirm } = Modal;
 const MenuPage = () => {
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [dishToEdit, setDishToEdit] = useState<Dish | null>(null);
@@ -56,10 +68,12 @@ const MenuPage = () => {
 
   const fetchDishes = async () => {
     try {
+      setLoading(true);
+      setFetchError(false);
       const data = await getDishes();
       setDishes(data);
-    } catch (err: any) {
-      message.error(t("dishes.messages.fetchError"));
+    } catch {
+      setFetchError(true);
     } finally {
       setLoading(false);
     }
@@ -247,9 +261,21 @@ const MenuPage = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <Spin size="large" />
+      <div className="container mx-auto px-4 py-8">
+        <div style={{ height: 32, width: 160, background: '#f0f0f0', borderRadius: 6, marginBottom: 20 }} />
+        <SkeletonTableRows rows={8} />
       </div>
+    );
+  }
+
+  if (fetchError) {
+    return (
+      <EmptyState
+        icon={MenuEmptyIcon}
+        title="Menu indisponible"
+        description="Impossible de charger les plats. Le serveur ne répond pas."
+        onRetry={fetchDishes}
+      />
     );
   }
 

@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { useState, useEffect } from "react";
+import OfflineBanner from "./components/OfflineBanner";
 
 import LoginPage from "./pages/Login/LoginPage";
 import NotFoundPage from "./pages/NotFound/NotFoundPage";
@@ -200,10 +202,29 @@ function App() {
     },
   ];
 
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleServerError = (e: Event) => {
+      const status = (e as CustomEvent).detail?.status ?? 500;
+      setServerError(`Erreur serveur (${status}) — Veuillez réessayer.`);
+      setTimeout(() => setServerError(null), 4000);
+    };
+    window.addEventListener('api:server-error', handleServerError);
+    return () => window.removeEventListener('api:server-error', handleServerError);
+  }, []);
+
   return (
     <>
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <Router>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <OfflineBanner />
+          {/* Server-error toast */}
+          {serverError && (
+            <div className="fixed bottom-4 right-4 z-50 bg-red-600 text-white text-sm font-medium px-4 py-3 rounded-lg shadow-lg max-w-xs">
+              {serverError}
+            </div>
+          )}
           <Routes>
             {/* Routes available regardless of auth status */}
             <Route path="/reset-password" element={<ResetPassword />} />

@@ -10,11 +10,23 @@ import {
 import { Order } from "../../types/order";
 import { useTranslation } from "react-i18next";
 import { useNotificationContext } from "../../contexts/NotificationContext";
+import EmptyState from "../../components/EmptyState";
+import { SkeletonTableRows } from "../../components/SkeletonLoader";
+
+const OrdersEmptyIcon = (
+  <svg viewBox="0 0 64 64" fill="none" className="w-full h-full" stroke="currentColor">
+    <rect x="14" y="8" width="36" height="48" rx="4" strokeWidth="3"/>
+    <path strokeLinecap="round" strokeWidth="3" d="M22 20h20M22 30h20M22 40h12"/>
+    <circle cx="46" cy="46" r="10" strokeWidth="3" fill="white"/>
+    <path strokeLinecap="round" strokeWidth="3" d="M43 46h6M46 43v6"/>
+  </svg>
+);
 
 const OrdersPage: React.FC = () => {
   const { t } = useTranslation();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [fetchError, setFetchError] = useState<boolean>(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [newOrderId, setNewOrderId] = useState<string | null>(null);
@@ -57,16 +69,14 @@ const OrdersPage: React.FC = () => {
   const loadOrders = async () => {
     try {
       setLoading(true);
+      setFetchError(false);
       const response = await fetchOrders();
-      
-      // Ensure we have the data array and it's not undefined
       const ordersData = Array.isArray(response.data) ? response.data : [];
-
       setOrders(ordersData);
     } catch (error) {
       console.error("Error fetching orders:", error);
-      message.error(t("orders.messages.fetchError"));
-      setOrders([]); // Set to empty array on error
+      setFetchError(true);
+      setOrders([]);
     } finally {
       setLoading(false);
     }
@@ -179,6 +189,26 @@ const OrdersPage: React.FC = () => {
       ),
     },
   ];
+
+  if (loading) {
+    return (
+      <div style={{ padding: "20px" }}>
+        <div style={{ height: 32, width: 180, background: "#f0f0f0", borderRadius: 6, marginBottom: 16 }} />
+        <SkeletonTableRows rows={8} />
+      </div>
+    );
+  }
+
+  if (fetchError) {
+    return (
+      <EmptyState
+        icon={OrdersEmptyIcon}
+        title="Aucune commande disponible"
+        description="Impossible de charger les commandes. Le serveur ne répond pas."
+        onRetry={loadOrders}
+      />
+    );
+  }
 
   return (
     <div style={{ padding: "20px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>

@@ -11,6 +11,7 @@ import profileIcon from '../../assets/profile.svg';
 import { useSettings } from '../../contexts/SettingsContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNotificationContext } from '../../contexts/NotificationContext';
+import { useBackendStatus } from '../../hooks/useBackendStatus';
 import { API_BASE_URL } from "../../config/apiConfig";
 import { useTranslation } from 'react-i18next';
 
@@ -22,6 +23,8 @@ function TopBar({ toggleMobile }: TopBarProps) {
     const { user } = useAuth();
     const { toggleSettings } = useSettings();
     const { isConnected } = useNotificationContext();
+    const { isOnline, isBackendReachable } = useBackendStatus();
+    const backendUp = isOnline && isBackendReachable;
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const { t } = useTranslation();
@@ -49,10 +52,15 @@ function TopBar({ toggleMobile }: TopBarProps) {
                 <Bars3Icon className="h-6 w-6" />
             </button>
             <div className="flex items-center md:m-auto md:mr-1 space-x-2">
-                {/* Live indicator */}
-                {isConnected && (
-                    <span className="hidden sm:flex items-center gap-1 text-xs text-green-600 font-medium">
-                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                {/* Backend status indicator */}
+                <span className={`hidden sm:flex items-center gap-1 text-xs font-medium ${backendUp ? 'text-green-600' : 'text-red-500'}`}>
+                    <span className={`w-2 h-2 rounded-full ${backendUp ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
+                    {backendUp ? 'Backend: En ligne' : 'Backend: Hors ligne'}
+                </span>
+                {/* Live Mercure indicator */}
+                {isConnected && backendUp && (
+                    <span className="hidden sm:flex items-center gap-1 text-xs text-blue-500 font-medium">
+                        <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
                         Live
                     </span>
                 )}

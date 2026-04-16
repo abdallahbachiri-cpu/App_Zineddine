@@ -73,10 +73,29 @@ class ApiClient {
 
     // Response interceptor
     this.instance.interceptors.response.use(
-      (response: AxiosResponse) => response,
+      (response: AxiosResponse) => {
+        // Signal that the backend is reachable
+        window.dispatchEvent(new CustomEvent('api:online'));
+        return response;
+      },
       async (error: AxiosError) => {
         const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
-        
+
+        // Network error (backend unreachable, no response at all)
+        if (!error.response) {
+          window.dispatchEvent(new CustomEvent('api:network-error'));
+          return Promise.reject(error);
+        }
+
+        // 5xx server errors → toast notification
+        if (error.response.status >= 500) {
+          window.dispatchEvent(
+            new CustomEvent('api:server-error', {
+              detail: { status: error.response.status },
+            })
+          );
+        }
+
         if (error.response?.status === 401 && !originalRequest._retry) {
           if (this.isRefreshing) {
             return new Promise<string>((resolve, reject) => {
@@ -95,7 +114,7 @@ class ApiClient {
           try {
             const refreshToken = this.getRefreshToken();
             if (!refreshToken) throw new Error('No refresh token available');
-            
+
             const response = await axios.post<TokenResponse>(`${API_BASE_URL}/auth/token/refresh`, {
               refreshToken,
             });
@@ -111,7 +130,7 @@ class ApiClient {
           } catch (refreshError) {
             this.processQueue(refreshError as AxiosError);
             this.clearTokens();
-            window.location.href = '/';
+            window.location.href = '/login';
             return Promise.reject(refreshError);
           } finally {
             this.isRefreshing = false;
