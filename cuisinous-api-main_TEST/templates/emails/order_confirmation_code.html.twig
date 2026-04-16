@@ -1,0 +1,47 @@
+{% set _locale = locale|default('en') %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ 'order_confirmation.subject'|trans({'%order_number%': order.orderNumber}, 'messages', _locale) }}</title>
+    <style>
+        .button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .code {
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <p>{{ 'email.hello_name'|trans({'%name%': user.firstName}, 'messages', _locale) }},</p>
+    
+    <p>{{ 'order_confirmation.intro'|trans({
+        '%order_number%': order.orderNumber,
+        '%store_name%': order.store.name
+    }, 'messages', _locale) }}</p>
+    
+    <div class="code">
+        {{ 'order_confirmation.code'|trans({}, 'messages', _locale) }}: 
+        <strong>{{ order.confirmationCode }}</strong>
+    </div>
+    
+    <p>{{ 'order_confirmation.instructions'|trans({}, 'messages', _locale) }}</p>
+    
+    <p><em>{{ 'order_confirmation.ignore_if_received'|trans({}, 'messages', _locale) }}</em></p>
+
+</body>
+</html>

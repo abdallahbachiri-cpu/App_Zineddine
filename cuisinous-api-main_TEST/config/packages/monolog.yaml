@@ -1,0 +1,141 @@
+monolog:
+    channels:
+        - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
+        - wallet
+
+when@dev:
+    monolog:
+        handlers:
+            # --- wallet channel ---
+            wallet:
+                type: group
+                members: [wallet_file, wallet_stream]
+                channels: [wallet]
+            wallet_file:
+                type: rotating_file
+                path: "%kernel.logs_dir%/wallet.log"
+                level: debug
+                max_files: 30
+            wallet_stream:
+                type: stream
+                path: php://stdout
+                level: debug
+
+            # --- main (everything except events) ---
+            main:
+                type: group
+                members: [main_file, main_stream]
+                channels: ["!event", "!wallet", "!doctrine"]
+            main_file:
+                type: rotating_file
+                path: "%kernel.logs_dir%/dev.log"
+                level: debug
+                max_files: 30
+            main_stream:
+                type: stream
+                path: php://stdout
+                level: debug
+
+            # --- errors/critical immediately to stderr ---
+            errors:
+                type: stream
+                path: php://stderr
+                level: error
+                channels: ["!event", "!wallet", "!doctrine"]
+
+            console:
+                type: console
+                process_psr_3_messages: false
+                channels: ["!event", "!doctrine", "!console"]
+
+when@test:
+    monolog:
+        handlers:
+            main:
+                type: fingers_crossed
+                action_level: error
+                handler: nested
+                excluded_http_codes: [404, 405]
+                channels: ["!event", "!doctrine"]
+            nested:
+                type: group
+                members: [nested_file, nested_stream]
+            nested_file:
+                type: rotating_file
+                path: "%kernel.logs_dir%/test.log"
+                level: debug
+                max_files: 30
+            nested_stream:
+                type: stream
+                path: php://stderr
+                level: debug
+
+when@prod:
+    monolog:
+        handlers:
+            # --- wallet channel ---
+            wallet:
+                type: group
+                members: [wallet_file, wallet_stream]
+                channels: [wallet]
+            wallet_file:
+                type: rotating_file
+                path: "%kernel.logs_dir%/wallet.log"
+                level: debug
+                max_files: 30
+            wallet_stream:
+                type: stream
+                path: php://stderr
+                level: debug
+                formatter: monolog.formatter.json
+
+            # --- errors/critical immediately to stderr (bypass fingers_crossed) ---
+            errors:
+                type: stream
+                path: php://stderr
+                level: error
+                formatter: monolog.formatter.json
+                channels: ["!event", "!wallet", "!doctrine"]
+
+            # --- main with full debug context on error ---
+            main:
+                type: fingers_crossed
+                action_level: error
+                handler: main_group
+                excluded_http_codes: [404, 405]
+                buffer_size: 50
+                channels: ["!event", "!wallet", "!doctrine"]
+            main_group:
+                type: group
+                members: [main_file, main_stream]
+            main_file:
+                type: rotating_file
+                path: "%kernel.logs_dir%/prod.log"
+                level: debug
+                max_files: 30
+            main_stream:
+                type: stream
+                path: php://stderr
+                level: debug
+                formatter: monolog.formatter.json
+
+            console:
+                type: console
+                process_psr_3_messages: false
+                channels: ["!event", "!doctrine"]
+
+            # --- deprecations ---
+            deprecation:
+                type: group
+                members: [deprecation_file, deprecation_stream]
+                channels: [deprecation]
+            deprecation_file:
+                type: rotating_file
+                path: "%kernel.logs_dir%/deprecation.log"
+                level: debug
+                max_files: 30
+            deprecation_stream:
+                type: stream
+                path: php://stderr
+                level: debug
+                formatter: monolog.formatter.json

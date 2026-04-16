@@ -1,0 +1,23 @@
+.status-success {
+    background-color: #00B69B;
+    color: white;
+  }
+
+  .common-class {
+    border: solid;
+  }
+
+  .status-accepted {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .status-pending {
+    color: orange;
+    font-weight: bold;
+  }
+  
+  .status-rejected {
+    color: red;
+    font-weight: bold;
+  }

@@ -1,0 +1,78 @@
+security:
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"
+        App\Entity\User: "auto"
+    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+    providers:
+        users_in_memory: { memory: null }
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email # the unique identifier
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        # login:
+        #     pattern:  ^/auth/login
+        #     stateless: true
+        #     provider: app_user_provider
+        #     json_login:
+        #         check_path: /auth/login_check
+        #         success_handler: lexik_jwt_authentication.handler.authentication_success
+        #         failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern: ^/api
+            stateless: true
+            provider: app_user_provider
+            jwt: ~
+
+        main:
+            lazy: true
+            provider: users_in_memory
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#the-firewall
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/api/webhook/stripe, roles: PUBLIC_ACCESS }
+        - { path: ^/api/user/password-reset, roles: PUBLIC_ACCESS }
+        - { path: ^/api/user/email-confirmation, roles: PUBLIC_ACCESS }
+        - { path: ^/api/media, roles: PUBLIC_ACCESS }
+        # - { path: ^/api/v2/auth, roles: PUBLIC_ACCESS }
+        - { path: ^/api/(v[0-9]+/)?auth, roles: PUBLIC_ACCESS }
+        - { path: ^/api/doc, roles: PUBLIC_ACCESS }
+        - { path: ^/api/stripe, roles: PUBLIC_ACCESS }
+        # - { path: ^/api/dev, roles: PUBLIC_ACCESS }
+        - { path: ^/api/admin, roles: ROLE_ADMIN } # Restricted to admins
+        - { path: ^/api/seller, roles: ROLE_SELLER } # Restricted to sellers
+        - { path: ^/api/buyer, roles: ROLE_BUYER } # Restricted to buyers
+        - { path: ^/api/user, roles: IS_AUTHENTICATED_FULLY } # Restricted to buyers
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY } # General API access
+        # - { path: ^/api/users, roles: ROLE_ }  # General API access
+
+    # role_hierarchy:
+    #     ROLE_BUYER:       ROLE_USER
+    #     ROLE_SELLER:      ROLE_USER
+    #     ROLE_ADMIN:       ROLE_USER
+    #     ROLE_SUPER_ADMIN: [ROLE_ADMIN]
+
+when@test:
+    security:
+        password_hashers:
+            # By default, password hashers are resource intensive and take time. This is
+            # important to generate secure password hashes. In tests however, secure hashes
+            # are not important, waste resources and increase test times. The following
+            # reduces the work factor to the lowest possible values.
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon

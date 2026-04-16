@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "963257456085",
+    "project_id": "cuisinous-f3c9a",
+    "storage_bucket": "cuisinous-f3c9a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963257456085:android:4147bb866c2b847760595c",
+        "android_client_info": {
+          "package_name": "ca.cuisinous"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwI9zZndqvjubI1OtkfNVDtBb6UdOKmRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

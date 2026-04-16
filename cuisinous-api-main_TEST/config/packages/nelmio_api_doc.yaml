@@ -1,0 +1,33 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Cuisinous
+            description: Cuisinous API documentation
+            version: 1.0.0
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+            schemas: {}
+        security:
+            - Bearer: []
+        paths:
+            /api/auth/login:
+                post:
+                    security: []
+            /api/auth/register:
+                post:
+                    security: []
+            /api/auth/google/callback:
+                get:
+                    security: []
+
+            /api/auth/token/refresh:
+                post:
+                    security: []
+    areas:
+        default:
+            path_patterns:
+                - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

@@ -1,0 +1,11 @@
+org.gradle.jvmargs=-Xmx8G -XX:MaxMetaspaceSize=4G -XX:ReservedCodeCacheSize=512m -XX:+HeapDumpOnOutOfMemoryError
+android.useAndroidX=true
+android.enableJetifier=true
+android.enableR8.fullMode=false
+
+# Environment Variables for Android Build
+# Copy this file to gradle.properties and uncomment/add your actual keys
+# STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key_here
+# GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+# GOOGLE_SIGN_IN_CLIENT_ID=your_google_sign_in_client_id_here
+

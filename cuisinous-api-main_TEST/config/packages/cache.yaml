@@ -1,0 +1,14 @@
+framework:
+    cache:
+        # Unique name of your app: used to compute stable namespaces for cache keys.
+        prefix_seed: 'cuisinous'
+
+        # The "app" cache stores to the filesystem by default.
+        # The data in this cache should persist between deploys.
+        app: cache.adapter.filesystem
+        
+        # Dedicated pool for rate limiting
+        pools:
+            cache.rate_limiter:
+                adapter: cache.adapter.filesystem
+

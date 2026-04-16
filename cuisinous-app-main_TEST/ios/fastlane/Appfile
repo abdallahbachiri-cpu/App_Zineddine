@@ -1,0 +1,5 @@
+app_identifier("com.yourcompany.cuisinous") # The bundle identifier of your app
+apple_id("apple_id@yourcompany.com") # Your Apple Developer Portal username
+
+itc_team_id("123456789") # App Store Connect Team ID
+team_id("ABCDEFGHIJ") # Developer Portal Team ID

@@ -1,0 +1,13 @@
+{% set _locale = locale|default('en') %}
+
+{{ 'email.hello_name'|trans({'%name%': user.firstName}, 'messages', _locale) }},
+
+{{ 'email_confirmation.token_message'|trans({}, 'messages', _locale) }}
+
+{{ emailConfirmationToken }}
+
+{{ 'email_confirmation.token_expiry'|trans({}, 'messages', _locale) }}
+
+{{ 'email_confirmation.token_warning'|trans({}, 'messages', _locale) }}
+
+{{ 'email.salutation'|trans({}, 'messages', _locale) }}

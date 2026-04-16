@@ -1,0 +1,28 @@
+# Ignore everything by default
+*
+
+# Allow Symfony application files
+!bin/
+!config/
+!public/
+!src/
+!templates/
+!translations/
+!migrations/
+!composer.json
+!composer.lock
+!symfony.lock
+!docker/
+!.env
+
+# Exclude unwanted files/folders
+.dockerignore
+docker-compose.yml
+docker-compose.override.yml
+.git/
+.gitignore
+.idea/
+var/cache/
+var/log/
+node_modules/
+.env.local

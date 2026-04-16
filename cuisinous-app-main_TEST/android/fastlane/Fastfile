@@ -1,0 +1,60 @@
+default_platform(:android)
+
+platform :android do
+  desc "Copy generated golden tests to Fastlane metadata directories"
+  lane :prepare_screenshots do
+    require 'fileutils'
+    
+    # Fastlane executes in either android/ or android/fastlane/. 
+    # Determine the absolute project root by anchoring from this Fastfile.
+    fastlane_dir = File.dirname(__FILE__)
+    android_dir = File.expand_path("..", fastlane_dir)
+    project_root = File.expand_path("..", android_dir)
+    
+    phone_dir = File.join(fastlane_dir, "metadata", "android", "en-US", "images", "phoneScreenshots")
+    tablet_dir = File.join(fastlane_dir, "metadata", "android", "en-US", "images", "sevenInchScreenshots")
+    
+    FileUtils.mkdir_p(phone_dir)
+    FileUtils.mkdir_p(tablet_dir)
+    
+    goldens_dir = File.join(project_root, "test", "goldens", "goldens")
+    
+    # 1. Copy phone screenshots (e.g. iPhone 11 rendering)
+    phone_images = Dir.glob(File.join(goldens_dir, "*_iphone11.png"))
+    phone_images.each do |img|
+      FileUtils.cp(img, phone_dir)
+    end
+    
+    # 2. Copy tablet screenshots (e.g. tabletPortrait) to 7-inch
+    tablet_images = Dir.glob(File.join(goldens_dir, "*_tabletPortrait.png"))
+    tablet_images.each do |img|
+      FileUtils.cp(img, tablet_dir)
+    end
+    
+    # Output the results so we know how many were copied
+    UI.success("Copied #{phone_images.length} phone screenshots and #{tablet_images.length} tablet screenshots to metadata directories.")
+  end
+
+  desc "Upload screenshots and metadata to the Google Play Store"
+  lane :upload_store_screenshots do
+    # Ensure they are copied first
+    prepare_screenshots
+    
+    # Supply is the action that interacts with the Play Store
+    supply(
+      track: "internal", # 'production', 'beta', 'alpha', 'internal'
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
+      skip_upload_images: false,
+      skip_upload_screenshots: false
+    )
+  end
+  
+  desc "Full Deployment (Build AAB, upload everything)"
+  lane :deploy do
+    prepare_screenshots
+    gradle(task: "bundle", release: true)
+    supply(track: "production")
+  end
+end

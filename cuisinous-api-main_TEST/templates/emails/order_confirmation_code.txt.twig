@@ -1,0 +1,14 @@
+{% set _locale = locale|default('en') %}
+
+{{ 'email.hello_name'|trans({'%name%': user.firstName}, 'messages', _locale) }},
+
+{{ 'order_confirmation.intro'|trans({
+    '%order_number%': order.orderNumber,
+    '%store_name%': order.store.name
+}, 'messages', _locale) }}
+
+{{ 'order_confirmation.code'|trans({}, 'messages', _locale) }}: {{ order.confirmationCode }}
+
+{{ 'order_confirmation.instructions'|trans({}, 'messages', _locale) }}
+
+{{ 'order_confirmation.ignore_if_received'|trans({}, 'messages', _locale) }}

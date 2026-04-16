@@ -1,0 +1,5 @@
+{
+    "status": "ERROR",
+    "message": "cURL error 60: SSL certificate OpenSSL verify result: unable to get local issuer certificate (20) (see https:\/\/curl.haxx.se\/libcurl\/c\/libcurl-errors.html) for https:\/\/oauth2.googleapis.com\/token",
+    "token_preview": "eyC16SxvS3yKl5Ca4E0dXt:APA91bEZMEZ_WmYgV"
+}

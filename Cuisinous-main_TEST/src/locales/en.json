@@ -1,0 +1,1431 @@
+{
+  "adminWallet": {
+    "title": "Food Store Wallet Management",
+    "fetchStoresError": "Failed to fetch food stores",
+    "fetchWalletError": "Failed to fetch wallet",
+    "fetchTransactionsError": "Failed to fetch transactions",
+    "storeName": "Store Name",
+    "actions": "Actions",
+    "select": "Select",
+    "selected": "Selected",
+    "searchStorePlaceholder": "Search food stores...",
+    "noStoresFound": "No stores found",
+    "selectedStore": "Selected Store",
+    "overviewTab": "Wallet Overview",
+    "transactionsTab": "Transactions",
+    "filterDate": "Filter by Date",
+    "refresh": "Refresh",
+    "selectStorePrompt": "Please select a food store to view wallet information",
+    "blockWallet": "Block Wallet",
+    "unblockWallet": "Unblock Wallet",
+    "blockWalletConfirm": "Are you sure you want to block this wallet? This will prevent all transactions.",
+    "unblockWalletConfirm": "Are you sure you want to unblock this wallet? This will allow transactions to resume.",
+    "blockWalletSuccess": "Wallet blocked successfully",
+    "unblockWalletSuccess": "Wallet unblocked successfully",
+    "blockWalletError": "Failed to block wallet",
+    "unblockWalletError": "Failed to unblock wallet",
+    "walletStatus": "Wallet Status",
+    "blocked": "Blocked",
+    "active": "Active",
+    "errors": {
+      "noWalletData": "Failed to fetch wallet data"
+    }
+  },
+  "categories": {
+    "fetchError": "Failed to fetch categories",
+    "typesFetchError": "Failed to fetch category types",
+    "updateSuccess": "Category updated successfully",
+    "createSuccess": "Category created successfully",
+    "submitError": "Failed to submit category",
+    "deleteTitle": "Delete Category",
+    "deleteContent": "Are you sure you want to delete this category?",
+    "delete": "Delete",
+    "deleteSuccess": "Category deleted successfully",
+    "deleteError": "Failed to delete category",
+    "edit": "Edit",
+    "newCategory": "New Category",
+    "noCategories": "No categories found",
+    "searchPlaceholder": "Search categories",
+    "typeFilterPlaceholder": "Filter by type",
+    "editTitle": "Edit Category",
+    "createTitle": "Create Category",
+    "columns": {
+      "nameEn": "English Name",
+      "nameFr": "French Name",
+      "type": "Type",
+      "actions": "Actions"
+    },
+    "form": {
+      "nameEn": "English Name",
+      "nameFr": "French Name",
+      "type": "Type",
+      "nameEnRequired": "Please input English name!",
+      "nameFrRequired": "Please input French name!",
+      "typeRequired": "Please select type!"
+    }
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "unknownError": "An unknown error occurred",
+    "close": "Close",
+    "view": "View",
+    "edit": "Edit",
+    "back": "Back",
+    "delete": "Delete",
+    "actions": "Actions"
+  },
+  "adminOrders": {
+    "title": "Admin Orders Dashboard",
+    "fetchError": "Failed to fetch orders",
+    "detailsError": "Failed to fetch order details",
+    "noOrders": "No orders found",
+    "orderDetails": "Order Details",
+    "viewDetails": "View Details",
+    "orderInfo": "Order Information",
+    "customerInfo": "Customer Information",
+    "storeInfo": "Store Information",
+    "statusInfo": "Status Information",
+    "timestamps": "Timestamps",
+    "status": {
+      "pending": "Pending",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "paid": "Paid",
+      "confirmed": "Confirmed"
+    },
+    "columns": {
+      "orderNumber": "Order Number",
+      "customer": "Customer",
+      "store": "Store",
+      "totalPrice": "Total Price",
+      "status": "Status",
+      "date": "Date",
+      "actions": "Actions"
+    },
+    "orderNumber": "Order Number",
+    "confirmationCode": "Confirmation Code",
+    "totalPrice": "Total Price",
+    "customerName": "Customer Name",
+    "customerId": "Customer ID",
+    "storeName": "Store Name",
+    "storeId": "Store ID",
+    "orderStatus": "Order Status",
+    "paymentStatus": "Payment Status",
+    "deliveryStatus": "Delivery Status",
+    "createdAt": "Created At",
+    "lastUpdated": "Last Updated",
+    "cancel": "Cancel",
+    "cancelOrder": "Cancel Order",
+    "cancelOrderConfirm": "Are you sure you want to cancel this order? This will initiate a refund if payment was made.",
+    "cancelOrderSuccess": "Order cancelled successfully",
+    "cancelOrderError": "Failed to cancel order",
+    "cannotCancelCompleted": "Cannot cancel completed orders",
+    "cannotCancelInTransit": "Cannot cancel orders in transit",
+    "cannotCancelDelivered": "Cannot cancel delivered orders"
+  },
+  "ratings": {
+    "title": "Ratings Dashboard",
+    "foodStoreTab": "Food Store Ratings",
+    "dishTab": "Dish Ratings",
+    "storeName": "Store Name",
+    "dishName": "Dish Name",
+    "searchStorePlaceholder": "Search food stores...",
+    "searchDishPlaceholder": "Search dishes...",
+    "viewingStore": "Viewing ratings for store",
+    "viewingDish": "Viewing ratings for dish",
+    "select": "Select",
+    "selected": "Selected",
+    "action": "Action",
+    "buyer": "Buyer",
+    "rating": "Rating",
+    "comment": "Comment",
+    "orderId": "Order ID",
+    "date": "Date",
+    "dish": "Dish",
+    "minRating": "Min Rating",
+    "maxRating": "Max Rating",
+    "sortBy": "Sort By",
+    "sortByDate": "Date",
+    "sortByRating": "Rating",
+    "totalRatings": "Total {{total}} ratings",
+    "fetchRatingsError": "Failed to load ratings",
+    "fetchStoresError": "Failed to load food stores",
+    "fetchDishesError": "Failed to load dishes"
+  },
+  "payoutConfig": {
+    "title": "Payout Configuration",
+    "commissionRate": "Commission Rate",
+    "minimumPayout": "Minimum Payout",
+    "maximumPayout": "Maximum Payout",
+    "dailyLimit": "Daily Limit",
+    "payoutCooldownHours": "Payout Cooldown (hours)",
+    "maxDailyPayoutCount": "Max Daily Payout Count",
+    "commissionRateRequired": "Please enter a commission rate",
+    "commissionRateRange": "Commission rate must be between 0 and 1",
+    "minimumPayoutRequired": "Please enter a minimum payout amount",
+    "maximumPayoutRequired": "Please enter a maximum payout amount",
+    "dailyLimitRequired": "Please enter a daily limit",
+    "payoutCooldownRequired": "Please enter cooldown minutes",
+    "maxDailyPayoutCountRequired": "Please enter max daily payout count",
+    "positiveNumber": "Must be a positive number",
+    "payoutCooldownRange": "Must be between 1 and 1440 minutes (24h)",
+    "maxDailyPayoutCountRange": "Must be between 1 and 10",
+    "saveButton": "Save Configuration",
+    "fetchError": "Failed to load payout configuration",
+    "updateError": "Failed to update payout configuration",
+    "updateSuccess": "Payout configuration updated successfully"
+  },
+  "admin": {
+    "orderId": "Order ID",
+    "buyer": "Buyer",
+    "store": "Store",
+    "amount": "Amount",
+    "dish": "Dish",
+    "price": "Price",
+    "rating": "Rating",
+    "noRatings": "No ratings",
+    "totalUsers": "Total Users",
+    "activeUsers": "Active Users",
+    "foodStores": "Food Stores",
+    "verifiedStores": "Verified Stores",
+    "totalOrders": "Total Orders",
+    "completedOrders": "Completed Orders",
+    "totalRevenue": "Total Revenue",
+    "recentOrders": "Recent Orders",
+    "popularDishes": "Popular Dishes",
+    "userGrowth": "User Growth",
+    "userGrowthChartPlaceholder": "User growth chart would be displayed here",
+    "dataPoints": "Data points: {{count}}",
+    "loading": "Loading admin statistics...",
+    "byOrders": "By Orders",
+    "orders": "Orders",
+    "status": {
+      "title": "Status",
+      "pending": "Pending",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "confirmed": "Confirmed"
+    },
+    "statistics": {
+      "title": "Admin Statistics"
+    }
+  },
+  "stripe": {
+    "title": "Stripe Account",
+    "setup_account": "Set Up Stripe Account",
+    "no_account_description": "You need to set up a Stripe account to receive payments.",
+    "setup_button": "Set Up Account",
+    "complete_onboarding": "Complete Onboarding",
+    "onboarding_incomplete": "Your Stripe account setup is not yet complete.",
+    "complete_onboarding_button": "Complete Setup",
+    "account_pending": "Account Verification Needed",
+    "payouts_not_enabled": "Your account is not yet ready to receive payouts. Please complete verification process.",
+    "update_account_button": "Update Account Information",
+    "account_active": "Stripe Account",
+    "account_ready": "Your account is ready!",
+    "can_receive_payments": "You can now receive payments and payouts.",
+    "request_payout": "Request Payout",
+    "payoutRequestSuccess": "Payout request submitted successfully!",
+    "amount": "Amount",
+    "amount_required": "Please enter payout amount",
+    "amount_min": "Amount must be at least $1",
+    "request_payout_button": "Request Payout",
+    "account_created": "Stripe account created successfully!",
+    "payout_successful": "Payout requested successfully!",
+    "failed_to_load_status": "Failed to load Stripe status",
+    "failed_to_create_account": "Failed to create Stripe account",
+    "failed_to_get_onboarding_link": "Failed to get onboarding link",
+    "payout_failed": "Payout request failed",
+    "returnUrl": {
+      "verifying_status": "Verifying status...",
+      "failed_to_verify_status": "Failed to verify status.",
+      "failed_to_generate_link": "Failed to generate fresh link.",
+      "onboarding_complete": "Onboarding Complete!",
+      "back_to_dashboard": "Back to Dashboard",
+      "onboarding_not_finished": "Onboarding Not Finished",
+      "onboarding_not_finished_description": "You haven't completed all steps. Please click below to finish.",
+      "complete_setup": "Complete Setup",
+      "cancel": "Cancel"
+    },
+    "refreshUrl": {
+      "session_expired": "Your session expired. Please try again from dashboard.",
+      "redirecting_message": "Session expired or invalid. Redirecting you back to Stripe...",
+      "error": "Error",
+      "return_to_payout_settings": "Return to Payout Settings"
+    }
+  },
+  "storeVerification": {
+    "title": "Store Verification",
+    "status": {
+      "pending": "Your verification request is pending review",
+      "approved": "Your store has been verified!",
+      "rejected": "Your verification request was rejected. Please submit a new request with updated documents.",
+      "default": "Your store is not yet verified",
+      "approvedMessage": "You can now operate your store"
+    },
+    "adminFeedback": "Admin Feedback",
+    "submittedDocuments": "Submitted Documents:",
+    "upload": {
+      "title": "Please upload documents for verification (business license, health certificate, etc.)",
+      "formats": "Accepted formats: PDF, JPEG, PNG (Max 15 files, 10MB each)",
+      "selectFiles": "Select Files",
+      "filesSelected": "{count} file(s) selected (Max 15)"
+    },
+    "buttons": {
+      "submit": "Submit Verification Request",
+      "cancel": "Cancel Verification Request",
+      "download": "Download",
+      "delete": "Delete"
+    },
+    "messages": {
+      "submitSuccess": "Verification request submitted successfully",
+      "submitError": "Failed to submit verification request",
+      "cancelSuccess": "Verification request cancelled",
+      "cancelError": "Failed to cancel verification request",
+      "downloadError": "Failed to download document",
+      "fileTypeError": "You can only upload PDF, JPEG, or PNG files!",
+      "fileLimitError": "You cannot upload more than 15 files",
+      "noFilesError": "Please select at least one file"
+    }
+  },
+  "sidebar": {
+    "admin": {
+      "dashboard": "Dashboard",
+      "ratings": "Ratings",
+      "vendors": "Vendors",
+      "ingredients": "Ingredients",
+      "profile": "Profile",
+      "orders": "Orders",
+      "category": "Category",
+      "wallet": "Wallet",
+      "statistics": "Statistics",
+      "foodStores": "Food Stores",
+      "createAdmin": "Create Admin"
+    },
+    "seller": {
+      "dashboard": "Dashboard",
+      "ratings": "Ratings",
+      "stores": "Stores",
+      "profile": "Profile",
+      "orders": "Orders",
+      "recipes": "Recipes",
+      "wallet": "Wallet",
+      "statistics": "Statistics"
+    },
+    "settings": {
+      "privacyLegal": "Privacy & Legal",
+      "back": "Back"
+    },
+    "actions": {
+      "collapseMenu": "Collapse menu",
+      "logout": "Logout",
+      "loading": "Loading..."
+    }
+  },
+  "sellerStats": {
+    "title": "Seller Dashboard",
+    "loading": "Loading seller statistics...",
+    "cards": {
+      "totalRevenue": "Total Revenue",
+      "totalOrders": "Total Orders",
+      "completionRate": "Completion Rate",
+      "averageRating": "Average Rating"
+    },
+    "charts": {
+      "monthlyRevenue": "Monthly Revenue",
+      "last30Days": "Last 30 Days",
+      "dailyRevenue": "Daily Revenue",
+      "popularDishes": "Popular Dishes",
+      "byOrders": "By Orders",
+      "orders": "Orders"
+    },
+    "recentOrders": {
+      "title": "Recent Orders",
+      "latest5": "Latest 5 Orders",
+      "columns": {
+        "orderNumber": "Order #",
+        "amount": "Amount",
+        "status": "Status",
+        "date": "Date"
+      },
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      }
+    },
+    "tooltips": {
+      "revenue": "Revenue"
+    }
+  },
+  "wallet": {
+    "title": "Wallet",
+    "tabs": {
+      "transactions": "Transactions",
+      "paymentMethods": "Payment Methods"
+    },
+    "balance": {
+      "title": "Wallet Balance",
+      "availableBalance": "Available Balance"
+    },
+    "messages": {
+      "fetchWalletError": "Failed to fetch wallet",
+      "fetchTransactionsError": "Failed to fetch transactions",
+      "fetchPaymentMethodsError": "Failed to fetch payment methods",
+      "unknownError": "An unknown error occurred",
+      "addCardSuccess": "Card added successfully",
+      "removeCardSuccess": "Card removed successfully"
+    },
+    "loading": "Loading...",
+    "transaction": {
+      "date": "Date",
+      "type": "Type",
+      "currency": "Currency",
+      "amount": "Amount",
+      "grossAmount": "Gross Amount",
+      "commissionRate": "Commission Rate",
+      "commissionAmount": "Commission Amount",
+      "status": "Status",
+      "description": "Description"
+    },
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending",
+      "failed": "Failed"
+    },
+    "type": {
+      "deposit": "Deposit",
+      "withdrawal": "Withdrawal",
+      "order_income": "Order Income",
+      "tip_income": "Tip Income"
+    }
+  },
+  "dish": {
+    "addForm": {
+      "title": "Add New Dish",
+      "fields": {
+        "name": "Name",
+        "description": "Description",
+        "price": "Price",
+        "images": "Images"
+      },
+      "placeholders": {
+        "name": "Enter dish name",
+        "description": "Enter dish description",
+        "price": "Enter price"
+      },
+      "validation": {
+        "nameRequired": "Please input dish name!",
+        "priceRequired": "Please input dish price!"
+      },
+      "buttons": {
+        "chooseFiles": "Choose Files",
+        "cancel": "Cancel",
+        "addDish": "Add Dish",
+        "filesChosen": "{count} file(s) chosen",
+        "noFiles": "No file chosen"
+      }
+    },
+    "editForm": {
+      "title": "Edit Dish",
+      "fields": {
+        "name": "Name",
+        "description": "Description",
+        "price": "Price"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "update": "Update Dish",
+        "updating": "Updating..."
+      }
+    },
+    "detail": {
+      "backButton": "Back to Dishes",
+      "notFound": "Dish not found",
+      "sections": {
+        "details": "Details",
+        "images": "Images",
+        "ingredients": "Ingredients",
+        "allergens": "Allergens"
+      },
+      "tabs": {
+        "dishDetails": "Dish Details",
+        "ingredients": "Ingredients",
+        "allergens": "Allergens"
+      },
+      "labels": {
+        "price": "Price:",
+        "noImages": "No images available",
+        "selectImages": "Select Images",
+        "uploadImages": "Upload {count} Image(s)",
+        "addIngredient": "Add Ingredient",
+        "availableIngredients": "Available Ingredients",
+        "dishIngredients": "Dish Ingredients",
+        "searchPlaceholder": "Search ingredients...",
+        "filterOptions": {
+          "all": "All Ingredients",
+          "supplements": "Supplements Only",
+          "regular": "Regular Only"
+        },
+        "sortOptions": {
+          "nameAsc": "Name (A-Z)",
+          "nameDesc": "Name (Z-A)",
+          "newest": "Newest First",
+          "oldest": "Oldest First"
+        },
+        "ingredientColumns": {
+          "nameEn": "Name (EN)",
+          "nameFr": "Name (FR)",
+          "actions": "Actions",
+          "select": "Select",
+          "ingredient": "Ingredient",
+          "supplement": "Supplement",
+          "supplementYes": "Yes",
+          "supplementNo": "No",
+          "price": "Price"
+        },
+        "allergenColumns": {
+          "nameEn": "Allergen (EN)",
+          "nameFr": "Allergen (FR)",
+          "actions": "Actions",
+          "specification": "Specification",
+          "allergen": "Allergen"
+        },
+        "dishAllergenColumns": {
+          "allergenEn": "Allergen (EN)",
+          "allergenFr": "Allergen (FR)",
+          "specification": "Specification",
+          "actions": "Actions"
+        }
+      },
+      "modals": {
+        "editIngredient": {
+          "title": "Edit Ingredient",
+          "buttons": {
+            "cancel": "Cancel",
+            "save": "Save Changes"
+          }
+        },
+        "createIngredient": {
+          "title": "Create New Ingredient",
+          "buttons": {
+            "cancel": "Cancel",
+            "create": "Create"
+          },
+          "fields": {
+            "nameEn": "English Name",
+            "nameFr": "French Name",
+            "nameEnRequired": "Please input English name",
+            "nameFrRequired": "Please input French name"
+          }
+        },
+        "delete": {
+          "image": {
+            "title": "Delete Image",
+            "content": "Are you sure you want to delete this image?",
+            "okText": "Delete",
+            "cancelText": "Cancel"
+          },
+          "ingredient": {
+            "title": "Remove Ingredient",
+            "content": "Are you sure you want to remove this ingredient?",
+            "okText": "Remove",
+            "cancelText": "Cancel"
+          }
+        }
+      },
+      "confirm": {
+        "removeIngredient": {
+          "title": "Are you sure you want to remove this ingredient?",
+          "content": "This action cannot be undone.",
+          "okText": "Remove",
+          "cancelText": "Cancel"
+        },
+        "deleteIngredient": {
+          "title": "Are you sure you want to delete this ingredient?",
+          "content": "This will permanently delete ingredient from your food store.",
+          "okText": "Delete",
+          "cancelText": "Cancel"
+        },
+        "removeAllergen": {
+          "title": "Are you sure you want to remove this allergen?",
+          "content": "This action cannot be undone.",
+          "okText": "Remove",
+          "cancelText": "Cancel"
+        }
+      },
+      "cards": {
+        "addIngredient": {
+          "title": "Add Ingredient",
+          "placeholders": {
+            "selectIngredient": "Select Ingredient",
+            "price": "Price",
+            "specification": "Specification (if required)"
+          },
+          "labels": {
+            "isSupplement": "Is Supplement?",
+            "yes": "Yes",
+            "no": "No"
+          },
+          "buttons": {
+            "add": "Add",
+            "createNew": "Create New Ingredient"
+          }
+        },
+        "availableIngredients": {
+          "title": "Available Ingredients",
+          "placeholders": {
+            "searchIngredients": "Search ingredients..."
+          },
+          "options": {
+            "allIngredients": "All Ingredients",
+            "supplementsOnly": "Supplements Only",
+            "regularOnly": "Regular Only"
+          },
+          "sortOptions": {
+            "nameAsc": "Name (A-Z)",
+            "nameDesc": "Name (Z-A)",
+            "newestFirst": "Newest First",
+            "oldestFirst": "Oldest First"
+          }
+        },
+        "dishIngredients": {
+          "title": "Dish Ingredients"
+        },
+        "addAllergen": {
+          "title": "Add Allergen",
+          "placeholders": {
+            "selectAllergen": "Select Allergen"
+          },
+          "buttons": {
+            "addAllergen": "Add Allergen"
+          }
+        },
+        "dishAllergens": {
+          "title": "Dish Allergens"
+        }
+      },
+      "table": {
+        "columns": {
+          "ingredientEn": "Ingredient En",
+          "ingredientFr": "Ingredient Fr",
+          "supplement": "Supplement",
+          "price": "Price",
+          "available": "Available",
+          "actions": "Actions",
+          "allergenEn": "Allergen En",
+          "allergenFr": "Allergen Fr",
+          "specification": "Specification"
+        }
+      },
+      "form": {
+        "ingredientLabel": "Ingredient:",
+        "availableLabel": "Available",
+        "priceLabel": "Price:"
+      },
+      "messages": {
+        "imageUploadSuccess": "Images uploaded successfully",
+        "imageUploadError": "Failed to upload images",
+        "imageDeleteSuccess": "Image deleted successfully",
+        "imageDeleteError": "Failed to delete image",
+        "ingredientAddSuccess": "Ingredient added successfully",
+        "ingredientAddError": "Failed to add ingredient",
+        "ingredientUpdateSuccess": "Ingredient updated successfully",
+        "ingredientUpdateError": "Failed to update ingredient",
+        "ingredientRemoveSuccess": "Ingredient removed successfully",
+        "ingredientRemoveError": "Failed to remove ingredient",
+        "allergenAddSuccess": "Allergen added successfully",
+        "allergenAddError": "Failed to add allergen",
+        "allergenRemoveSuccess": "Allergen removed successfully",
+        "allergenRemoveError": "Failed to remove allergen"
+      }
+    }
+  },
+  "dishes": {
+    "title": "My Recipes",
+    "addButton": "Add Dish",
+    "galleryView": "Gallery View",
+    "editModalTitle": "Edit Dish",
+    "table": {
+      "columns": {
+        "name": "Name",
+        "description": "Description",
+        "price": "Price",
+        "availability": "Availability",
+        "images": "Images",
+        "actions": "Actions"
+      }
+    },
+    "status": {
+      "available": "Available",
+      "unavailable": "Unavailable"
+    },
+    "actions": {
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
+    "card": {
+      "noImage": "No Image"
+    },
+    "categories": "Categories",
+    "noCategories": "No categories assigned",
+    "selectCategoryType": "Select Category Type",
+    "selectCategory": "Select Category",
+    "addCategory": "Add Category",
+    "deleteConfirm": {
+      "title": "Delete Dish",
+      "content": "Are you sure you want to delete this dish?",
+      "okText": "Delete",
+      "cancelText": "Cancel"
+    },
+    "messages": {
+      "fetchError": "Failed to fetch dishes",
+      "createSuccess": "Dish created successfully",
+      "createError": "Failed to create dish",
+      "updateSuccess": "Dish updated successfully",
+      "updateError": "Failed to update dish",
+      "deleteSuccess": "Dish deleted successfully",
+      "deleteError": "Failed to delete dish",
+      "categoryAdded": "Category added successfully",
+      "categoryAddError": "Failed to add category",
+      "categoryRemoved": "Category removed successfully",
+      "categoryRemoveError": "Failed to remove category",
+      "activateSuccess": "Dish activated successfully",
+      "activateError": "Failed to activate dish",
+      "deactivateSuccess": "Dish deactivated successfully",
+      "deactivateError": "Failed to deactivate dish"
+    }
+  },
+  "orders": {
+    "title": "Food Store Orders",
+    "table": {
+      "columns": {
+        "orderNumber": "Order Number",
+        "customer": "Customer",
+        "store": "Store",
+        "totalPrice": "Total Price",
+        "grossTotal": "Gross Total",
+        "status": "Status",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "emptyText": "No orders found",
+      "status": {
+        "completed": "completed",
+        "cancelled": "cancelled",
+        "pending": "pending",
+        "confirmed": "Confirmed"
+      }
+    },
+    "actions": {
+      "view": "View",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    },
+    "modal": {
+      "title": "Order Details",
+      "orderInfo": "Order Information",
+      "statusInfo": "Status Information",
+      "timestamps": "Timestamps",
+      "fields": {
+        "orderNumber": "Order Number",
+        "customer": "Customer",
+        "store": "Store",
+        "totalPrice": "Total Price",
+        "grossTotal": "Gross Total",
+        "confirmationCode": "Confirmation Code",
+        "orderStatus": "Order Status",
+        "paymentStatus": "Payment Status",
+        "deliveryStatus": "Delivery Status",
+        "createdAt": "Created At",
+        "updatedAt": "Updated At"
+      },
+      "taxesInfo": "Taxe info:",
+      "taxes": {
+        "rates": "Rates",
+        "amounts": "Amount",
+        "totalTax": "Total Taxe"
+      }
+    },
+    "messages": {
+      "fetchError": "Failed to fetch orders",
+      "confirmSuccess": "Order confirmed successfully",
+      "confirmError": "Failed to confirm order",
+      "cancelSuccess": "Order cancelled successfully",
+      "cancelError": "Failed to cancel order"
+    }
+  },
+  "store": {
+    "title": "Store Management",
+    "create": {
+      "title": "Create Store",
+      "button": "Create Store",
+      "success": "Store created successfully",
+      "error": "Failed to create store"
+    },
+    "update": {
+      "title": "Update Store",
+      "button": "Update Store",
+      "success": "Store updated successfully",
+      "error": "Failed to update store"
+    },
+    "delete": {
+      "title": "Delete Store",
+      "confirm": "Are you sure you want to delete this store? This action cannot be undone.",
+      "button": "Delete",
+      "success": "Store deleted successfully",
+      "error": "Failed to delete store. Please try again."
+    },
+    "fetchError": "Failed to fetch store data",
+    "noStore": {
+      "title": "No Store Created",
+      "description": "You haven't created a store yet."
+    },
+    "form": {
+      "name": "Store Name",
+      "namePlaceholder": "Enter store name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter store description",
+      "profileImage": "Profile Image",
+      "currentImage": "Current image will be kept",
+      "location": {
+        "title": "Location Details",
+        "search": "Search Address",
+        "searchPlaceholder": "Enter an address to search",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "street": "Street Address",
+        "city": "City",
+        "state": "State/Province",
+        "zipCode": "ZIP/Postal Code",
+        "country": "Country",
+        "additionalDetails": "Additional Location Details",
+        "additionalDetailsPlaceholder": "Enter any additional location details"
+      },
+      "validation": {
+        "nameRequired": "Please input store name!",
+        "nameMax": "Store name must be less than 100 characters",
+        "descriptionMax": "Description must be less than 500 characters",
+        "locationRequired": "Please select a location on map",
+        "latitudeRange": "Latitude must be between -90 and 90",
+        "longitudeRange": "Longitude must be between -180 and 180",
+        "streetMax": "Street address must be less than 100 characters",
+        "cityMax": "City must be less than 50 characters",
+        "stateMax": "State must be less than 50 characters",
+        "zipMax": "ZIP code must be less than 20 characters",
+        "countryMax": "Country must be less than 50 characters",
+        "additionalMax": "Additional details must be less than 200 characters",
+        "imageFormat": "You can only upload image files!",
+        "imageSize": "Image must be smaller than 5MB!"
+      }
+    },
+    "info": {
+      "title": "Store Information",
+      "name": "Store Name",
+      "description": "Description",
+      "profileImage": "Profile Image",
+      "address": "Address",
+      "coordinates": "Coordinates",
+      "latitude": "Latitude",
+      "longitude": "Longitude"
+    }
+  },
+  "map": {
+    "loadError": "Failed to load Google Maps API"
+  },
+  "upload": {
+    "text": "Click to upload",
+    "hint": "Upload"
+  },
+  "rating": {
+    "seller": {
+      "title": "Ratings for {{foodStoreName}}",
+      "table": {
+        "columns": {
+          "rating": "Rating",
+          "comment": "Comment",
+          "buyer": "Buyer",
+          "dish": "Dish",
+          "order": "Order",
+          "date": "Date"
+        }
+      },
+      "filters": {
+        "dish": "Filter by Dish",
+        "search": "Search comments/buyers",
+        "minRating": "Min Rating",
+        "maxRating": "Max Rating",
+        "buyerId": "Buyer ID",
+        "orderId": "Order ID",
+        "buyerName": "Buyer Name",
+        "orderNumber": "Order Number"
+      },
+      "actions": {
+        "filter": "Filter",
+        "reset": "Reset"
+      }
+    },
+    "admin": {
+      "title": "Ratings Management",
+      "table": {
+        "columns": {
+          "rating": "Rating",
+          "comment": "Comment",
+          "buyer": "Buyer",
+          "store": "Store",
+          "dish": "Dish",
+          "order": "Order",
+          "date": "Date"
+        }
+      },
+      "filters": {
+        "store": "Filter by Store",
+        "dish": "Filter by Dish",
+        "search": "Search comments/buyers",
+        "minRating": "Min Rating",
+        "maxRating": "Max Rating",
+        "buyerId": "Buyer ID",
+        "orderId": "Order ID"
+      },
+      "actions": {
+        "filter": "Filter",
+        "reset": "Reset"
+      }
+    },
+    "stars": {
+      "1": "1 ★",
+      "2": "2 ★",
+      "3": "3 ★",
+      "4": "4 ★",
+      "5": "5 ★"
+    },
+    "pagination": {
+      "showing": "Showing {{total}} ratings"
+    },
+    "notAvailable": "N/A"
+  },
+  "profile": {
+    "title": "Profile",
+    "image": {
+      "uploadText": "Click to upload a new profile photo (JPG/PNG, max 2MB)",
+      "success": "Profile image updated successfully!",
+      "error": "Failed to update profile image",
+      "validation": {
+        "format": "You can only upload JPG/PNG files!",
+        "size": "Image must be smaller than 2MB!"
+      }
+    },
+    "form": {
+      "username": {
+        "label": "Username",
+        "help": "Username cannot be changed"
+      },
+      "firstName": {
+        "label": "First Name",
+        "error": "Please input your first name"
+      },
+      "lastName": {
+        "label": "Last Name",
+        "error": "Please input your last name"
+      },
+      "middleName": {
+        "label": "Middle Name"
+      },
+      "email": {
+        "label": "Email",
+        "error": {
+          "required": "Please input your email",
+          "invalid": "Please enter a valid email"
+        }
+      },
+      "phoneNumber": {
+        "label": "Phone Number",
+        "error": "Please input your phone number"
+      },
+      "saveButton": "Save Changes",
+      "success": "Profile updated successfully!",
+      "error": "Failed to update profile. Please try again."
+    }
+  },
+  "ingredients": {
+    "title": "Ingredients Management",
+    "table": {
+      "columns": {
+        "nameFr": "French Name",
+        "nameEn": "English Name",
+        "createdAt": "Created At",
+        "updatedAt": "Updated At",
+        "actions": "Actions"
+      },
+      "noData": {
+        "search": "No matching ingredients found",
+        "default": "No ingredients available"
+      }
+    },
+    "actions": {
+      "add": "Add New Ingredient",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "processing": "Processing..."
+    },
+    "modal": {
+      "addTitle": "Add New Ingredient",
+      "editTitle": "Edit Ingredient",
+      "labels": {
+        "nameFr": "French Name",
+        "nameEn": "English Name"
+      },
+      "placeholders": {
+        "nameFr": "Enter French name",
+        "nameEn": "Enter English name"
+      },
+      "validation": "Both French and English names are required",
+      "success": {
+        "create": "Ingredient created successfully",
+        "update": "Ingredient updated successfully",
+        "delete": "Ingredient deleted successfully"
+      },
+      "error": "Operation failed",
+      "confirmDelete": "Are you sure you want to delete this ingredient?"
+    },
+    "search": {
+      "placeholder": "Search ingredients...",
+      "sortOptions": {
+        "nameEnAsc": "English Name (A-Z)",
+        "nameEnDesc": "English Name (Z-A)",
+        "nameFrAsc": "French Name (A-Z)",
+        "nameFrDesc": "French Name (Z-A)",
+        "createdAtDesc": "Newest First",
+        "createdAtAsc": "Oldest First",
+        "updatedAtDesc": "Recently Updated",
+        "updatedAtAsc": "Least Recently Updated"
+      }
+    }
+  },
+  "users": {
+    "title": "User Management",
+    "vendorAgreement": {
+      "Accepted": "Accepted",
+      "Not Accepted": "Not Accepted"
+    },
+    "messages": {
+      "loading": "Loading users...",
+      "error": "Failed to load users",
+      "deleteSuccess": "User deleted successfully",
+      "restoreSuccess": "User restored successfully",
+      "suspendSuccess": "User suspended successfully",
+      "activateSuccess": "User activated successfully"
+    },
+    "confirm": {
+      "delete": {
+        "title": "Delete User",
+        "content": "Are you sure you want to delete this user?"
+      }
+    },
+    "types": {
+      "buyer": "Buyer",
+      "seller": "Seller",
+      "admin": "Administrator",
+      "customer": "Customer"
+    },
+    "table": {
+      "columns": {
+        "user": "User",
+        "contact": "Contact",
+        "foodStore": "Food Store",
+        "vendorAgreement": "Vendor Agreement",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "status": {
+        "verified": "Verified",
+        "active": "Active",
+        "suspended": "Suspended",
+        "deleted": "Deleted",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "total": "Total {{total}} users",
+      "showing": "Showing {{count}} users"
+    },
+    "search": {
+      "placeholder": "Search users...",
+      "filter": {
+        "all": "All Users",
+        "buyer": "Buyers",
+        "seller": "Sellers",
+        "admin": "Admins"
+      },
+      "sort": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "createdAt": "Creation Date"
+      }
+    },
+    "actions": {
+      "details": "Details",
+      "fullDetails": "Full Details",
+      "delete": "Delete",
+      "restore": "Restore",
+      "suspend": "Suspend",
+      "activate": "Activate"
+    },
+    "details": {
+      "title": "User Details",
+      "foodStore": "Food Store",
+      "status": "Status",
+      "createdAt": "Created At",
+      "lastLogin": "Last Login"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
+  "verification": {
+    "title": "Food Store Verification Requests",
+    "table": {
+      "columns": {
+        "storeName": "Store Name",
+        "status": "Status",
+        "notes": "Notes",
+        "submittedAt": "Submitted At",
+        "actions": "Actions"
+      },
+      "noDocuments": "No documents",
+      "storeId": "ID: {id}"
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "modal": {
+      "approveTitle": "Approve Verification Request",
+      "rejectTitle": "Reject Verification Request",
+      "storeLabel": "Store:",
+      "documentsLabel": "Documents:",
+      "statusLabel": "Current Status:",
+      "processedLabel": "Last Processed:",
+      "approveNote": "Approval Note:",
+      "rejectNote": "Rejection Note:",
+      "approvePlaceholder": "Optional approval note...",
+      "rejectPlaceholder": "Required rejection note...",
+      "previousNote": "Previous note:",
+      "documentPreview": "Document Preview"
+    },
+    "buttons": {
+      "documents": "Documents",
+      "approve": "Approve",
+      "reject": "Reject",
+      "viewDetails": "View decision details",
+      "download": "Download Document {index}",
+      "preview": "Preview"
+    },
+    "messages": {
+      "fetchError": "Failed to fetch verification requests",
+      "downloadSuccess": "Downloaded {filename}",
+      "downloadError": "Failed to download document",
+      "previewError": "Failed to preview document",
+      "approveSuccess": "Request approved successfully",
+      "rejectSuccess": "Request rejected successfully",
+      "rejectNoteRequired": "Rejection note is required",
+      "processError": "Failed to process request"
+    }
+  },
+  "dashboard": {
+    "cards": {
+      "totalUser": "Total Users",
+      "totalOrder": "Total Orders",
+      "totalSales": "Total Sales",
+      "totalPending": "Total Pending",
+      "growth": {
+        "upYesterday": "{percent}% Up from yesterday",
+        "upWeek": "{percent}% Up from past week",
+        "downYesterday": "{percent}% Down from yesterday"
+      }
+    }
+  },
+  "login": {
+    "title": "Login To Your Dashboard",
+    "passwordRecovery": "Password Recovery",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "staySignedIn": "Stay Signed in",
+    "forgotPassword": "Forgot password?",
+    "loginButton": "Login",
+    "loggingIn": "Logging in...",
+    "or": "Or",
+    "signInWithGoogle": "Sign in with Google",
+    "sendRecoveryLink": "Send Recovery Link",
+    "sending": "Sending...",
+    "backToLogin": "Back to Login",
+    "errors": {
+      "invalidCredentials": "Invalid email or password.",
+      "googleLoginFailed": "Google login failed. Please try again.",
+      "enterValidEmail": "Please enter a valid email.",
+      "resetLinkFailed": "Failed to send reset link"
+    },
+    "success": {
+      "loggedIn": "Logged in successfully",
+      "googleLoggedIn": "Logged in successfully with Google",
+      "resetLinkSent": "If the email exists, a reset link has been sent"
+    },
+    "loading": "Loading...",
+    "slogan": "Your neighbors, Your chefs"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "profile": "Profile",
+    "settings": "Settings",
+    "statistics": "Statistics",
+    "logout": "Logout"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "minLength": "Must be at least {{count}} characters"
+  },
+  "userDetails": {
+    "messages": {
+      "error": "Failed to load user details",
+      "loading": "Loading user details...",
+      "notFound": "User not found",
+      "updateSuccess": "User updated successfully",
+      "updateError": "Failed to update user"
+    },
+    "breadcrumb": {
+      "users": "Users"
+    },
+    "title": "User Details",
+    "actions": {
+      "edit": "Edit User",
+      "backToList": "Back to Users",
+      "editProfile": "Edit Profile"
+    },
+    "sections": {
+      "basicInfo": "Basic Information",
+      "sellerInfo": "Seller Information"
+    },
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "middleName": "Middle Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "status": "Status",
+      "createdAt": "Created At",
+      "foodStore": "Food Store",
+      "type": "User Type"
+    },
+    "editModal": {
+      "title": "Edit User",
+      "cancel": "Cancel",
+      "save": "Save Changes"
+    },
+    "validation": {
+      "firstNameRequired": "Please input first name",
+      "lastNameRequired": "Please input last name",
+      "emailRequired": "Please input email",
+      "emailInvalid": "Please enter a valid email",
+      "typeRequired": "Please select user type"
+    }
+  },
+  "settings": {
+    "title": "General Settings"
+  },
+  "topBar": {
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "statistics": {
+    "revenueByYear": "Revenue by Year",
+    "revenueByMonth": "Revenue by Month",
+    "revenueByDay": "Revenue by Day",
+    "platformRevenue": "Platform Revenue",
+    "platformRevenueByYear": "Platform Revenue by Year",
+    "platformRevenueByMonth": "Platform Revenue by Month",
+    "platformRevenueByDay": "Platform Revenue by Day",
+    "yearly": "Yearly",
+    "monthly": "Monthly",
+    "daily": "Daily"
+  },
+  "foodStores": {
+    "title": "Food Stores Management",
+    "stripe": {
+      "connect": "Connect Stripe Account",
+      "disconnect": "Disconnect Stripe Account",
+      "connected": "Stripe account is connected",
+      "notConnected": "Stripe account is not connected"
+    },
+    "type": {
+      "home": "Home"
+    },
+    "table": {
+      "columns": {
+        "store": "Food Store",
+        "seller": "Seller",
+        "location": "Location",
+        "vendorAgreement": "Vendor Agreement",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "totalWithRange": "Showing {{total}} food stores"
+    },
+    "search": {
+      "placeholder": "Search food stores...",
+      "filter": {
+        "all": "All",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "sort": {
+        "name": "Name",
+        "city": "City",
+        "createdAt": "Created Date",
+        "updatedAt": "Updated Date"
+      }
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "verified": "Verified",
+      "unverified": "Unverified"
+    },
+    "vendorAgreement": {
+      "accepted": "Accepted",
+      "notAccepted": "Not Accepted"
+    },
+    "actions": {
+      "details": "Details",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "verify": "Verify",
+      "unverify": "Unverify",
+      "delete": "Delete"
+    },
+    "details": {
+      "name": "Name",
+      "status": "Status",
+      "seller": "Seller",
+      "sellerEmail": "Seller Email",
+      "description": "Description",
+      "location": "Location",
+      "vendorAgreement": "Vendor Agreement",
+      "createdAt": "Created At",
+      "profileImage": "Profile Image",
+      "dishes": "Dishes",
+      "storeInformation": "Store Information",
+      "updatedAt": "Updated At",
+      "deliveryOption": "Delivery Option",
+      "pickupOption": "Pickup Option",
+      "stripeConnection": "Stripe Connection",
+      "connected": "Connected",
+      "notConnected": "Not Connected",
+      "address": "Address",
+      "type": "Type"
+    },
+    "delivery": {
+      "title": "Delivery Options",
+      "delivery": "Delivery",
+      "pickupOnly": "Pickup",
+      "both": "Both"
+    },
+    "dishes": {
+      "name": "Name",
+      "description": "Description",
+      "price": "Price",
+      "category": "Category",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "title": "Dishes",
+      "image": "Image",
+      "noImage": "No image available",
+      "noDescription": "No description",
+      "noCategory": "No Category",
+      "addDish": "Add Dish",
+      "searchPlaceholder": "Search dishes...",
+      "filterByStatus": "Filter by Status",
+      "allStatus": "All Status",
+      "sortBy": "Sort By",
+      "sortByName": "Name",
+      "sortByPrice": "Price",
+      "sortByCategory": "Category",
+      "sortByCreatedAt": "Created Date",
+      "sortByUpdatedAt": "Updated Date",
+      "totalCount": "Total",
+      "dishes": "dishes",
+      "filtered": "Filtered",
+      "pagination": "Showing {{total}} dishes",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    },
+    "confirmDelete": {
+      "title": "Delete Food Store",
+      "content": "Are you sure you want to delete \"{{name}}\"?"
+    },
+    "messages": {
+      "error": "Failed to fetch food stores",
+      "activated": "Food store activated successfully",
+      "deactivated": "Food store deactivated successfully",
+      "verified": "Food store verified successfully",
+      "unverified": "Food store verification removed",
+      "deleted": "Food store deleted successfully"
+    },
+    "notFound": "Food store not found",
+    "noImage": "No profile image",
+    "viewDishes": "View Dishes",
+    "viewAllDishes": "View All Dishes"
+  },
+  "createAdmin": {
+    "title": "Create New Admin",
+    "description": "Fill in the form below to create a new administrator account",
+    "form": {
+      "firstName": "First Name",
+      "firstNamePlaceholder": "Enter first name",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter last name",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address",
+      "password": "Password",
+      "passwordPlaceholder": "Enter password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "locale": "Language Preference",
+      "localePlaceholder": "Select language",
+      "createButton": "Create Admin",
+      "creating": "Creating..."
+    },
+    "validation": {
+      "firstNameRequired": "Please input first name!",
+      "firstNameMin": "First name must be at least 2 characters!",
+      "firstNameMax": "First name must be less than 50 characters!",
+      "lastNameRequired": "Please input last name!",
+      "lastNameMin": "Last name must be at least 2 characters!",
+      "lastNameMax": "Last name must be less than 50 characters!",
+      "emailRequired": "Please input email!",
+      "emailInvalid": "Please enter a valid email!",
+      "passwordRequired": "Please input password!",
+      "passwordMin": "Password must be at least 8 characters!",
+      "passwordMax": "Password must be less than 128 characters!",
+      "passwordPattern": "Password must contain at least one uppercase letter, one lowercase letter, and one number!",
+      "confirmPasswordRequired": "Please confirm password!",
+      "passwordMismatch": "Passwords do not match!",
+      "localeRequired": "Please select a language!"
+    },
+    "messages": {
+      "success": "Admin user created successfully",
+      "error": "Failed to create admin user"
+    }
+  }
+}

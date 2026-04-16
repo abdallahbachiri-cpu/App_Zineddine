@@ -1,0 +1,64 @@
+framework:
+  rate_limiter:
+    # Authentication endpoints - strict rate limiting to prevent brute force
+    auth_limiter:
+      policy: 'sliding_window'
+      limit: 5              # 5 requests
+      interval: '15 minutes' # per 15 minutes
+      cache_pool: 'cache.rate_limiter'
+
+    # Password reset endpoint - prevent abuse
+    password_reset_limiter:
+      policy: 'sliding_window'
+      limit: 3              # 3 requests
+      interval: '1 hour'    # per hour
+      cache_pool: 'cache.rate_limiter'
+
+    # Email confirmation endpoint - moderate limiting
+    email_confirmation_limiter:
+      policy: 'sliding_window'
+      limit: 10             # 10 requests
+      interval: '1 hour'    # per hour
+      cache_pool: 'cache.rate_limiter'
+
+    # General API rate limiting for authenticated users
+    api_limiter:
+      policy: 'sliding_window'
+      limit: 1000           # 1000 requests
+      interval: '5 minutes'    # per 5 minutes
+      cache_pool: 'cache.rate_limiter'
+
+    # Buyer endpoints - more relaxed for UX
+    buyer_limiter:
+      policy: 'sliding_window'
+      limit: 500            # 500 requests
+      interval: '5 minutes'    # per 5 minutes
+      cache_pool: 'cache.rate_limiter'
+
+    # Seller endpoints - moderate limiting
+    seller_limiter:
+      policy: 'sliding_window'
+      limit: 500            # 500 requests
+      interval: '5 minutes'    # per 5 minutes
+      cache_pool: 'cache.rate_limiter'
+
+    # Admin endpoints - higher limit for administrative tasks
+    admin_limiter:
+      policy: 'sliding_window'
+      limit: 2000           # 2000 requests
+      interval: '1 hour'    # per hour
+      cache_pool: 'cache.rate_limiter'
+
+    # Search endpoints - prevent resource exhaustion
+    search_limiter:
+      policy: 'sliding_window'
+      limit: 30             # 30 requests
+      interval: '1 minute'  # per minute
+      cache_pool: 'cache.rate_limiter'
+
+    # Webhook endpoints - very relaxed or disabled
+    webhook_limiter:
+      policy: 'sliding_window'
+      limit: 1000
+      interval: '1 minute'
+      cache_pool: 'cache.rate_limiter'

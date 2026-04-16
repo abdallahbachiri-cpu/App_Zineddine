@@ -1,0 +1,1422 @@
+{
+  "adminWallet": {
+    "title": "Gestion du portefeuille des magasins d'alimentation",
+    "fetchStoresError": "Échec de la récupération des magasins d'alimentation",
+    "fetchWalletError": "Échec de la récupération du portefeuille",
+    "fetchTransactionsError": "Échec de la récupération des transactions",
+    "storeName": "Nom du magasin",
+    "actions": "Actions",
+    "select": "Sélectionner",
+    "selected": "Sélectionné",
+    "searchStorePlaceholder": "Rechercher des magasins...",
+    "noStoresFound": "Aucun magasin trouvé",
+    "selectedStore": "Magasin sélectionné",
+    "overviewTab": "Aperçu du portefeuille",
+    "transactionsTab": "Transactions",
+    "filterDate": "Filtrer par date",
+    "refresh": "Actualiser",
+    "selectStorePrompt": "Veuillez sélectionner un magasin pour afficher les informations du portefeuille",
+    "blockWallet": "Bloquer le portefeuille",
+    "unblockWallet": "Débloquer le portefeuille",
+    "blockWalletConfirm": "Êtes-vous sûr de vouloir bloquer ce portefeuille ? Cela empêchera toutes les transactions.",
+    "unblockWalletConfirm": "Êtes-vous sûr de vouloir débloquer ce portefeuille ? Cela permettra aux transactions de reprendre.",
+    "blockWalletSuccess": "Portefeuille bloqué avec succès",
+    "unblockWalletSuccess": "Portefeuille débloqué avec succès",
+    "blockWalletError": "Échec du blocage du portefeuille",
+    "unblockWalletError": "Échec du déblocage du portefeuille",
+    "walletStatus": "Statut du portefeuille",
+    "blocked": "Bloqué",
+    "active": "Actif",
+    "errors": {
+      "noWalletData" : "Échec de la récupération des données du portefeuille"
+    }
+  },
+  "categories": {
+    "fetchError": "Échec de la récupération des catégories",
+    "typesFetchError": "Échec de la récupération des types de catégories",
+    "updateSuccess": "Catégorie mise à jour avec succès",
+    "createSuccess": "Catégorie créée avec succès",
+    "submitError": "Échec de la soumission de la catégorie",
+    "deleteTitle": "Supprimer la catégorie",
+    "deleteContent": "Êtes-vous sûr de vouloir supprimer cette catégorie?",
+    "delete": "Supprimer",
+    "deleteSuccess": "Catégorie supprimée avec succès",
+    "deleteError": "Échec de la suppression de la catégorie",
+    "edit": "Modifier",
+    "newCategory": "Nouvelle catégorie",
+    "noCategories": "Aucune catégorie trouvée",
+    "searchPlaceholder": "Rechercher des catégories",
+    "typeFilterPlaceholder": "Filtrer par type",
+    "editTitle": "Modifier la catégorie",
+    "createTitle": "Créer une catégorie",
+    "columns": {
+      "nameEn": "Nom anglais",
+      "nameFr": "Nom français",
+      "type": "Type",
+      "actions": "Actions"
+    },
+    "form": {
+      "nameEn": "Nom anglais",
+      "nameFr": "Nom français",
+      "type": "Type",
+      "nameEnRequired": "Veuillez saisir le nom anglais!",
+      "nameFrRequired": "Veuillez saisir le nom français!",
+      "typeRequired": "Veuillez sélectionner le type!"
+    }
+  },
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "ok": "OK",
+    "unknownError": "Une erreur inconnue s'est produite",
+    "close": "Fermer",
+    "view": "Voir",
+    "edit": "Modifier",
+    "back": "Retour",
+    "delete": "Supprimer",
+    "actions": "Actions"
+  },
+  "adminOrders": {
+    "title": "Tableau de bord des commandes administrateur",
+    "fetchError": "Échec de la récupération des commandes",
+    "detailsError": "Échec de la récupération des détails de la commande",
+    "noOrders": "Aucune commande trouvée",
+    "orderDetails": "Détails de la commande",
+    "viewDetails": "Voir les détails",
+    "orderInfo": "Informations sur la commande",
+    "customerInfo": "Informations sur le client",
+    "storeInfo": "Informations sur le magasin",
+    "statusInfo": "Informations sur le statut",
+    "timestamps": "Horodatages",
+    "status": {
+      "pending": "En attente",
+      "completed": "Terminé",
+      "cancelled": "Annulé",
+      "paid": "Payé",
+      "confirmed": "Confirmé"
+    },
+    "columns": {
+      "orderNumber": "Numéro de commande",
+      "customer": "Client",
+      "store": "Magasin",
+      "totalPrice": "Prix total",
+      "status": "Statut",
+      "date": "Date",
+      "actions": "Actions"
+    },
+    "orderNumber": "Numéro de commande",
+    "confirmationCode": "Code de confirmation",
+    "totalPrice": "Prix total",
+    "customerName": "Nom du client",
+    "customerId": "ID du client",
+    "storeName": "Nom du magasin",
+    "storeId": "ID du magasin",
+    "orderStatus": "Statut de la commande",
+    "paymentStatus": "Statut du paiement",
+    "deliveryStatus": "Statut de la livraison",
+    "createdAt": "Créé le",
+    "lastUpdated": "Dernière mise à jour",
+    "cancel": "Annuler",
+    "cancelOrder": "Annuler la commande",
+    "cancelOrderConfirm": "Êtes-vous sûr de vouloir annuler cette commande ? Cela initiera un remboursement si un paiement a été effectué.",
+    "cancelOrderSuccess": "Commande annulée avec succès",
+    "cancelOrderError": "Échec de l'annulation de la commande",
+    "cannotCancelCompleted": "Impossible d'annuler les commandes terminées",
+    "cannotCancelInTransit": "Impossible d'annuler les commandes en transit",
+    "cannotCancelDelivered": "Impossible d'annuler les commandes livrées"
+  },
+  "ratings": {
+    "title": "Tableau de bord des évaluations",
+    "foodStoreTab": "Évaluations du magasin d'alimentation",
+    "dishTab": "Évaluations des plats",
+    "storeName": "Nom du magasin",
+    "dishName": "Nom du plat",
+    "searchStorePlaceholder": "Rechercher des magasins...",
+    "searchDishPlaceholder": "Rechercher des plats...",
+    "viewingStore": "Affichage des évaluations pour le magasin",
+    "viewingDish": "Affichage des évaluations pour le plat",
+    "select": "Sélectionner",
+    "selected": "Sélectionné",
+    "action": "Action",
+    "buyer": "Acheteur",
+    "rating": "Évaluation",
+    "comment": "Commentaire",
+    "orderId": "ID de commande",
+    "date": "Date",
+    "dish": "Plat",
+    "minRating": "Note minimale",
+    "maxRating": "Note maximale",
+    "sortBy": "Trier par",
+    "sortByDate": "Date",
+    "sortByRating": "Évaluation",
+    "totalRatings": "Total {{total}} évaluations",
+    "fetchRatingsError": "Échec du chargement des évaluations",
+    "fetchStoresError": "Échec du chargement des magasins d'alimentation",
+    "fetchDishesError": "Échec du chargement des plats"
+  },
+  "payoutConfig": {
+    "title": "Configuration des Paiements",
+    "commissionRate": "Taux de Commission",
+    "minimumPayout": "Paiement Minimum",
+    "maximumPayout": "Paiement Maximum",
+    "dailyLimit": "Limite Quotidienne",
+    "payoutCooldownHours": "Délai entre Paiements (heures)",
+    "maxDailyPayoutCount": "Nombre Maximum de Paiements Quotidiens",
+    "commissionRateRequired": "Veuillez entrer un taux de commission",
+    "commissionRateRange": "Le taux de commission doit être entre 0 et 1",
+    "minimumPayoutRequired": "Veuillez entrer un montant de paiement minimum",
+    "maximumPayoutRequired": "Veuillez entrer un montant de paiement maximum",
+    "dailyLimitRequired": "Veuillez entrer une limite quotidienne",
+    "payoutCooldownRequired": "Veuillez entrer les minutes de délai",
+    "maxDailyPayoutCountRequired": "Veuillez entrer le nombre maximum de paiements quotidiens",
+    "positiveNumber": "Doit être un nombre positif",
+    "payoutCooldownRange": "Doit être entre 1 et 1440 minutes (24h)",
+    "maxDailyPayoutCountRange": "Doit être entre 1 et 10",
+    "saveButton": "Enregistrer la Configuration",
+    "fetchError": "Échec du chargement de la configuration des paiements",
+    "updateError": "Échec de la mise à jour de la configuration des paiements",
+    "updateSuccess": "Configuration des paiements mise à jour avec succès"
+  },
+  "admin": {
+    "orderId": "ID de commande",
+    "buyer": "Acheteur",
+    "store": "Magasin",
+    "amount": "Montant",
+    "dish": "Plat",
+    "price": "Prix",
+    "rating": "Évaluation",
+    "noRatings": "Pas d'évaluations",
+    "totalUsers": "Utilisateurs totaux",
+    "activeUsers": "Utilisateurs actifs",
+    "foodStores": "Magasins d'alimentation",
+    "verifiedStores": "Magasins vérifiés",
+    "totalOrders": "Commandes totales",
+    "completedOrders": "Commandes terminées",
+    "totalRevenue": "Revenu total",
+    "recentOrders": "Commandes récentes",
+    "popularDishes": "Plats populaires",
+    "userGrowth": "Croissance des utilisateurs",
+    "userGrowthChartPlaceholder": "Le graphique de croissance des utilisateurs serait affiché ici",
+    "dataPoints": "Points de données : {{count}}",
+    "loading": "Chargement des statistiques administrateur...",
+    "byOrders": "Par Commandes",
+    "orders": "Commandes",
+    "status": {
+      "title": "Statut",
+      "pending": "En attente",
+      "completed": "Terminé",
+      "cancelled": "Annulé",
+      "confirmed":"Confirmé"
+    },
+    "statistics": {
+      "title": "Statistiques Administrateur"
+    }
+  },
+  "stripe": {
+    "title": "Compte Stripe",
+    "setup_account": "Configurer un compte Stripe",
+    "no_account_description": "Vous devez configurer un compte Stripe pour recevoir des paiements.",
+    "setup_button": "Configurer le compte",
+    "complete_onboarding": "Finaliser l'inscription",
+    "onboarding_incomplete": "La configuration de votre compte Stripe n'est pas encore terminée.",
+    "complete_onboarding_button": "Terminer la configuration",
+    "account_pending": "Vérification du Compte Nécessaire",
+    "payouts_not_enabled": "Votre compte n'est pas encore prêt à recevoir des paiements. Veuillez terminer le processus de vérification.",
+    "update_account_button": "Mettre à jour les informations du compte",
+    "account_active": "Compte Stripe",
+    "account_ready": "Votre compte est prêt!",
+    "can_receive_payments": "Vous pouvez maintenant recevoir des paiements et des versements.",
+    "request_payout": "Demander un Paiement",
+    "payoutRequestSuccess": "Demande de paiement soumise avec succès!",
+    "amount": "Montant",
+    "amount_required": "Veuillez entrer le montant du paiement",
+    "amount_min": "Le montant doit être d'au moins 1$",
+    "request_payout_button": "Demander un Paiement",
+    "account_created": "Compte Stripe créé avec succès!",
+    "payout_successful": "Demande de paiement effectuée avec succès!",
+    "failed_to_load_status": "Échec du chargement du statut Stripe",
+    "failed_to_create_account": "Échec de la création du compte Stripe",
+    "failed_to_get_onboarding_link": "Échec de l'obtention du lien d'inscription",
+    "payout_failed": "Échec de la demande de paiement",
+    "returnUrl": {
+      "verifying_status": "Vérification du statut...",
+      "failed_to_verify_status": "Échec de la vérification du statut.",
+      "failed_to_generate_link": "Échec de la génération d'un nouveau lien.",
+      "onboarding_complete": "Inscription Terminée!",
+      "back_to_dashboard": "Retour au Tableau de Bord",
+      "onboarding_not_finished": "Inscription Non Terminée",
+      "onboarding_not_finished_description": "Vous n'avez pas terminé toutes les étapes. Veuillez cliquer ci-dessous pour finir.",
+      "complete_setup": "Terminer la Configuration",
+      "cancel": "Annuler"
+    },
+    "refreshUrl": {
+      "session_expired": "Votre session a expiré. Veuillez réessayer depuis le tableau de bord.",
+      "redirecting_message": "Session expirée ou invalide. Redirection vers Stripe...",
+      "error": "Erreur",
+      "return_to_payout_settings": "Retour aux Paramètres de Paiement"
+    }
+  },
+  "storeVerification": {
+    "title": "Vérification du Magasin",
+    "status": {
+      "pending": "Votre demande de vérification est en attente d'examen",
+      "approved": "Votre magasin a été vérifié!",
+      "rejected": "Votre demande de vérification a été rejetée. Veuillez soumettre une nouvelle demande avec des documents mis à jour.",
+      "default": "Votre magasin n'est pas encore vérifié",
+      "approvedMessage": "Vous pouvez maintenant exploiter votre magasin"
+    },
+    "adminFeedback": "Commentaire de l'administrateur",
+    "submittedDocuments": "Documents soumis :",
+    "upload": {
+      "title": "Veuillez télécharger des documents pour vérification (licence commerciale, certificat de santé, etc.)",
+      "formats": "Formats acceptés : PDF, JPEG, PNG (Max 15 fichiers, 10MB chacun)",
+      "selectFiles": "Sélectionner des Fichiers",
+      "filesSelected": "{count} fichier(s) sélectionné(s) (Max 15)"
+    },
+    "buttons": {
+      "submit": "Soumettre la Demande de Vérification",
+      "cancel": "Annuler la Demande de Vérification",
+      "download": "Télécharger",
+      "delete": "Supprimer"
+    },
+    "messages": {
+      "submitSuccess": "Demande de vérification soumise avec succès",
+      "submitError": "Échec de la soumission de la demande de vérification",
+      "cancelSuccess": "Demande de vérification annulée",
+      "cancelError": "Échec de l'annulation de la demande de vérification",
+      "downloadError": "Échec du téléchargement du document",
+      "fileTypeError": "Vous ne pouvez télécharger que des fichiers PDF, JPEG ou PNG!",
+      "fileLimitError": "Vous ne pouvez pas télécharger plus de 15 fichiers",
+      "noFilesError": "Veuillez sélectionner au moins un fichier"
+    }
+  },
+  "sidebar": {
+    "admin": {
+      "dashboard": "Tableau de bord",
+      "ratings": "Évaluations",
+      "vendors": "Vendeurs",
+      "ingredients": "Ingrédients",
+      "profile": "Profil",
+      "orders": "Commandes",
+      "category": "Catégorie",
+      "wallet": "Portefeuille",
+      "statistics": "Statistiques",
+      "foodStores": "Magasins d'alimentation",
+      "createAdmin": "Créer un Admin"
+    },
+    "seller": {
+      "dashboard": "Tableau de bord",
+      "ratings": "Évaluations",
+      "stores": "Magasins",
+      "profile": "Profil",
+      "orders": "Commandes",
+      "recipes": "Recettes",
+      "wallet": "Portefeuille",
+      "statistics": "Statistiques"
+    },
+    "settings": {
+      "privacyLegal": "Confidentialité & Légal",
+      "back": "Retour"
+    },
+    "actions": {
+      "collapseMenu": "Réduire le menu",
+      "logout": "Déconnexion",
+      "loading": "Chargement..."
+    }
+  },
+  "sellerStats": {
+    "title": "Tableau de bord du vendeur",
+    "loading": "Chargement des statistiques du vendeur...",
+    "cards": {
+      "totalRevenue": "Revenu total",
+      "totalOrders": "Commandes totales",
+      "completionRate": "Taux d'achèvement",
+      "averageRating": "Note moyenne"
+    },
+    "charts": {
+      "monthlyRevenue": "Revenu mensuel",
+      "last30Days": "30 derniers jours",
+      "dailyRevenue": "Revenu quotidien",
+      "popularDishes": "Plats populaires",
+      "byOrders": "Par Commandes",
+      "orders": "Commandes"
+    },
+    "recentOrders": {
+      "title": "Commandes récentes",
+      "latest5": "5 dernières commandes",
+      "columns": {
+        "orderNumber": "Commande #",
+        "amount": "Montant",
+        "status": "Statut",
+        "date": "Date"
+      },
+      "status": {
+        "pending": "En attente",
+        "confirmed": "Confirmée",
+        "completed": "Terminée",
+        "cancelled": "Annulée"
+      }
+    },
+    "tooltips": {
+      "revenue": "Revenu"
+    }
+  },
+  "wallet": {
+    "title": "Portefeuille",
+    "tabs": {
+      "transactions": "Transactions",
+      "paymentMethods": "Méthodes de Paiement"
+    },
+    "balance": {
+      "title": "Solde du Portefeuille",
+      "availableBalance": "Solde Disponible"
+    },
+    "messages": {
+      "fetchWalletError": "Échec de la récupération du portefeuille",
+      "fetchTransactionsError": "Échec de la récupération des transactions",
+      "fetchPaymentMethodsError": "Échec de la récupération des méthodes de paiement",
+      "unknownError": "Une erreur inconnue s'est produite",
+      "addCardSuccess": "Carte ajoutée avec succès",
+      "removeCardSuccess": "Carte supprimée avec succès"
+    },
+    "loading": "Chargement...",
+    "transaction": {
+      "date": "Date",
+      "type":"Type",
+      "currency":"Devise",
+      "amount":"Montant",
+      "grossAmount":"Montant Brut",
+      "commissionRate":"Taux de Commission",
+      "commissionAmount": "Montant de la Commission",
+      "status": "Statut",
+      "description": "Description"
+    },
+    "status": {
+      "completed": "Terminé",
+      "pending": "En attente",
+      "failed": "Échec"
+    },
+    "type": {
+      "deposit": "Dépôt",
+      "withdrawal": "Retrait",
+      "order_income": "Revenu de la Commande",
+      "tip_income": "Revenu du Pourboire"
+    }
+  },
+  "dish": {
+    "addForm": {
+      "title": "Ajouter un Nouveau Plat",
+      "fields": {
+        "name": "Nom",
+        "description": "Description",
+        "price": "Prix",
+        "images": "Images"
+      },
+      "placeholders": {
+        "name": "Entrer le nom du plat",
+        "description": "Entrer la description du plat",
+        "price": "Entrer le prix"
+      },
+      "validation": {
+        "nameRequired": "Veuillez saisir le nom du plat!",
+        "priceRequired": "Veuillez saisir le prix du plat!"
+      },
+      "buttons": {
+        "chooseFiles": "Choisir des Fichiers",
+        "cancel": "Annuler",
+        "addDish": "Ajouter le Plat",
+        "filesChosen": "{count} fichier(s) choisi(s)",
+        "noFiles": "Aucun fichier choisi"
+      }
+    },
+    "editForm": {
+      "title": "Modifier le Plat",
+      "fields": {
+        "name": "Nom",
+        "description": "Description",
+        "price": "Prix"
+      },
+      "buttons": {
+        "cancel": "Annuler",
+        "update": "Mettre à jour le Plat",
+        "updating": "Mise à jour..."
+      }
+    },
+    "detail": {
+      "backButton": "Retour aux Plats",
+      "notFound": "Plat non trouvé",
+      "sections": {
+        "details": "Détails",
+        "images": "Images",
+        "ingredients": "Ingrédients",
+        "allergens": "Allergènes"
+      },
+      "tabs": {
+        "dishDetails": "Détails du Plat",
+        "ingredients": "Ingrédients",
+        "allergens": "Allergènes"
+      },
+      "labels": {
+        "price": "Prix :",
+        "noImages": "Aucune image disponible",
+        "selectImages": "Sélectionner des Images",
+        "uploadImages": "Télécharger {count} Image(s)",
+        "addIngredient": "Ajouter un Ingrédient",
+        "availableIngredients": "Ingrédients Disponibles",
+        "dishIngredients": "Ingrédients du Plat",
+        "searchPlaceholder": "Rechercher des ingrédients...",
+        "filterOptions": {
+          "all": "Tous les Ingrédients",
+          "supplements": "Suppléments Seulement",
+          "regular": "Réguliers Seulement"
+        },
+        "sortOptions": {
+          "nameAsc": "Nom (A-Z)",
+          "nameDesc": "Nom (Z-A)",
+          "newest": "Plus Récents D'abord",
+          "oldest": "Plus Anciens D'abord"
+        },
+        "ingredientColumns": {
+          "nameEn": "Nom (EN)",
+          "nameFr": "Nom (FR)",
+          "actions": "Actions",
+          "select": "Sélectionner",
+          "ingredient": "Ingrédient",
+          "supplement": "Supplément",
+          "supplementYes": "Oui",
+          "supplementNo": "Non",
+          "price": "Prix"
+        },
+        "allergenColumns": {
+          "nameEn": "Allergène (EN)",
+          "nameFr": "Allergène (FR)",
+          "actions": "Actions",
+          "specification": "Spécification",
+          "allergen": "Allergène"
+        },
+        "dishAllergenColumns": {
+          "allergenEn": "Allergène (EN)",
+          "allergenFr": "Allergène (FR)",
+          "specification": "Spécification",
+          "actions": "Actions"
+        }
+      },
+      "modals": {
+        "editIngredient": {
+          "title": "Modifier l'Ingrédient",
+          "buttons": {
+            "cancel": "Annuler",
+            "save": "Enregistrer les Modifications"
+          }
+        },
+        "createIngredient": {
+          "title": "Créer un Nouvel Ingrédient",
+          "buttons": {
+            "cancel": "Annuler",
+            "create": "Créer"
+          },
+          "fields": {
+            "nameEn": "Nom anglais",
+            "nameFr": "Nom français",
+            "nameEnRequired": "Veuillez saisir le nom anglais",
+            "nameFrRequired": "Veuillez saisir le nom français"
+          }
+        },
+        "delete": {
+          "image": {
+            "title": "Supprimer l'Image",
+            "content": "Êtes-vous sûr de vouloir supprimer cette image?",
+            "okText": "Supprimer",
+            "cancelText": "Annuler"
+          },
+          "ingredient": {
+            "title": "Supprimer l'Ingrédient",
+            "content": "Êtes-vous sûr de vouloir supprimer cet ingrédient?",
+            "okText": "Supprimer",
+            "cancelText": "Annuler"
+          }
+        }
+      },
+      "confirm": {
+        "removeIngredient": {
+          "title": "Êtes-vous sûr de vouloir supprimer cet ingrédient?",
+          "content": "Cette action ne peut pas être annulée.",
+          "okText": "Supprimer",
+          "cancelText": "Annuler"
+        },
+        "deleteIngredient": {
+          "title": "Êtes-vous sûr de vouloir supprimer cet ingrédient?",
+          "content": "Cela supprimera définitivement l'ingrédient de votre magasin alimentaire.",
+          "okText": "Supprimer",
+          "cancelText": "Annuler"
+        },
+        "removeAllergen": {
+          "title": "Êtes-vous sûr de vouloir supprimer cet allergène?",
+          "content": "Cette action ne peut pas être Annulée.",
+          "okText": "Supprimer",
+          "cancelText": "Annuler"
+        }
+      },
+      "cards": {
+        "addIngredient": {
+          "title": "Ajouter un Ingrédient",
+          "placeholders": {
+            "selectIngredient": "Sélectionner un Ingrédient",
+            "price": "Prix",
+            "specification": "Spécification (si requise)"
+          },
+          "labels": {
+            "isSupplement": "Est-ce un Supplément?",
+            "yes": "Oui",
+            "no": "Non"
+          },
+          "buttons": {
+            "add": "Ajouter",
+            "createNew": "Créer un Nouvel Ingrédient"
+          }
+        },
+        "availableIngredients": {
+          "title": "Ingrédients Disponibles",
+          "placeholders": {
+            "searchIngredients": "Rechercher des ingrédients..."
+          },
+          "options": {
+            "allIngredients": "Tous les Ingrédients",
+            "supplementsOnly": "Suppléments Seulement",
+            "regularOnly": "Réguliers Seulement"
+          },
+          "sortOptions": {
+            "nameAsc": "Nom (A-Z)",
+            "nameDesc": "Nom (Z-A)",
+            "newestFirst": "Plus Récents D'abord",
+            "oldestFirst": "Plus Anciens D'abord"
+          }
+        },
+        "dishIngredients": {
+          "title": "Ingrédients du Plat"
+        },
+        "addAllergen": {
+          "title": "Ajouter un Allergène",
+          "placeholders": {
+            "selectAllergen": "Sélectionner un Allergène"
+          },
+          "buttons": {
+            "addAllergen": "Ajouter un Allergène"
+          }
+        },
+        "dishAllergens": {
+          "title": "Allergènes du Plat"
+        }
+      },
+      "table": {
+        "columns": {
+          "ingredientEn": "Ingrédient En",
+          "ingredientFr": "Ingrédient Fr",
+          "supplement": "Supplément",
+          "price": "Prix",
+          "available": "Disponible",
+          "actions": "Actions",
+          "allergenEn": "Allergène En",
+          "allergenFr": "Allergène Fr",
+          "specification": "Spécification"
+        }
+      },
+      "form": {
+        "ingredientLabel": "Ingrédient :",
+        "availableLabel": "Disponible",
+        "priceLabel": "Prix :"
+      },
+      "messages": {
+        "imageUploadSuccess": "Images téléchargées avec succès",
+        "imageUploadError": "Échec du téléchargement des images",
+        "imageDeleteSuccess": "Image supprimée avec succès",
+        "imageDeleteError": "Échec de la suppression de l'image",
+        "ingredientAddSuccess": "Ingrédient ajouté avec succès",
+        "ingredientAddError": "Échec de l'ajout de l'ingrédient",
+        "ingredientUpdateSuccess": "Ingrédient mis à jour avec succès",
+        "ingredientUpdateError": "Échec de la mise à jour de l'ingrédient",
+        "ingredientRemoveSuccess": "Ingrédient supprimé avec succès",
+        "ingredientRemoveError": "Échec de la suppression de l'ingrédient",
+        "allergenAddSuccess": "Allergène ajouté avec succès",
+        "allergenAddError": "Échec de l'ajout de l'allergène",
+        "allergenRemoveSuccess": "Allergène supprimé avec succès",
+        "allergenRemoveError": "Échec de la suppression de l'allergène"
+      }
+    }
+  },
+  "dishes": {
+    "title": "Mes Recettes",
+    "addButton": "Ajouter un Plat",
+    "galleryView": "Vue Galerie",
+    "editModalTitle": "Modifier le Plat",
+    "table": {
+      "columns": {
+        "name": "Nom",
+        "description": "Description",
+        "price": "Prix",
+        "availability": "Disponibilité",
+        "images": "Images",
+        "actions": "Actions"
+      }
+    },
+    "status": {
+      "available": "Disponible",
+      "unavailable": "Indisponible"
+    },
+    "actions": {
+      "activate": "Activer",
+      "deactivate": "Désactiver"
+    },
+    "card": {
+      "noImage": "Pas d'Image"
+    },
+    "categories": "Catégories",
+    "noCategories": "Aucune catégorie assignée",
+    "selectCategoryType": "Sélectionner le Type de Catégorie",
+    "selectCategory": "Sélectionner la Catégorie",
+    "addCategory": "Ajouter une Catégorie",
+    "deleteConfirm": {
+      "title": "Supprimer le Plat",
+      "content": "Êtes-vous sûr de vouloir supprimer ce plat?",
+      "okText": "Supprimer",
+      "cancelText": "Annuler"
+    },
+    "messages": {
+      "fetchError": "Échec de la récupération des plats",
+      "createSuccess": "Plat créé avec succès",
+      "createError": "Échec de la création du plat",
+      "updateSuccess": "Plat mis à jour avec succès",
+      "updateError": "Échec de la mise à jour du plat",
+      "deleteSuccess": "Plat supprimé avec succès",
+      "deleteError": "Échec de la suppression du plat",
+      "categoryAdded": "Catégorie ajoutée avec succès",
+      "categoryAddError": "Échec de l'ajout de la catégorie",
+      "categoryRemoved": "Catégorie supprimée avec succès",
+      "categoryRemoveError": "Échec de la suppression de la catégorie",
+      "activateSuccess": "Plat activé avec succès",
+      "activateError": "Échec de l'activation du plat",
+      "deactivateSuccess": "Plat désactivé avec succès",
+      "deactivateError": "Échec de la désactivation du plat"
+    }
+  },
+  "orders": {
+    "title": "Commandes du Magasin Alimentaire",
+    "table": {
+      "columns": {
+        "orderNumber": "Numéro de Commande",
+        "customer": "Client",
+        "store": "Magasin",
+        "totalPrice": "Prix Total",
+        "grossTotal": "Total Brut",
+        "status": "Statut",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "emptyText": "Aucune commande trouvée",
+      "status": {
+        "completed": "terminé",
+        "cancelled": "annulé",
+        "pending": "en attente",
+        "confirmed": "Confirmée"
+      }
+    },
+    "actions": {
+      "view": "Voir",
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
+    },
+    "modal": {
+      "title": "Détails de la Commande",
+      "orderInfo": "Informations sur la Commande",
+      "statusInfo": "Informations sur le Statut",
+      "timestamps": "Horodatages",
+      "fields": {
+        "orderNumber": "Numéro de Commande",
+        "customer": "Client",
+        "store": "Magasin",
+        "totalPrice": "Prix Total",
+        "grossTotal": "Total Brut",
+        "confirmationCode": "Code de Confirmation",
+        "orderStatus": "Statut de la Commande",
+        "paymentStatus": "Statut du Paiement",
+        "deliveryStatus": "Statut de la Livraison",
+        "createdAt": "Créé le",
+        "updatedAt": "Mis à jour le"
+      },
+      "taxesInfo": "Info taxes:",
+      "taxes": {
+        "rates":"Taux",
+        "amounts": "Montant",
+        "totalTax": "Total des Taxes"
+      }
+    },
+    "messages": {
+      "fetchError": "Échec de la récupération des commandes",
+      "confirmSuccess": "Commande confirmée avec succès",
+      "confirmError": "Échec de la confirmation de la commande",
+      "cancelSuccess": "Commande annulée avec succès",
+      "cancelError": "Échec de l'annulation de la commande"
+    }
+  },
+  "store": {
+    "title": "Gestion du Magasin",
+    "create": {
+      "title": "Créer un Magasin",
+      "button": "Créer un Magasin",
+      "success": "Magasin créé avec succès",
+      "error": "Échec de la création du magasin"
+    },
+    "update": {
+      "title": "Mettre à jour le Magasin",
+      "button": "Mettre à jour le Magasin",
+      "success": "Magasin mis à jour avec succès",
+      "error": "Échec de la mise à jour du magasin"
+    },
+    "delete": {
+      "title": "Supprimer le Magasin",
+      "confirm": "Êtes-vous sûr de vouloir supprimer ce magasin? Cette action ne peut pas être annulée.",
+      "button": "Supprimer",
+      "success": "Magasin supprimé avec succès",
+      "error": "Échec de la suppression du magasin. Veuillez réessayer."
+    },
+    "fetchError": "Échec de la récupération des données du magasin",
+    "noStore": {
+      "title": "Aucun Magasin Créé",
+      "description": "Vous n'avez pas encore créé de magasin."
+    },
+    "form": {
+      "name": "Nom du Magasin",
+      "namePlaceholder": "Entrer le nom du magasin",
+      "description": "Description",
+      "descriptionPlaceholder": "Entrer la description du magasin",
+      "profileImage": "Image de Profil",
+      "currentImage": "L'image actuelle sera conservée",
+      "location": {
+        "title": "Détails de Localisation",
+        "search": "Rechercher une Adresse",
+        "searchPlaceholder": "Entrer une adresse à rechercher",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "street": "Adresse",
+        "city": "Ville",
+        "state": "État/Province",
+        "zipCode": "Code Postal",
+        "country": "Pays",
+        "additionalDetails": "Détails de Localisation Supplémentaires",
+        "additionalDetailsPlaceholder": "Entrer des détails de localisation supplémentaires"
+      },
+      "validation": {
+        "nameRequired": "Veuillez saisir le nom du magasin!",
+        "nameMax": "Le nom du magasin doit contenir moins de 100 caractères",
+        "descriptionMax": "La description doit contenir moins de 500 caractères",
+        "locationRequired": "Veuillez sélectionner une localisation sur la carte",
+        "latitudeRange": "La latitude doit être entre -90 et 90",
+        "longitudeRange": "La longitude doit être entre -180 et 180",
+        "streetMax": "L'adresse doit contenir moins de 100 caractères",
+        "cityMax": "La ville doit contenir moins de 50 caractères",
+        "stateMax": "L'état doit contenir moins de 50 caractères",
+        "zipMax": "Le code postal doit contenir moins de 20 caractères",
+        "countryMax": "Le pays doit contenir moins de 50 caractères",
+        "additionalMax": "Les détails supplémentaires doivent contenir moins de 200 caractères",
+        "imageFormat": "Vous ne pouvez télécharger que des fichiers image!",
+        "imageSize": "L'image doit être inférieure à 5MB!"
+      }
+    },
+    "info": {
+      "title": "Informations sur le Magasin",
+      "name": "Nom du Magasin",
+      "description": "Description",
+      "profileImage": "Image de Profil",
+      "address": "Adresse",
+      "coordinates": "Coordonnées",
+      "latitude": "Latitude",
+      "longitude": "Longitude"
+    }
+  },
+  "map": {
+    "loadError": "Échec du chargement de l'API Google Maps"
+  },
+  "upload": {
+    "text": "Cliquez pour télécharger",
+    "hint": "Télécharger"
+  },
+  "rating": {
+    "seller": {
+      "title": "Évaluations pour {{foodStoreName}}",
+      "table": {
+        "columns": {
+          "rating": "Note",
+          "comment": "Commentaire",
+          "buyer": "Acheteur",
+          "dish": "Plat",
+          "order": "Commande",
+          "date": "Date"
+        }
+      },
+      "filters": {
+        "dish": "Filtrer par Plat",
+        "search": "Rechercher des commentaires/acheteurs",
+        "minRating": "Note Minimale",
+        "maxRating": "Note Maximale",
+        "buyerId": "ID de l'Acheteur",
+        "orderId": "ID de Commande",
+        "buyerName": "Nom de l'Acheteur",
+        "orderNumber": "Numéro de Commande"
+      },
+      "actions": {
+        "filter": "Filtrer",
+        "reset": "Réinitialiser"
+      }
+    },
+    "admin": {
+      "title": "Gestion des Évaluations",
+      "table": {
+        "columns": {
+          "rating": "Note",
+          "comment": "Commentaire",
+          "buyer": "Acheteur",
+          "store": "Magasin",
+          "dish": "Plat",
+          "order": "Commande",
+          "date": "Date"
+        }
+      },
+      "filters": {
+        "store": "Filtrer par Magasin",
+        "dish": "Filtrer par Plat",
+        "search": "Rechercher des commentaires/acheteurs",
+        "minRating": "Note Minimale",
+        "maxRating": "Note Maximale",
+        "buyerId": "ID de l'Acheteur",
+        "orderId": "ID de Commande"
+      },
+      "actions": {
+        "filter": "Filtrer",
+        "reset": "Réinitialiser"
+      }
+    },
+    "stars": {
+      "1": "1 ★",
+      "2": "2 ★",
+      "3": "3 ★",
+      "4": "4 ★",
+      "5": "5 ★"
+    },
+    "pagination": {
+      "showing": "Affichage de {{total}} évaluations"
+    },
+    "notAvailable": "N/A"
+  },
+  "profile": {
+    "title": "Profil",
+    "image": {
+      "uploadText": "Cliquez pour télécharger une nouvelle photo de profil (JPG/PNG, max 2MB)",
+      "success": "Image de profil mise à jour avec succès!",
+      "error": "Échec de la mise à jour de l'image de profil",
+      "validation": {
+        "format": "Vous ne pouvez télécharger que des fichiers JPG/PNG!",
+        "size": "L'image doit être inférieure à 2MB!"
+      }
+    },
+    "form": {
+      "username": {
+        "label": "Nom d'utilisateur",
+        "help": "Le nom d'utilisateur ne peut pas être modifié"
+      },
+      "firstName": {
+        "label": "Prénom",
+        "error": "Veuillez saisir votre prénom"
+      },
+      "lastName": {
+        "label": "Nom",
+        "error": "Veuillez saisir votre nom"
+      },
+      "middleName": {
+        "label": "Deuxième Prénom"
+      },
+      "email": {
+        "label": "Email",
+        "error": {
+          "required": "Veuillez saisir votre email",
+          "invalid": "Veuillez entrer un email valide"
+        }
+      },
+      "phoneNumber": {
+        "label": "Numéro de Téléphone",
+        "error": "Veuillez saisir votre numéro de téléphone"
+      },
+      "saveButton": "Enregistrer les Modifications",
+      "success": "Profil mis à jour avec succès!",
+      "error": "Échec de la mise à jour du profil. Veuillez réessayer."
+    }
+  },
+  "ingredients": {
+    "title": "Gestion des Ingrédients",
+    "table": {
+      "columns": {
+        "nameFr": "Nom Français",
+        "nameEn": "Nom Anglais",
+        "createdAt": "Créé le",
+        "updatedAt": "Mis à jour le",
+        "actions": "Actions"
+      },
+      "noData": {
+        "search": "Aucun ingrédient correspondant trouvé",
+        "default": "Aucun ingrédient disponible"
+      }
+    },
+    "actions": {
+      "add": "Ajouter un Nouvel Ingrédient",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "processing": "Traitement en cours..."
+    },
+    "modal": {
+      "addTitle": "Ajouter un Nouvel Ingrédient",
+      "editTitle": "Modifier l'Ingrédient",
+      "labels": {
+        "nameFr": "Nom Français",
+        "nameEn": "Nom Anglais"
+      },
+      "placeholders": {
+        "nameFr": "Entrer le nom français",
+        "nameEn": "Entrer le nom anglais"
+      },
+      "validation": "Les noms français et anglais sont obligatoires",
+      "success": {
+        "create": "Ingrédient créé avec succès",
+        "update": "Ingrédient mis à jour avec succès",
+        "delete": "Ingrédient supprimé avec succès"
+      },
+      "error": "Opération échouée",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet ingrédient?"
+    },
+    "search": {
+      "placeholder": "Rechercher des ingrédients...",
+      "sortOptions": {
+        "nameEnAsc": "Nom Anglais (A-Z)",
+        "nameEnDesc": "Nom Anglais (Z-A)",
+        "nameFrAsc": "Nom Français (A-Z)",
+        "nameFrDesc": "Nom Français (Z-A)",
+        "createdAtDesc": "Plus Récents D'abord",
+        "createdAtAsc": "Plus Anciens D'abord",
+        "updatedAtDesc": "Récemment Mis à Jour",
+        "updatedAtAsc": "Moins Récemment Mis à Jour"
+      }
+    }
+  },
+  "users": {
+    "title": "Gestion des Utilisateurs",
+    "vendorAgreement": {
+      "Accepted": "Accepté",
+      "Not Accepted": "Non Accepté"
+    },
+    "messages": {
+      "loading": "Chargement des utilisateurs...",
+      "error": "Échec du chargement des utilisateurs",
+      "deleteSuccess": "Utilisateur supprimé avec succès",
+      "restoreSuccess": "Utilisateur restauré avec succès",
+      "suspendSuccess": "Utilisateur suspendu avec succès",
+      "activateSuccess": "Utilisateur activé avec succès"
+    },
+    "confirm": {
+      "delete": {
+        "title": "Supprimer l'Utilisateur",
+        "content": "Êtes-vous sûr de vouloir supprimer cet utilisateur?"
+      }
+    },
+    "types": {
+      "buyer": "Acheteur",
+      "seller": "Vendeur",
+      "admin": "Administrateur",
+      "customer": "Client"
+    },
+    "table": {
+      "columns": {
+        "user": "Utilisateur",
+        "contact": "Contact",
+        "foodStore": "Magasin Alimentaire",
+        "vendorAgreement": "Contrat Vendeur",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "status": {
+        "verified": "Vérifié",
+        "active": "Actif",
+        "suspended": "Suspendu",
+        "deleted": "Supprimé",
+        "yes": "Oui",
+        "no": "Non"
+      },
+      "total": "Total {{total}} utilisateurs",
+      "showing": "Affichage de {{count}} utilisateurs"
+    },
+    "search": {
+      "placeholder": "Rechercher des utilisateurs...",
+      "filter": {
+        "all": "Tous les Utilisateurs",
+        "buyer": "Acheteurs",
+        "seller": "Vendeurs",
+        "admin": "Administrateurs"
+      },
+      "sort": {
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "Email",
+        "createdAt": "Date de Création"
+      }
+    },
+    "actions": {
+      "details": "Détails",
+      "fullDetails": "Détails Complets",
+      "delete": "Supprimer",
+      "restore": "Restaurer",
+      "suspend": "Suspendre",
+      "activate": "Activer"
+    },
+    "details": {
+      "title": "Détails de l'Utilisateur",
+      "foodStore": "Magasin Alimentaire",
+      "status": "Statut",
+      "createdAt": "Créé le",
+      "lastLogin": "Dernière Connexion"
+    },
+    "pagination": {
+      "previous": "Précédent",
+      "next": "Suivant"
+    }
+  },
+  "verification": {
+    "title": "Demandes de Vérification des Magasins Alimentaires",
+    "table": {
+      "columns": {
+        "storeName": "Nom du Magasin",
+        "status": "Statut",
+        "notes": "Notes",
+        "submittedAt": "Soumis le",
+        "actions": "Actions"
+      },
+      "noDocuments": "Aucun document",
+      "storeId": "ID : {id}"
+    },
+    "status": {
+      "pending": "En attente",
+      "approved": "Approuvé",
+      "rejected": "Rejeté"
+    },
+    "modal": {
+      "approveTitle": "Approuver la Demande de Vérification",
+      "rejectTitle": "Rejeter la Demande de Vérification",
+      "storeLabel": "Magasin :",
+      "documentsLabel": "Documents :",
+      "statusLabel": "Statut Actuel :",
+      "processedLabel": "Dernier Traitement :",
+      "approveNote": "Note d'Approbation :",
+      "rejectNote": "Note de Rejet :",
+      "approvePlaceholder": "Note d'approbation facultative...",
+      "rejectPlaceholder": "Note de rejet obligatoire...",
+      "previousNote": "Note précédente :",
+      "documentPreview": "Aperçu du Document"
+    },
+    "buttons": {
+      "documents": "Documents",
+      "approve": "Approuver",
+      "reject": "Rejeter",
+      "viewDetails": "Voir les détails de la décision",
+      "download": "Télécharger le Document {index}",
+      "preview": "Aperçu"
+    },
+    "messages": {
+      "fetchError": "Échec de la récupération des demandes de vérification",
+      "downloadSuccess": "{filename} téléchargé",
+      "downloadError": "Échec du téléchargement du document",
+      "previewError": "Échec de l'aperçu du document",
+      "approveSuccess": "Demande approuvée avec succès",
+      "rejectSuccess": "Demande rejetée avec succès",
+      "rejectNoteRequired": "Une note de rejet est requise",
+      "processError": "Échec du traitement de la demande"
+    }
+  },
+  "dashboard": {
+    "cards": {
+      "totalUser": "Utilisateurs Totaux",
+      "totalOrder": "Commandes Totales",
+      "totalSales": "Ventes Totales",
+      "totalPending": "En Attente Totale",
+      "growth": {
+        "upYesterday": "{percent}% En hausse depuis hier",
+        "upWeek": "{percent}% En hausse depuis la semaine dernière",
+        "downYesterday": "{percent}% En baisse depuis hier"
+      }
+    }
+  },
+  "login": {
+    "title": "Connectez-vous à Votre Tableau de Bord",
+    "passwordRecovery": "Récupération de Mot de Passe",
+    "email": "Email",
+    "emailPlaceholder": "Entrez votre email",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "staySignedIn": "Rester Connecté",
+    "forgotPassword": "Mot de passe oublié?",
+    "loginButton": "Connexion",
+    "loggingIn": "Connexion en cours...",
+    "or": "Ou",
+    "signInWithGoogle": "Se connecter avec Google",
+    "sendRecoveryLink": "Envoyer le Lien de Récupération",
+    "sending": "Envoi en cours...",
+    "backToLogin": "Retour à la Connexion",
+    "errors": {
+      "invalidCredentials": "Email ou mot de passe invalide.",
+      "googleLoginFailed": "La connexion Google a échoué. Veuillez réessayer.",
+      "enterValidEmail": "Veuillez entrer un email valide.",
+      "resetLinkFailed": "Échec de l'envoi du lien de réinitialisation"
+    },
+    "success": {
+      "loggedIn": "Connecté avec succès",
+      "googleLoggedIn": "Connecté avec succès via Google",
+      "resetLinkSent": "Si l'email existe, un lien de Réinitialisation a été envoyé"
+    },
+    "loading": "Chargement...",
+    "slogan": "Vos voisins, Vos chefs"
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "users": "Utilisateurs",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "statistics": "Statistiques",
+    "logout": "Déconnexion"
+  },
+  "validation": {
+    "required": "Ce champ est requis",
+    "invalidEmail": "Adresse email invalide",
+    "minLength": "Doit contenir au moins {{count}} caractères"
+  },
+  "userDetails": {
+    "messages": {
+      "error": "Échec du chargement des détails de l'utilisateur",
+      "loading": "Chargement des détails de l'utilisateur...",
+      "notFound": "Utilisateur non trouvé",
+      "updateSuccess": "Utilisateur mis à jour avec succès",
+      "updateError": "Échec de la mise à jour de l'utilisateur"
+    },
+    "breadcrumb": {
+      "users": "Utilisateurs"
+    },
+    "title": "Détails de l'Utilisateur",
+    "actions": {
+      "edit": "Modifier l'Utilisateur",
+      "backToList": "Retour aux Utilisateurs",
+      "editProfile": "Modifier le Profil"
+    },
+    "sections": {
+      "basicInfo": "Informations de Base",
+      "sellerInfo": "Informations du Vendeur"
+    },
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "middleName": "Deuxième Prénom",
+      "email": "Email",
+      "phone": "Numéro de Téléphone",
+      "status": "Statut",
+      "createdAt": "Créé le",
+      "foodStore": "Magasin Alimentaire",
+      "type": "Type d'Utilisateur"
+    },
+    "editModal": {
+      "title": "Modifier l'Utilisateur",
+      "cancel": "Annuler",
+      "save": "Enregistrer les Modifications"
+    },
+    "validation": {
+      "firstNameRequired": "Veuillez saisir le prénom",
+      "lastNameRequired": "Veuillez saisir le nom",
+      "emailRequired": "Veuillez saisir l'email",
+      "emailInvalid": "Veuillez entrer un email valide",
+      "typeRequired": "Veuillez sélectionner le type d'utilisateur"
+    }
+  },
+  "settings": {
+    "title": "Paramètres Généraux"
+  },
+  "topBar": {
+    "profile": "Profil",
+    "settings": "Paramètres"
+  },
+  "statistics": {
+    "revenueByYear": "Revenu par Année",
+    "revenueByMonth": "Revenu par Mois",
+    "revenueByDay": "Revenu par Jour",
+    "platformRevenue": "Revenu de la Plateforme",
+    "platformRevenueByYear": "Revenu de la Plateforme par Année",
+    "platformRevenueByMonth": "Revenu de la Plateforme par Mois",
+    "platformRevenueByDay": "Revenu de la Plateforme par Jour",
+    "yearly": "Annuel",
+    "monthly": "Mensuel",
+    "daily": "Quotidien"
+  },
+  "foodStores": {
+    "title": "Gestion des Magasins d'Alimentation",
+    "table": {
+      "columns": {
+        "store": "Magasin d'Alimentation",
+        "seller": "Vendeur",
+        "location": "Localisation",
+        "vendorAgreement": "Contrat Vendeur",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "totalWithRange": "Affichage de {{start}}-{{end}} sur {{total}} magasins d'alimentation"
+    },
+    "search": {
+      "placeholder": "Rechercher des magasins d'alimentation...",
+      "filter": {
+        "all": "Tous",
+        "active": "Actif",
+        "inactive": "Inactif"
+      },
+      "sort": {
+        "name": "Nom",
+        "city": "Ville",
+        "createdAt": "Date de Création",
+        "updatedAt": "Date de Mise à Jour"
+      }
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif",
+      "verified": "Vérifié",
+      "unverified": "Non Vérifié"
+    },
+    "vendorAgreement": {
+      "accepted": "Accepté",
+      "notAccepted": "Non Accepté"
+    },
+    "actions": {
+      "details": "Détails",
+      "activate": "Activer",
+      "deactivate": "Désactiver",
+      "verify": "Vérifier",
+      "unverify": "Dévérifier",
+      "delete": "Supprimer"
+    },
+    "details": {
+      "name": "Nom",
+      "status": "Statut",
+      "seller": "Vendeur",
+      "sellerEmail": "Email du Vendeur",
+      "description": "Description",
+      "location": "Localisation",
+      "vendorAgreement": "Contrat Vendeur",
+      "createdAt": "Créé le",
+      "profileImage": "Image de Profil",
+      "dishes": "Plats",
+      "storeInformation": "Informations sur le Magasin",
+      "updatedAt": "Mis à jour le",
+      "deliveryOption": "Option de Livraison",
+      "pickupOption": "Option de Retrait",
+      "stripeConnection": "Connexion Stripe",
+      "connected": "Connecté",
+      "notConnected": "Non Connecté",
+      "address": "Adresse",
+      "type": "Type"
+    },
+    "delivery": {
+      "title": "Options de Livraison",
+      "delivery": "Livraison",
+      "pickupOnly": "Retrait",
+      "both": "Les Deux"
+    },
+    "dishes": {
+      "name": "Nom",
+      "description": "Description",
+      "price": "Prix",
+      "category": "Catégorie",
+      "status": "Statut",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "title": "Plats",
+      "image": "Image",
+      "noImage": "Aucune image disponible",
+      "noDescription": "Aucune description",
+      "noCategory": "Aucune Catégorie",
+      "addDish": "Ajouter un Plat",
+      "searchPlaceholder": "Rechercher des plats...",
+      "filterByStatus": "Filtrer par Statut",
+      "allStatus": "Tous les Statuts",
+      "sortBy": "Trier par",
+      "sortByName": "Nom",
+      "sortByPrice": "Prix",
+      "sortByCategory": "Catégorie",
+      "sortByCreatedAt": "Date de Création",
+      "sortByUpdatedAt": "Date de Mise à Jour",
+      "totalCount": "Total",
+      "dishes": "plats",
+      "filtered": "Filtré",
+      "pagination": "Affichage de {{start}}-{{end}} sur {{total}} plats",
+      "createdAt": "Créé le",
+      "updatedAt": "Mis à jour le"
+    },
+    "confirmDelete": {
+      "title": "Supprimer le Magasin d'Alimentation",
+      "content": "Êtes-vous sûr de vouloir supprimer \"{{name}}\"?"
+    },
+    "messages": {
+      "error": "Échec de la récupération des magasins d'alimentation",
+      "activated": "Magasin d'alimentation activé avec succès",
+      "deactivated": "Magasin d'alimentation désactivé avec succès",
+      "verified": "Magasin d'alimentation vérifié avec succès",
+      "unverified": "Vérification du magasin d'alimentation retirée",
+      "deleted": "Magasin d'alimentation supprimé avec succès"
+    },
+    "notFound": "Magasin d'alimentation non trouvé",
+    "noImage": "Aucune image de profil",
+    "viewDishes": "Voir les Plats",
+    "viewAllDishes": "Voir Tous les Plats"
+  },
+  "createAdmin": {
+    "title": "Créer un Nouvel Administrateur",
+    "description": "Remplissez le formulaire ci-dessous pour créer un nouveau compte administrateur",
+    "form": {
+      "firstName": "Prénom",
+      "firstNamePlaceholder": "Entrez le prénom",
+      "lastName": "Nom",
+      "lastNamePlaceholder": "Entrez le nom",
+      "email": "Email",
+      "emailPlaceholder": "Entrez l'adresse email",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Entrez le mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Confirmez le mot de passe",
+      "locale": "Préférence de langue",
+      "localePlaceholder": "Sélectionner la langue",
+      "createButton": "Créer un Admin",
+      "creating": "Création..."
+    },
+    "validation": {
+      "firstNameRequired": "Veuillez saisir le prénom!",
+      "firstNameMin": "Le prénom doit contenir au moins 2 caractères!",
+      "firstNameMax": "Le prénom doit contenir moins de 50 caractères!",
+      "lastNameRequired": "Veuillez saisir le nom!",
+      "lastNameMin": "Le nom doit contenir au moins 2 caractères!",
+      "lastNameMax": "Le nom doit contenir moins de 50 caractères!",
+      "emailRequired": "Veuillez saisir l'email!",
+      "emailInvalid": "Veuillez entrer un email valide!",
+      "passwordRequired": "Veuillez saisir le mot de passe!",
+      "passwordMin": "Le mot de passe doit contenir au moins 8 caractères!",
+      "passwordMax": "Le mot de passe doit contenir moins de 128 caractères!",
+      "passwordPattern": "Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre!",
+      "confirmPasswordRequired": "Veuillez confirmer le mot de passe!",
+      "passwordMismatch": "Les mots de passe ne correspondent pas!",
+      "localeRequired": "Veuillez sélectionner une langue!"
+    },
+    "messages": {
+      "success": "Administrateur créé avec succès",
+      "error": "Échec de la création de l'administrateur"
+    }
+  }
+}

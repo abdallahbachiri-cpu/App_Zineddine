@@ -1,0 +1,84 @@
+#!/bin/sh
+
+set -e
+
+if [ "$APP_ENV" = "prod" ]; then
+  composer install --prefer-dist --no-progress --no-dev --optimize-autoloader
+else
+  composer install --prefer-dist --no-progress
+fi
+
+# Ensure JWT config directory exists
+mkdir -p config/jwt
+
+# Handle JWT keys
+if [ -n "$JWT_PRIVATE_KEY" ] && [ -n "$JWT_PUBLIC_KEY" ]; then
+  echo "$JWT_PRIVATE_KEY" | base64 -d > config/jwt/private.pem
+  echo "$JWT_PUBLIC_KEY" | base64 -d > config/jwt/public.pem
+elif [ ! -f config/jwt/private.pem ] || [ ! -f config/jwt/public.pem ]; then
+  echo "Generating JWT keys..."
+  if [ -n "$JWT_PASSPHRASE" ]; then
+    openssl genpkey -aes256 -pass pass:$JWT_PASSPHRASE \
+      -out config/jwt/private.pem -algorithm RSA -pkeyopt rsa_keygen_bits:4096
+    openssl pkey -in config/jwt/private.pem -passin pass:$JWT_PASSPHRASE \
+      -pubout -out config/jwt/public.pem
+  else
+    openssl genpkey -out config/jwt/private.pem -algorithm RSA -pkeyopt rsa_keygen_bits:4096
+    openssl pkey -in config/jwt/private.pem -pubout -out config/jwt/public.pem
+  fi
+fi
+chmod 640 config/jwt/private.pem
+chmod 644 config/jwt/public.pem
+
+# Check if database is ready (PostgreSQL version)
+if echo "$DATABASE_URL" | grep -q '^postgresql://'; then
+  echo "Waiting for database to be ready..."
+  timeout=30
+  while ! pg_isready -h db -U ${DB_USER} -d ${DB_NAME} -t 1; do
+    timeout=$((timeout - 1))
+    if [ $timeout -le 0 ]; then
+      echo "Database connection timed out" >&2
+      exit 1
+    fi
+    sleep 1
+  done
+fi
+
+# Execute migrations if this is a production environment
+# if [ "$APP_ENV" = "prod" ]; then
+#   php bin/console doctrine:migrations:migrate -n --allow-no-migration
+# fi
+
+# if [ "$APP_ENV" = "prod" ]; then
+#   php bin/console cache:clear
+#   php bin/console cache:warmup
+#   # Ensure cache and logs directories are writable
+#   chown -R www-data:www-data var/
+# fi
+echo "Running migrations..."
+php bin/console doctrine:migrations:migrate -n --allow-no-migration
+
+# Create default admin in non-test environments
+if [ "$APP_ENV" != "test" ]; then
+    echo "Creating default admin user..."
+    php bin/console app:create-default-admin -n
+fi
+
+
+echo "Clearing and warming up cache..."
+php bin/console cache:clear || true
+php bin/console cache:warmup || true
+
+chmod +x bin/console \
+ && chown -R www-data:www-data var/
+
+# Ensure media directories exist and are writable
+echo "Preparing persistent disk..."
+mkdir -p /mnt/data/uploads/public
+mkdir -p /mnt/data/uploads/secure
+# chown -R www-data:www-data /mnt/data/uploads
+chmod -R 775 /mnt/data/uploads || true
+
+
+# Start PHP-FPM
+exec docker-php-entrypoint "$@"

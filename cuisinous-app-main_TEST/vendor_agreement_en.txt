@@ -1,0 +1,116 @@
+SERVICE AGREEMENT v.1
+
+This Service Agreement (the “Agreement”) is entered into and becomes effective on the date and at the time of its electronic acceptance by the Vendor through the Cuisinous platform.
+
+BETWEEN:
+9534-9072 QUÉBEC INC., a corporation duly incorporated under the Business Corporations Act, having its registered office at 401-5131, Place Leblanc, in the city of Sainte-Catherine, Province of Québec, J5C 1G6;
+(hereinafter referred to as “Cuisinous”)
+
+AND:
+Any natural or legal person who has created a vendor account on the Cuisinous platform and has accepted this Agreement electronically, whose identity, contact details, and relevant information are those provided at the time of vendor account creation;
+(hereinafter referred to as the “Vendor”)
+
+(Cuisinous and the Vendor are hereinafter collectively referred to as the “Parties”)
+
+PREAMBLE
+By electronically accepting this Agreement, the Vendor acknowledges having carefully read, understood, and unconditionally accepted all of its terms, as well as any related documents, policies, or conditions, where applicable.
+
+The Vendor acknowledges that Cuisinous acts solely as a technology matchmaking platform, that it does not engage in any food preparation, manufacturing, processing, storage, inspection, or delivery activities, and that it assumes no responsibility whatsoever for the food products offered by the Vendor.
+
+The Vendor further acknowledges acting independently, as a self-employed individual, and assumes full responsibility for its activities, products, operations, and legal obligations.
+
+The electronic acceptance of this Agreement constitutes free and informed consent and has the same legal value as a handwritten signature, in accordance with applicable Québec laws.
+
+1. PURPOSE
+Cuisinous operates a technology platform that facilitates connections between food product Vendors and Customers. Cuisinous does not engage in any food preparation, manufacturing, processing, storage, inspection, or delivery activities and is in no way a restaurateur, employer, agent, or representative of the Vendor. This Agreement defines the rights and obligations of the Vendor and Cuisinous regarding the use of the platform.
+
+2. INDEPENDENT VENDOR STATUS
+2.1. The Vendor acts as an independent contractor and operates its business independently. Nothing in this Agreement shall be construed as creating an employment, agency, partnership, joint venture, or representative relationship between the Vendor and Cuisinous.
+2.2. The Vendor assumes all risks and responsibilities related to its business, including applicable tax, social, and regulatory obligations.
+
+3. VENDOR OBLIGATIONS
+3.1. The Vendor is solely and fully responsible for, without limitation:
+    a) food safety, hygiene, and sanitation;
+    b) product quality, labeling, composition, and allergen disclosure;
+    c) preparation, storage, and distribution methods;
+    d) obtaining and maintaining all required permits, licenses, and certifications, including those issued by the Québec Ministry of Agriculture, Fisheries and Food (“MAPAQ”);
+    e) compliance with all applicable laws and regulations;
+    f) the accuracy and truthfulness of information provided to Cuisinous;
+    g) respecting intellectual property rights and refraining from selling counterfeit, illegal, or infringing products.
+3.2. Cuisinous does not verify, inspect, or certify the Vendor’s activities, kitchen, products, operations, permits, or insurance.
+3.3. The Vendor agrees to immediately notify Cuisinous of any change, suspension, or revocation of permits or certifications, or any information that may affect food safety, legal compliance, or the performance of this Agreement.
+
+4. VENDOR REPRESENTATIONS AND WARRANTIES
+4.1. The Vendor represents and warrants that it:
+    a) holds all required permits and certifications, which are valid and up to date;
+    b) complies with all applicable laws, regulations, and standards;
+    c) assumes full responsibility for its products and operations;
+    d) agrees to indemnify and hold harmless Cuisinous, its directors, officers, and partners from any claim, fine, damage, or action arising from the Vendor’s non-compliance;
+    e) acknowledges that providing false, misleading, or outdated information constitutes a material breach of this Agreement and may result in immediate suspension or termination;
+    f) maintains, at its own expense, throughout the term of this Agreement, adequate civil liability insurance covering its activities, products, and any resulting bodily injury, property damage, or financial loss.
+4.2. The Vendor expressly acknowledges and agrees that Cuisinous does not require, verify, validate, or retain any proof of the Vendor’s insurance, and that the absence, insufficiency, invalidity, or non-compliance of the Vendor’s insurance shall in no event engage the liability of Cuisinous. The Vendor expressly releases Cuisinous from any liability, claim, or obligation arising from the Vendor’s failure to maintain adequate insurance.
+4.3. The Vendor acknowledges being entirely responsible for food safety, hygiene, ingredient accuracy, allergen disclosure, cross-contamination risks, and any consequences arising from the consumption of food sold through Cuisinous.
+
+5. FEES AND CIRCUMVENTION PROHIBITION
+5.1. The Vendor agrees to pay all applicable fees related to the use of the platform.
+5.2. The Vendor is strictly prohibited from bypassing the platform to conduct direct transactions with Customers obtained through Cuisinous. Any violation authorizes Cuisinous to immediately suspend or terminate the Vendor’s account and pursue available remedies.
+
+6. PAYMENT TERMS
+6.1. All Customer payments and amounts payable to the Vendor are processed exclusively through an independent third-party payment service provider, including Stripe or any equivalent provider.
+6.2. The Vendor acknowledges that Cuisinous is not a financial institution and does not act as a payment intermediary, trustee, or fund custodian, and does not store, process, or retain any banking, financial, or credit card information.
+6.3. The Vendor acknowledges that payment execution, processing, authorization, settlement, and disbursement are the sole responsibility of the third-party payment provider.
+6.4. The Vendor understands that Cuisinous cannot be held liable for any error, omission, delay, interruption, failure, payment refusal, fund hold, account suspension, or security incident attributable to the third-party payment provider or its systems.
+
+7. LIMITATION OF LIABILITY
+7.1. The Vendor acknowledges that Cuisinous acts solely as a technology platform provider and matchmaking intermediary and does not intervene in any manner in food preparation, manufacturing, processing, storage, packaging, labeling, handling, delivery, or sale.
+7.2. To the fullest extent permitted by law, Cuisinous and its directors, officers, employees, shareholders, and partners shall not be liable for any direct or indirect, incidental, consequential, special, or punitive damages, including:
+    a) illness, food poisoning, allergic reactions, bodily injury, or death;
+    b) loss of income, business, or reputation;
+    c) claims, complaints, penalties, fines, or legal actions by customers, third parties, or regulators;
+    arising directly or indirectly from the Vendor’s food, ingredients, information, omissions, or activities.
+7.3. Cuisinous provides no express or implied warranty regarding the quality, safety, legality, regulatory compliance, or fitness for consumption of Vendor products.
+7.4. The Vendor expressly waives any claim against Cuisinous relating to damages arising from Vendor food products or platform use, except in cases of gross negligence or intentional misconduct by Cuisinous.
+
+8. INDEMNIFICATION
+8.1. The Vendor agrees to indemnify, defend, and hold harmless Cuisinous and its directors, officers, employees, shareholders, representatives, and partners from any claim, demand, complaint, lawsuit, investigation, sanction, fine, penalty, damage, loss, liability, cost, or expense (including legal and expert fees on a solicitor-client basis) arising directly or indirectly from:
+    a) food, ingredients, products, or services offered by the Vendor;
+    b) illness, food poisoning, allergic reactions, injury, death, or health impacts;
+    c) non-compliance with laws, regulations, or MAPAQ requirements;
+    d) false, misleading, incomplete, or outdated information provided by the Vendor;
+    e) any breach of this Agreement or related policies;
+    f) any actual or alleged violation of customer, third-party, or governmental rights.
+8.2. At Cuisinous’ request, the Vendor shall assume the full defense of such claims, at its expense, with counsel reasonably acceptable to Cuisinous. Cuisinous may participate in the defense at its own expense.
+8.3. These indemnification obligations survive termination or expiration of this Agreement.
+
+9. SUSPENSION AND TERMINATION
+9.1. Cuisinous reserves the right, at its sole discretion, to suspend, restrict, remove products, disable platform access, or terminate the Vendor’s account at any time, with or without notice, including in cases of:
+    a) breach of this Agreement or related policies;
+    b) false or misleading information;
+    c) non-compliance with laws or food safety regulations;
+    d) health or safety risks;
+    e) regulatory complaints or investigations;
+    f) reputational harm;
+    g) reasonable suspicion of fraud or serious misconduct.
+9.2. Suspension or termination does not entitle the Vendor to any compensation or refund.
+9.3. Termination does not affect obligations that by their nature survive, including payment, confidentiality, indemnification, and liability provisions.
+
+10. CONFIDENTIALITY AND DATA PROTECTION
+10.1. “Confidential Information” includes all data or information disclosed through platform use, including customer data, transactions, pricing, business terms, platform features, technologies, and internal policies.
+10.2. The Vendor agrees to maintain confidentiality, use such information solely for contract performance, not disclose it without written authorization, and implement reasonable safeguards.
+10.3. The Vendor agrees to comply with applicable privacy laws, including Québec’s Private Sector Privacy Act, and to use customer data solely for order fulfillment.
+10.4. All customer and platform data remain the exclusive property of Cuisinous, subject to applicable legal rights.
+10.5. Confidentiality obligations survive indefinitely.
+10.6. Any breach may cause irreparable harm and justify injunctive relief.
+
+11. GENERAL PROVISIONS
+11.1. This Agreement is governed by Québec law. Québec judicial district courts have exclusive jurisdiction.
+11.2. Invalid provisions shall be severed without affecting remaining provisions.
+11.3. Neither Party is liable for force majeure events.
+11.4. Cuisinous may modify this Agreement at any time. Continued platform use constitutes acceptance.
+11.5. Failure to enforce a right does not constitute waiver.
+11.6. The Vendor may not assign this Agreement without consent. Cuisinous may assign freely.
+11.7. This Agreement constitutes the entire agreement between the Parties.
+
+12. ELECTRONIC ACCEPTANCE AND CONSENT
+12.1. Acceptance via “Accept and Continue” or continued platform use constitutes valid electronic signature under Québec law.
+12.2. The Vendor confirms that consent is given freely and knowingly after full review.

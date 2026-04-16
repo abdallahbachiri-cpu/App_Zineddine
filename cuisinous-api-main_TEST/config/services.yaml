@@ -1,0 +1,146 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    upload_directory: "/mnt/data/uploads" # Absolute path to persistent disk
+    # upload_directory: "%kernel.project_dir%/mnt/data/uploads"
+    # public_media_url: "/public"
+    mailer_from: "%env(MAILER_FROM)%"
+    frontend_password_reset_url: "%env(FRONTEND_PASSWORD_RESET_URL)%"
+    default_locale: "en"
+    supported_locales: ["en", "fr"]
+    stripe_webhook_secret: "%env(STRIPE_WEBHOOK_SECRET)%"
+    google_client_id: "%env(GOOGLE_CLIENT_ID)%"
+    google_client_secret: "%env(GOOGLE_CLIENT_SECRET)%"
+    apple_bundle_id: "%env(APPLE_BUNDLE_ID)%"
+    twilio_account_sid: "%env(TWILIO_ACCOUNT_SID)%"
+    twilio_auth_token: "%env(TWILIO_AUTH_TOKEN)%"
+    twilio_proxy_service_sid: "%env(TWILIO_PROXY_SERVICE_SID)%"
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: "../src/"
+        exclude:
+            - "../src/DependencyInjection/"
+            - "../src/Entity/"
+            - "../src/Kernel.php"
+
+    App\Service\GoogleOAuthService:
+        arguments:
+            $clientId: "%google_client_id%"
+            $clientSecret: "%google_client_secret%"
+
+    App\Service\AppleOAuthService:
+        arguments:
+            $bundleId: "%apple_bundle_id%"
+
+    App\Service\Media\MediaService:
+        arguments:
+            $uploadDir: "%upload_directory%"
+            # $publicPath: "%public_media_url%"
+
+    App\Service\Wallet\WalletService:
+        arguments:
+            $logger: "@monolog.logger.wallet"
+
+    App\Service\Stripe\StripeService:
+        arguments:
+            $platformSecretKey: "%env(STRIPE_SECRET_KEY)%"
+            $publishableKey: "%env(STRIPE_PUBLIC_KEY)%"
+
+    App\Controller\StripeController:
+        arguments:
+            $onboardingFrontendReturnUrl: "%env(STRIPE_ONBOARDING_RETURN_URL)%"
+            $onboardingFrontendRefreshUrl: "%env(STRIPE_ONBOARDING_REFRESH_URL)%"
+
+    App\Service\Mailer\MailService:
+        arguments:
+            $defaultFrom: "%mailer_from%"
+
+    App\Controller\UserController:
+        arguments:
+            $frontendPasswordResetUrl: "%frontend_password_reset_url%"
+
+    App\Service\Email\EmailTemplateRenderer:
+        arguments:
+            $twig: "@twig"
+            $translator: "@translator"
+
+    App\Controller\Webhook\StripeWebhookController:
+        arguments:
+            $stripeWebhookSecret: "%stripe_webhook_secret%"
+        tags: ["controller.service_arguments"]
+
+    App\Service\User\Auth\AuthService:
+        arguments:
+            $tokenTtl: "%lexik_jwt_authentication.token_ttl%"
+
+    App\Service\Twilio\TwilioProxyService:
+        arguments:
+            $twilioAccountSid: "%twilio_account_sid%"
+            $twilioAuthToken: "%twilio_auth_token%"
+            $twilioProxyServiceSid: "%twilio_proxy_service_sid%"
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    # Event Listeners for Security
+    rate_limiter_locator:
+        class: Symfony\Component\DependencyInjection\ServiceLocator
+        arguments:
+            - limiter_auth_limiter: "@limiter.auth_limiter"
+              limiter_password_reset_limiter: "@limiter.password_reset_limiter"
+              limiter_email_confirmation_limiter: "@limiter.email_confirmation_limiter"
+              limiter_api_limiter: "@limiter.api_limiter"
+              limiter_buyer_limiter: "@limiter.buyer_limiter"
+              limiter_seller_limiter: "@limiter.seller_limiter"
+              limiter_admin_limiter: "@limiter.admin_limiter"
+              limiter_search_limiter: "@limiter.search_limiter"
+              limiter_webhook_limiter: "@limiter.webhook_limiter"
+        tags: ["container.service_locator"]
+
+    App\EventListener\RateLimitListener:
+        arguments:
+            $rateLimiters: "@rate_limiter_locator"
+        tags:
+            - {
+                  name: kernel.event_listener,
+                  event: kernel.request,
+                  priority: 100,
+              }
+
+    App\EventListener\SecurityHeadersListener:
+        tags:
+            - {
+                  name: kernel.event_listener,
+                  event: kernel.response,
+                  priority: -10,
+              }
+
+    App\EventListener\RequestValidationListener:
+        tags:
+            - {
+                  name: kernel.event_listener,
+                  event: kernel.request,
+                  priority: 200,
+              }
+
+    App\Service\Fcm\FcmNotificationService:
+        arguments:
+            $projectId: '%env(FIREBASE_PROJECT_ID)%'
+            $credentialsPath: '%kernel.project_dir%/%env(FIREBASE_CREDENTIALS_PATH)%'
+
+    # App\EventListener\ExceptionListener:
+    #     arguments:
+    #         $requestStack: '@request_stack'
+    #     tags:
+    #         - { name: kernel.event_listener, event: kernel.exception, priority: 100 }

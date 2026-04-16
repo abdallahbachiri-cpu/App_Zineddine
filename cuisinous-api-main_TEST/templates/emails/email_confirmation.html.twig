@@ -1,0 +1,41 @@
+{% set _locale = locale|default('en') %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ 'email_confirmation.subject'|trans({}, 'messages', _locale) }}</title>
+    <style>
+        .token {
+            font-family: monospace;
+            font-size: 24px;
+            letter-spacing: 3px;
+            color:rgb(215, 69, 32);
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 15px 0;
+        }
+        .note {
+            color: #6c757d;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <p>{{ 'email.hello_name'|trans({'%name%': user.firstName}, 'messages', _locale) }},</p>
+    
+    <p>{{ 'email_confirmation.token_message'|trans({}, 'messages', _locale) }}</p>
+    
+    <div class="token">{{ emailConfirmationToken }}</div>
+    
+    <p class="note">
+        {{ 'email_confirmation.token_expiry'|trans({}, 'messages', _locale) }}
+    </p>
+    
+    <p>{{ 'email_confirmation.token_warning'|trans({}, 'messages', _locale) }}</p>
+    
+    <p>{{ 'email.salutation'|trans({}, 'messages', _locale) }}</p>
+</body>
+</html>

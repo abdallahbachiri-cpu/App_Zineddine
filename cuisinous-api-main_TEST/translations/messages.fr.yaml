@@ -1,0 +1,27 @@
+email:
+    hello: "Bonjour"
+    hello_name: "Bonjour %name%"
+    thank_you: "Merci !"
+    salutation: |
+        Cordialement,  
+        L’équipe Cuisinous
+    
+password_reset:
+    subject: "Réinitialisation de votre mot de passe"
+    requested: "Vous avez demandé une réinitialisation de mot de passe."
+    reset_button: "Réinitialiser le mot de passe"
+    ignore_if_not_requested: "Si vous n'avez pas demandé ceci, vous pouvez ignorer cet email."
+    
+order_confirmation:
+    subject: "Votre code de confirmation - Commande #%order_number%"
+    intro: "Voici votre code de confirmation pour la commande #%order_number% de %store_name% :"
+    code: "Code de confirmation"
+    instructions: "Veuillez fournir ce code à la personne qui vous livrera votre commande."
+    ignore_if_received: "Si vous avez déjà reçu ce code, veuillez ignorer ce message."
+
+email_confirmation:
+    subject: "Votre code de vérification d'email"
+    token_message: "Voici votre code de vérification :"
+    token_expiry: "Ce code expirera dans 30 minutes."
+    token_warning: "Si vous n'avez pas demandé ceci, veuillez ignorer cet email."
+    invalid_token: "Code de vérification invalide ou expiré."
