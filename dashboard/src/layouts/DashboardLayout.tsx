@@ -85,7 +85,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
     };
 
     return (
-        <div className="h-screen flex overflow-hidden bg-white">
+        <div className="h-screen flex overflow-hidden bg-gray-50">
             {/* Sidebar mobile */}
             <div
                 className={`fixed inset-0 flex z-40 md:hidden ${sidebarOpen ? "" : "hidden"
@@ -236,9 +236,12 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
             </div>
 
             {/* Main content */}
-            <div className="flex flex-col w-0 flex-1 overflow-hidden">
+            <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
                 <TopBar toggleMobile={toggleMobileSidebar} />
-                <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
+                <main
+                    className="flex-1 overflow-y-auto focus:outline-none"
+                    style={{ background: '#f9fafb', color: '#111827', minHeight: 0 }}
+                >
                     {children}
                 </main>
             </div>

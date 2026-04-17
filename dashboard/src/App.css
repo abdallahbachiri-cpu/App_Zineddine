@@ -1,13 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-main {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  width: 100%;
-}
+/* App.css — custom rules only. @tailwind directives live in index.css */
 
 :root {
   --font-heading: 'Playfair Display', serif;
@@ -18,6 +9,7 @@ main {
 body {
   font-family: var(--font-body);
   overflow-x: hidden;
+  color: #111827;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -27,6 +19,7 @@ h1, h2, h3, h4, h5, h6 {
 button, input, .ui-element, select, textarea, span {
   font-family: var(--font-ui);
 }
+
 @media (min-width: 640px) {
   .ant-card-body {
     overflow-y: scroll;
