@@ -31,17 +31,20 @@ class MailService
 
         try {
             $this->mailer->send($email);
-
+            $this->logger->info('Email sent successfully', [
+                'to'      => $to,
+                'subject' => $subject,
+                'from'    => $this->defaultFrom,
+            ]);
         } catch (TransportExceptionInterface $e) {
             $this->logger->error('Email sending failed', [
-                'exception' => $e,
-                'to' => $to,
-                'subject' => $subject,
+                'exception' => $e->getMessage(),
+                'to'        => $to,
+                'subject'   => $subject,
+                'dsn_hint'  => 'Check MAILER_DSN in .env.local — current value may be null://null',
             ]);
 
-            //dev
             throw new \RuntimeException('Failed to send email: ' . $e->getMessage(), 0, $e);
-            // throw new \RuntimeException('Failed to send the email');
         }
     }
 }

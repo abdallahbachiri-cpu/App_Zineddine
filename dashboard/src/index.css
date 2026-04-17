@@ -6,6 +6,19 @@ html,
 body,
 #root {
   height: 100%;
-  color: #111827;
-  background-color: #f9fafb;
+  color: #111827 !important;
+  background-color: #f9fafb !important;
+  min-height: 100vh;
+}
+
+/* Prevent Ant Design layout from overriding text color */
+.ant-layout,
+.ant-layout-content {
+  background: #f9fafb !important;
+  color: #111827 !important;
+}
+
+/* Ensure all text elements inherit dark color */
+h1, h2, h3, h4, h5, h6, p, span, div, td, th {
+  color: inherit;
 }

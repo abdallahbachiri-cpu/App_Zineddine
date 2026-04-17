@@ -96,8 +96,7 @@ export function useNotifications() {
   const [isConnected,   setIsConnected]   = useState(false);
   const [toast,         setToast]         = useState<OrderNotification | null>(null);
 
-  const toastTimerRef       = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const statusPollRef       = useRef<ReturnType<typeof setInterval> | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
@@ -156,24 +155,23 @@ export function useNotifications() {
         mercureService.configure(MERCURE_PUBLIC_URL, null);
       }
 
-      // 2. Register connection-state handler
-      mercureService.setConnectionChangeHandler(setIsConnected);
+      // 2. Register connection-state handler — fires on every open/close (no polling needed)
+      mercureService.setConnectionChangeHandler(connected => {
+        setIsConnected(connected);
+      });
 
       // 3. Subscribe to this user's topic
       const callback: MercureMessageCallback = data => addNotification(data);
       unsubscribeFn = mercureService.subscribe(topic, callback);
+
+      // 4. Sync initial state immediately after subscribing (EventSource may already be OPEN)
+      setIsConnected(mercureService.isConnected(topic));
     };
 
     init();
 
-    // Poll connection status every 4 s to keep indicator in sync
-    statusPollRef.current = setInterval(() => {
-      setIsConnected(mercureService.isConnected(topic));
-    }, 4000);
-
     return () => {
       unsubscribeFn?.();
-      if (statusPollRef.current)  clearInterval(statusPollRef.current);
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps

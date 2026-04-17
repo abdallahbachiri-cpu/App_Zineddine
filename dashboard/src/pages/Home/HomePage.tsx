@@ -57,21 +57,27 @@ const HomePage: React.FC = () => {
   const [stats, setStats] = useState<AdminStats>(MOCK_STATS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const loadStats = useCallback(async () => {
     setLoading(true);
     setError(false);
     try {
       const data = await getAdminBasicStats();
-      // Merge with mock defaults so no value is ever undefined
       setStats({ ...MOCK_STATS, ...(data ?? {}) });
     } catch {
       setError(true);
-      setStats(MOCK_STATS); // always show 0s, never a blank card
+      setStats(MOCK_STATS);
     } finally {
       setLoading(false);
     }
   }, []);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadStats();
+    setRefreshing(false);
+  }, [loadStats]);
 
   useEffect(() => {
     loadStats();
@@ -88,6 +94,10 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="p-6 space-y-6">
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .spin-active { animation: spin 0.8s linear infinite; }
+      `}</style>
 
       {/* ── Welcome header ── */}
       <div className="flex items-center justify-between flex-wrap gap-3">
@@ -99,20 +109,40 @@ const HomePage: React.FC = () => {
             Tableau de bord administrateur
           </p>
         </div>
-        <span
-          className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border ${
-            backendUp
-              ? "bg-green-50 border-green-200 text-green-700"
-              : "bg-red-50 border-red-200 text-red-600"
-          }`}
-        >
+
+        <div className="flex items-center gap-3">
+          {/* Refresh button */}
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing || loading}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-xs font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-all disabled:opacity-50"
+            title="Actualiser les statistiques"
+          >
+            <svg
+              className={`w-3.5 h-3.5 ${refreshing ? 'spin-active' : ''}`}
+              fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Actualiser
+          </button>
+
           <span
-            className={`w-2 h-2 rounded-full ${
-              backendUp ? "bg-green-500 animate-pulse" : "bg-red-500"
+            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border ${
+              backendUp
+                ? "bg-green-50 border-green-200 text-green-700"
+                : "bg-red-50 border-red-200 text-red-600"
             }`}
-          />
-          {backendUp ? "Backend: En ligne" : "Backend: Hors ligne"}
-        </span>
+          >
+            <span
+              className={`w-2 h-2 rounded-full ${
+                backendUp ? "bg-green-500 animate-pulse" : "bg-red-500"
+              }`}
+            />
+            {backendUp ? "Backend: En ligne" : "Backend: Hors ligne"}
+          </span>
+        </div>
       </div>
 
       {/* ── Error / offline banner under the header ── */}
