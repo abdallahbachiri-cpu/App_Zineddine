@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Card,
   Row,
@@ -142,65 +142,65 @@ const fetchRevenueData = async () => {
     fetchRevenueData();
   }, [revenueView, selectedYear, selectedMonth]);
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        setLoading(true);
-        
-        const basicStats = await getBasicStats();
-        
-        const [
-          ordersRes, 
-          dishesRes, 
-          walletRes
-        ] = await Promise.all([
-          API.get('/seller/food-store/orders'),
-          API.get('/seller/food-store/dishes'),
-          API.get('/seller/food-store/wallet')
-        ]);
+  const fetchStats = useCallback(async () => {
+    setLoading(true);
+    setFetchError(false);
+    try {
+      const basicStats = await getBasicStats();
 
-        const orders = ordersRes.data.data || [];
-        const dishes = dishesRes.data || [];
-        const wallet = walletRes.data;
+      const [
+        ordersRes,
+        dishesRes,
+        walletRes
+      ] = await Promise.all([
+        API.get('/seller/food-store/orders'),
+        API.get('/seller/food-store/dishes'),
+        API.get('/seller/food-store/wallet')
+      ]);
 
-        const totalRevenue = basicStats?.totalRevenue || wallet?.balance || 0;
-        const totalOrders = basicStats?.totalOrders || orders.length;
-        const completedOrders = orders.filter((o: { status: string; }) => o.status === 'completed').length;
-        const averageRating = dishes.reduce((sum: number, dish: Dish) => sum + dish.averageRating, 0) / dishes.length || 0;
+      const orders = ordersRes.data.data || [];
+      const dishes = dishesRes.data || [];
+      const wallet = walletRes.data;
 
-        const recentOrders = orders
-          .sort((a: Order, b: Order) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-          .slice(0, 5);
+      const totalRevenue = basicStats?.totalRevenue || wallet?.balance || 0;
+      const totalOrders = basicStats?.totalOrders || orders.length;
+      const completedOrders = orders.filter((o: { status: string; }) => o.status === 'completed').length;
+      const averageRating = dishes.reduce((sum: number, dish: Dish) => sum + dish.averageRating, 0) / dishes.length || 0;
 
-        const popularDishes = dishes
-          .sort((a: Dish, b: Dish) => b.orderCount - a.orderCount)
-          .slice(0, 5);
+      const recentOrders = orders
+        .sort((a: Order, b: Order) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, 5);
 
-        const monthlyRevenue = Array.from({ length: 30 }, (_, i) => ({
-          date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toLocaleDateString(),
-          revenue: Math.round(Math.random() * 1000 + 500)
-        }));
+      const popularDishes = dishes
+        .sort((a: Dish, b: Dish) => b.orderCount - a.orderCount)
+        .slice(0, 5);
 
-        setStats(prev => ({
-          ...prev,
-          totalRevenue,
-          totalOrders,
-          completedOrders,
-          averageRating: isNaN(averageRating) ? 0 : averageRating,
-          recentOrders,
-          popularDishes,
-          monthlyRevenue
-        }));
-      } catch (error) {
-        console.error("Failed to fetch stats:", error);
-        setFetchError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const monthlyRevenue = Array.from({ length: 30 }, (_, i) => ({
+        date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toLocaleDateString(),
+        revenue: Math.round(Math.random() * 1000 + 500)
+      }));
 
-    fetchStats();
+      setStats(prev => ({
+        ...prev,
+        totalRevenue,
+        totalOrders,
+        completedOrders,
+        averageRating: isNaN(averageRating) ? 0 : averageRating,
+        recentOrders,
+        popularDishes,
+        monthlyRevenue
+      }));
+    } catch (error) {
+      console.error("Failed to fetch stats:", error);
+      setFetchError(true);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
 
   const columns = [
     {
@@ -293,7 +293,7 @@ const fetchRevenueData = async () => {
         icon={StatsEmptyIcon}
         title="Statistiques indisponibles"
         description="Impossible de charger les statistiques. Le serveur ne répond pas."
-        onRetry={() => { setFetchError(false); setLoading(true); }}
+        onRetry={fetchStats}
       />
     );
   }

@@ -39,8 +39,12 @@ const WalletPage: React.FC = () => {
   }, []);
 
   const fetchStripeStatus = async () => {
-    const response = await API.get('seller/food-store/stripe/status');
-    setStripeStatus(response.data);
+    try {
+      const response = await API.get('seller/food-store/stripe/status');
+      setStripeStatus(response.data);
+    } catch {
+      // silently ignore — stripe status is optional
+    }
   };
 
   const fetchWallet = async () => {

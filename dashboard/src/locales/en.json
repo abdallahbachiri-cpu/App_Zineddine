@@ -300,19 +300,19 @@
       "orders": "Orders",
       "category": "Category",
       "wallet": "Wallet",
-      "statistics": "Statistics",
+      "statistics": "Analytics",
       "foodStores": "Food Stores",
       "createAdmin": "Create Admin"
     },
     "seller": {
       "dashboard": "Dashboard",
       "ratings": "Ratings",
-      "stores": "Stores",
+      "stores": "My Store",
       "profile": "Profile",
       "orders": "Orders",
-      "recipes": "Recipes",
+      "recipes": "Menu",
       "wallet": "Wallet",
-      "statistics": "Statistics"
+      "statistics": "Analytics"
     },
     "settings": {
       "privacyLegal": "Privacy & Legal",

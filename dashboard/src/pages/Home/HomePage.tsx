@@ -1,34 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import Users from "../Users/Users";
 import { useAuth } from "../../contexts/AuthContext";
 import { getAdminBasicStats } from "../../services/analyticsService";
 import { SkeletonStatCard } from "../../components/SkeletonLoader";
-import EmptyState from "../../components/EmptyState";
 import { useBackendStatus } from "../../hooks/useBackendStatus";
 
 interface AdminStats {
-  totalUsers?: number;
-  totalOrders?: number;
-  totalFoodStores?: number;
+  totalUsers?: number | string;
+  totalOrders?: number | string;
+  totalFoodStores?: number | string;
   totalRevenue?: number | string;
+  activeUsers?: number | string;
   [key: string]: unknown;
 }
+
+const MOCK_STATS: AdminStats = {
+  totalUsers: 0,
+  totalOrders: 0,
+  totalFoodStores: 0,
+  totalRevenue: 0,
+};
 
 function StatCard({
   label,
   value,
   icon,
   color,
+  offline,
 }: {
   label: string;
   value: string | number;
   icon: React.ReactNode;
   color: string;
+  offline?: boolean;
 }) {
   return (
-    <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
+    <div className={`bg-white rounded-xl p-5 shadow-sm border flex items-center gap-4 ${offline ? "border-gray-100 opacity-60" : "border-gray-100"}`}>
       <div className={`w-11 h-11 rounded-lg flex items-center justify-center ${color}`}>
         {icon}
       </div>
@@ -40,39 +49,33 @@ function StatCard({
   );
 }
 
-const StatsEmptyIcon = (
-  <svg viewBox="0 0 64 64" fill="none" className="w-full h-full" stroke="currentColor">
-    <rect x="8" y="32" width="12" height="24" rx="2" strokeWidth="3"/>
-    <rect x="26" y="20" width="12" height="36" rx="2" strokeWidth="3"/>
-    <rect x="44" y="12" width="12" height="44" rx="2" strokeWidth="3"/>
-  </svg>
-);
-
 const HomePage: React.FC = () => {
   const { user } = useAuth();
   const { isOnline, isBackendReachable } = useBackendStatus();
   const backendUp = isOnline && isBackendReachable;
 
-  const [stats, setStats] = useState<AdminStats | null>(null);
+  const [stats, setStats] = useState<AdminStats>(MOCK_STATS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const loadStats = async () => {
+  const loadStats = useCallback(async () => {
     setLoading(true);
     setError(false);
     try {
       const data = await getAdminBasicStats();
-      setStats(data);
+      // Merge with mock defaults so no value is ever undefined
+      setStats({ ...MOCK_STATS, ...(data ?? {}) });
     } catch {
       setError(true);
+      setStats(MOCK_STATS); // always show 0s, never a blank card
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadStats();
-  }, []);
+  }, [loadStats]);
 
   const displayName =
     (user as any)?.firstName ||
@@ -80,9 +83,13 @@ const HomePage: React.FC = () => {
     user?.email?.split("@")[0] ||
     "Admin";
 
+  const safeNum = (v: unknown) =>
+    Number(v ?? 0).toLocaleString();
+
   return (
     <div className="p-6 space-y-6">
-      {/* Welcome header */}
+
+      {/* ── Welcome header ── */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">
@@ -92,7 +99,6 @@ const HomePage: React.FC = () => {
             Tableau de bord administrateur
           </p>
         </div>
-        {/* Backend status badge */}
         <span
           className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border ${
             backendUp
@@ -109,22 +115,31 @@ const HomePage: React.FC = () => {
         </span>
       </div>
 
-      {/* Stat cards */}
-      {loading && <SkeletonStatCard />}
+      {/* ── Error / offline banner under the header ── */}
       {!loading && error && (
-        <EmptyState
-          icon={StatsEmptyIcon}
-          title="Statistiques indisponibles"
-          description="Impossible de charger les données. Le serveur ne répond pas."
-          onRetry={loadStats}
-        />
+        <div className="flex items-center justify-between bg-orange-50 border border-orange-200 rounded-lg px-4 py-3">
+          <p className="text-sm text-orange-700">
+            ⚠️ Statistiques indisponibles — les valeurs affichées sont à 0.
+          </p>
+          <button
+            onClick={loadStats}
+            className="text-xs font-semibold text-orange-700 underline ml-4 whitespace-nowrap"
+          >
+            Réessayer
+          </button>
+        </div>
       )}
-      {!loading && !error && stats && (
+
+      {/* ── Stat cards — always visible, 0 when offline ── */}
+      {loading ? (
+        <SkeletonStatCard />
+      ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatCard
             label="Utilisateurs"
-            value={Number(stats.totalUsers ?? 0).toLocaleString()}
+            value={safeNum(stats.totalUsers)}
             color="bg-blue-50"
+            offline={error}
             icon={
               <svg className="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -133,9 +148,10 @@ const HomePage: React.FC = () => {
             }
           />
           <StatCard
-            label="Commandes"
-            value={Number(stats.totalOrders ?? 0).toLocaleString()}
+            label="Total Orders"
+            value={safeNum(stats.totalOrders)}
             color="bg-orange-50"
+            offline={error}
             icon={
               <svg className="w-5 h-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -144,9 +160,10 @@ const HomePage: React.FC = () => {
             }
           />
           <StatCard
-            label="Restaurants"
-            value={Number(stats.totalFoodStores ?? 0).toLocaleString()}
+            label="Active Stores"
+            value={safeNum(stats.totalFoodStores)}
             color="bg-purple-50"
+            offline={error}
             icon={
               <svg className="w-5 h-5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -155,9 +172,10 @@ const HomePage: React.FC = () => {
             }
           />
           <StatCard
-            label="Revenus"
-            value={`${Number(stats.totalRevenue ?? 0).toLocaleString()} €`}
+            label="Total Revenue"
+            value={`$${Number(stats.totalRevenue ?? 0).toFixed(2)}`}
             color="bg-green-50"
+            offline={error}
             icon={
               <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -168,7 +186,7 @@ const HomePage: React.FC = () => {
         </div>
       )}
 
-      {/* Users table */}
+      {/* ── Users table ── */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100">
           <h2 className="text-base font-semibold text-gray-700">Utilisateurs</h2>

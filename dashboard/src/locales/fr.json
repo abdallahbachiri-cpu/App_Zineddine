@@ -28,7 +28,7 @@
     "blocked": "Bloqué",
     "active": "Actif",
     "errors": {
-      "noWalletData" : "Échec de la récupération des données du portefeuille"
+      "noWalletData": "Échec de la récupération des données du portefeuille"
     }
   },
   "categories": {
@@ -206,7 +206,7 @@
       "pending": "En attente",
       "completed": "Terminé",
       "cancelled": "Annulé",
-      "confirmed":"Confirmé"
+      "confirmed": "Confirmé"
     },
     "statistics": {
       "title": "Statistiques Administrateur"
@@ -300,19 +300,19 @@
       "orders": "Commandes",
       "category": "Catégorie",
       "wallet": "Portefeuille",
-      "statistics": "Statistiques",
+      "statistics": "Analytiques",
       "foodStores": "Magasins d'alimentation",
       "createAdmin": "Créer un Admin"
     },
     "seller": {
       "dashboard": "Tableau de bord",
       "ratings": "Évaluations",
-      "stores": "Magasins",
+      "stores": "Ma Boutique",
       "profile": "Profil",
       "orders": "Commandes",
-      "recipes": "Recettes",
+      "recipes": "Menu",
       "wallet": "Portefeuille",
-      "statistics": "Statistiques"
+      "statistics": "Analytiques"
     },
     "settings": {
       "privacyLegal": "Confidentialité & Légal",
@@ -382,11 +382,11 @@
     "loading": "Chargement...",
     "transaction": {
       "date": "Date",
-      "type":"Type",
-      "currency":"Devise",
-      "amount":"Montant",
-      "grossAmount":"Montant Brut",
-      "commissionRate":"Taux de Commission",
+      "type": "Type",
+      "currency": "Devise",
+      "amount": "Montant",
+      "grossAmount": "Montant Brut",
+      "commissionRate": "Taux de Commission",
       "commissionAmount": "Montant de la Commission",
       "status": "Statut",
       "description": "Description"
@@ -745,7 +745,7 @@
       },
       "taxesInfo": "Info taxes:",
       "taxes": {
-        "rates":"Taux",
+        "rates": "Taux",
         "amounts": "Montant",
         "totalTax": "Total des Taxes"
       }
