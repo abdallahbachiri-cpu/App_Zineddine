@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Button, Upload, message, Avatar, Card, Spin } from "antd";
-import { UserOutlined, EditOutlined } from "@ant-design/icons";
+import React, { useState, useEffect, useRef } from "react";
+import { Form, Input, Button, Upload, message, Avatar, Card, Spin, Modal } from "antd";
+import { UserOutlined, EditOutlined, DeleteOutlined, WarningOutlined } from "@ant-design/icons";
 import type { UploadProps } from 'antd';
 import API from '../../services/httpClient';
 import { API_BASE_URL } from "../../config/apiConfig";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { deleteAccount } from "../../services/accountService";
 
 interface UserData {
   email: string;
@@ -19,6 +22,8 @@ interface UserData {
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const [profileData, setProfileData] = useState<UserData>({
     email: "",
     firstName: "",
@@ -31,6 +36,29 @@ const ProfilePage: React.FC = () => {
   const [imageLoading, setImageLoading] = useState(false);
   const [, setError] = useState<string | null>(null);
   const [, setSuccess] = useState(false);
+
+  // ── Danger Zone state ──────────────────────────────────────────────────
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteInputRef = useRef<HTMLInputElement>(null);
+
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmText !== "DELETE") return;
+    setIsDeleting(true);
+    try {
+      await deleteAccount();
+      message.success("Account deleted. Goodbye!");
+      await logout();
+      navigate("/login");
+    } catch {
+      message.error("Failed to delete account. Please try again.");
+    } finally {
+      setIsDeleting(false);
+      setDeleteModalOpen(false);
+      setDeleteConfirmText("");
+    }
+  };
 
   useEffect(() => {
     const userData = localStorage.getItem("user");
@@ -144,7 +172,7 @@ const ProfilePage: React.FC = () => {
   };
   
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto space-y-6">
       <Card
         title={<h1 className="text-2xl font-bold">{t('profile.title')}</h1>}
         bordered={false}
@@ -252,6 +280,67 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
       </Card>
+
+      {/* ── Danger Zone ──────────────────────────────────────────────── */}
+      <div className="rounded-xl border border-red-200 bg-red-50 p-6">
+        <div className="flex items-center gap-2 mb-1">
+          <WarningOutlined className="text-red-500 text-lg" />
+          <h2 className="text-base font-semibold text-red-700 m-0">Danger Zone</h2>
+        </div>
+        <p className="text-sm text-red-600 mb-4">
+          Once you delete your account, all your data will be permanently removed and cannot be recovered.
+        </p>
+        <Button
+          danger
+          type="primary"
+          icon={<DeleteOutlined />}
+          onClick={() => { setDeleteModalOpen(true); setDeleteConfirmText(""); }}
+        >
+          Delete Account
+        </Button>
+      </div>
+
+      {/* ── Delete confirmation modal ─────────────────────────────────── */}
+      <Modal
+        open={deleteModalOpen}
+        title={
+          <span className="text-red-600 font-bold flex items-center gap-2">
+            <WarningOutlined /> Permanently Delete Account
+          </span>
+        }
+        onCancel={() => { setDeleteModalOpen(false); setDeleteConfirmText(""); }}
+        footer={[
+          <Button key="cancel" onClick={() => { setDeleteModalOpen(false); setDeleteConfirmText(""); }}>
+            Cancel
+          </Button>,
+          <Button
+            key="delete"
+            danger
+            type="primary"
+            disabled={deleteConfirmText !== "DELETE"}
+            loading={isDeleting}
+            onClick={handleDeleteAccount}
+          >
+            Permanently Delete Account
+          </Button>,
+        ]}
+        afterOpenChange={(open) => { if (open) deleteInputRef.current?.focus(); }}
+      >
+        <p className="text-gray-700 mb-4">
+          This action is <strong>irreversible</strong>. All your data — orders, profile, wallet — will be permanently deleted.
+        </p>
+        <p className="text-sm text-gray-500 mb-2">
+          Type <strong>DELETE</strong> to confirm:
+        </p>
+        <input
+          ref={deleteInputRef}
+          type="text"
+          value={deleteConfirmText}
+          onChange={(e) => setDeleteConfirmText(e.target.value)}
+          placeholder="DELETE"
+          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-red-400"
+        />
+      </Modal>
     </div>
   );
 };

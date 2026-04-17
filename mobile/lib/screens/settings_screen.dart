@@ -7,6 +7,7 @@ import 'package:cuisinous/providers/auth_provider.dart';
 import 'package:cuisinous/providers/settings_provider.dart';
 import 'package:cuisinous/screens/privacy_policy_screen.dart';
 import 'package:cuisinous/screens/terms_and_conditions_screen.dart';
+import 'package:cuisinous/services/account_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +19,63 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  bool _isDeletingAccount = false;
+
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> _showDeleteAccountDialog() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        title: const Text(
+          'Delete Account?',
+          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          'This action is permanent and cannot be undone.\nAll your data will be deleted.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text(
+              'Delete Account',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+    if (!mounted) return;
+
+    setState(() => _isDeletingAccount = true);
+
+    try {
+      await AccountService().deleteAccount();
+      if (!mounted) return;
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      await authProvider.logout();
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to delete account: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isDeletingAccount = false);
+    }
   }
 
   @override
@@ -92,97 +147,177 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: ListView(
               padding: const EdgeInsets.all(16),
-              itemCount: menuItems.length,
-              itemBuilder: (context, index) {
-                final itemKey = menuItems[index]['key'] as String;
-                final itemTitle = _getTranslatedTitle(context, itemKey);
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
+              children: [
+                // ── Regular menu items ──────────────────────────────────
+                ...List.generate(menuItems.length, (index) {
+                  final itemKey = menuItems[index]['key'] as String;
+                  final itemTitle = _getTranslatedTitle(context, itemKey);
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withAlpha(40),
+                          spreadRadius: 5,
+                          blurRadius: 10,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      leading: Icon(
+                        menuItems[index]['icon'],
+                        color:
+                            itemKey == 'Log out' ? Colors.red : Colors.black,
+                      ),
+                      title: Text(
+                        itemTitle,
+                        textAlign:
+                            itemKey == 'Log out'
+                                ? TextAlign.center
+                                : TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color:
+                              itemKey == 'Log out' ? Colors.red : Colors.black,
+                        ),
+                      ),
+                      trailing:
+                          itemKey != 'Log out'
+                              ? const Icon(Icons.arrow_forward_ios, size: 16)
+                              : null,
+                      onTap: () async {
+                        switch (itemKey) {
+                          case 'Profile':
+                            Navigator.pushNamed(context, AppRouter.profile);
+                            break;
+                          case 'Store':
+                            Navigator.pushNamed(context, AppRouter.store);
+                            break;
+                          case 'Wallet':
+                            Navigator.pushNamed(
+                                context, AppRouter.sellerWallet);
+                            break;
+                          case 'Language':
+                            Navigator.pushNamed(context, AppRouter.language);
+                            break;
+                          case 'Rate App':
+                            break;
+                          case 'Privacy Policy':
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => const PrivacyPolicyScreen(),
+                              ),
+                            );
+                            break;
+                          case 'Terms and conditions':
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        const TermsAndConditionsScreen(),
+                              ),
+                            );
+                            break;
+                          case 'Log out':
+                            final auth = Provider.of<AuthProvider>(
+                              context,
+                              listen: false,
+                            );
+                            await auth.logout();
+                            break;
+                        }
+                      },
+                    ),
+                  );
+                }),
+
+                // ── Danger Zone ─────────────────────────────────────────
+                const SizedBox(height: 24),
+                Container(
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withAlpha(40),
-                        spreadRadius: 5,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
+                    color: const Color(0xFFFEF2F2),
+                    border: Border.all(color: const Color(0xFFFECACA)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.warning_amber_rounded,
+                              color: Colors.red, size: 20),
+                          SizedBox(width: 8),
+                          Text(
+                            'Danger Zone',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Permanently delete your account and all associated data.',
+                        style: TextStyle(fontSize: 13, color: Colors.black54),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed:
+                              _isDeletingAccount
+                                  ? null
+                                  : _showDeleteAccountDialog,
+                          icon:
+                              _isDeletingAccount
+                                  ? const SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : const Icon(Icons.delete_forever,
+                                      color: Colors.white),
+                          label: Text(
+                            _isDeletingAccount
+                                ? 'Deleting...'
+                                : 'Delete My Account',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  child: ListTile(
-                    leading: Icon(
-                      menuItems[index]['icon'],
-                      color: itemKey == 'Log out' ? Colors.red : Colors.black,
-                    ),
-                    title: Text(
-                      itemTitle,
-                      textAlign:
-                          itemKey == 'Log out'
-                              ? TextAlign.center
-                              : TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: itemKey == 'Log out' ? Colors.red : Colors.black,
-                      ),
-                    ),
-                    trailing:
-                        itemKey != 'Log out'
-                            ? const Icon(Icons.arrow_forward_ios, size: 16)
-                            : null,
-                    onTap: () async {
-                      switch (itemKey) {
-                        case 'Profile':
-                          Navigator.pushNamed(context, AppRouter.profile);
-                          break;
-
-                        case 'Store':
-                          Navigator.pushNamed(context, AppRouter.store);
-                          break;
-                        case 'Wallet':
-                          Navigator.pushNamed(context, AppRouter.sellerWallet);
-                          break;
-                        case 'Language':
-                          Navigator.pushNamed(context, AppRouter.language);
-
-                          break;
-                        case 'Rate App':
-                          break;
-                        case 'Privacy Policy':
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const PrivacyPolicyScreen(),
-                            ),
-                          );
-                          break;
-                        case 'Terms and conditions':
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => const TermsAndConditionsScreen(),
-                            ),
-                          );
-                          break;
-                        case 'Log out':
-                          final authProvider = Provider.of<AuthProvider>(
-                            context,
-                            listen: false,
-                          );
-                          await authProvider.logout();
-                          break;
-                      }
-                    },
-                  ),
-                );
-              },
+                ),
+                const SizedBox(height: 16),
+              ],
             ),
           ),
         ],

@@ -10,17 +10,7 @@ import {
 import { Order } from "../../types/order";
 import { useTranslation } from "react-i18next";
 import { useNotificationContext } from "../../contexts/NotificationContext";
-import EmptyState from "../../components/EmptyState";
-import { SkeletonTableRows } from "../../components/SkeletonLoader";
 
-const OrdersEmptyIcon = (
-  <svg viewBox="0 0 64 64" fill="none" className="w-full h-full" stroke="currentColor">
-    <rect x="14" y="8" width="36" height="48" rx="4" strokeWidth="3"/>
-    <path strokeLinecap="round" strokeWidth="3" d="M22 20h20M22 30h20M22 40h12"/>
-    <circle cx="46" cy="46" r="10" strokeWidth="3" fill="white"/>
-    <path strokeLinecap="round" strokeWidth="3" d="M43 46h6M46 43v6"/>
-  </svg>
-);
 
 const OrdersPage: React.FC = () => {
   const { t } = useTranslation();
@@ -190,26 +180,6 @@ const OrdersPage: React.FC = () => {
     },
   ];
 
-  if (loading) {
-    return (
-      <div style={{ padding: "20px" }}>
-        <div style={{ height: 32, width: 180, background: "#f0f0f0", borderRadius: 6, marginBottom: 16 }} />
-        <SkeletonTableRows rows={8} />
-      </div>
-    );
-  }
-
-  if (fetchError) {
-    return (
-      <EmptyState
-        icon={OrdersEmptyIcon}
-        title="Aucune commande disponible"
-        description="Impossible de charger les commandes. Le serveur ne répond pas."
-        onRetry={loadOrders}
-      />
-    );
-  }
-
   return (
     <div style={{ padding: "20px", width: "100%", maxWidth: "100%", overflow: "hidden" }}>
       <style>{`
@@ -220,6 +190,14 @@ const OrdersPage: React.FC = () => {
         .order-row-new td { animation: slideInDown 0.4s ease-out; background-color: #fff7ed !important; }
       `}</style>
       <Title level={2}>{t("rating.admin.title")}</Title>
+
+      {fetchError && (
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 8, padding: "10px 16px", marginBottom: 16 }}>
+          <span style={{ fontSize: 13, color: "#c2410c" }}>⚠️ Impossible de charger les commandes. Le serveur ne répond pas.</span>
+          <button onClick={loadOrders} style={{ fontSize: 12, fontWeight: 600, color: "#c2410c", textDecoration: "underline", background: "none", border: "none", cursor: "pointer", marginLeft: 12 }}>Réessayer</button>
+        </div>
+      )}
+
       <Table
         columns={columns}
         dataSource={orders}

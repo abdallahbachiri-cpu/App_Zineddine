@@ -12,17 +12,7 @@ import {
   Space,
   Button
 } from "antd";
-import EmptyState from "../../components/EmptyState";
-import { SkeletonStatCard, SkeletonCard } from "../../components/SkeletonLoader";
 
-const StatsEmptyIcon = (
-  <svg viewBox="0 0 64 64" fill="none" className="w-full h-full" stroke="currentColor">
-    <rect x="8" y="32" width="12" height="24" rx="2" strokeWidth="3"/>
-    <rect x="26" y="20" width="12" height="36" rx="2" strokeWidth="3"/>
-    <rect x="44" y="12" width="12" height="44" rx="2" strokeWidth="3"/>
-    <path strokeLinecap="round" strokeWidth="2.5" d="M8 8l12 8 16-12 12 8"/>
-  </svg>
-);
 import {
   LineChart,
   Line,
@@ -276,35 +266,20 @@ const fetchRevenueData = async () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div style={{ padding: 24 }}>
-        <SkeletonStatCard />
-        <div style={{ marginTop: 16 }}>
-          <SkeletonCard height={260} />
-        </div>
-      </div>
-    );
-  }
-
-  if (fetchError) {
-    return (
-      <EmptyState
-        icon={StatsEmptyIcon}
-        title="Statistiques indisponibles"
-        description="Impossible de charger les statistiques. Le serveur ne répond pas."
-        onRetry={fetchStats}
-      />
-    );
-  }
-
   return (
     <div style={{ padding: 24 }}>
       <Title level={3} style={{ marginBottom: 24 }}>{t('sellerStats.title')}</Title>
+
+      {fetchError && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff7ed', border: '1px solid #fed7aa', borderRadius: 8, padding: '10px 16px', marginBottom: 16 }}>
+          <span style={{ fontSize: 13, color: '#c2410c' }}>⚠️ Statistiques partielles — le serveur ne répond pas.</span>
+          <button onClick={fetchStats} style={{ fontSize: 12, fontWeight: 600, color: '#c2410c', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer', marginLeft: 12 }}>Réessayer</button>
+        </div>
+      )}
       
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <Card bordered={false}>
+          <Card bordered={false} loading={loading}>
             <Statistic
               title={t('sellerStats.cards.totalRevenue')}
               value={stats.totalRevenue}
@@ -315,7 +290,7 @@ const fetchRevenueData = async () => {
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <Card bordered={false}>
+          <Card bordered={false} loading={loading}>
             <Statistic
               title={t('sellerStats.cards.totalOrders')}
               value={stats.totalOrders}
@@ -324,22 +299,27 @@ const fetchRevenueData = async () => {
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <Card bordered={false}>
-            <Statistic
-              title={t('sellerStats.cards.completionRate')}
-              value={(stats.completedOrders / stats.totalOrders * 100).toFixed(1)}
-              suffix="%"
-              prefix={<CheckCircleOutlined />}
-            />
-            <Progress 
-              percent={Math.round(stats.completedOrders / stats.totalOrders * 100)} 
-              size="small" 
-              status="active" 
-            />
+          <Card bordered={false} loading={loading}>
+            {(() => {
+              const rate = stats.totalOrders > 0
+                ? (stats.completedOrders / stats.totalOrders * 100)
+                : 0;
+              return (
+                <>
+                  <Statistic
+                    title={t('sellerStats.cards.completionRate')}
+                    value={rate.toFixed(1)}
+                    suffix="%"
+                    prefix={<CheckCircleOutlined />}
+                  />
+                  <Progress percent={Math.round(rate)} size="small" status="active" />
+                </>
+              );
+            })()}
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <Card bordered={false}>
+          <Card bordered={false} loading={loading}>
             <Statistic
               title={t('sellerStats.cards.averageRating')}
               value={stats.averageRating}

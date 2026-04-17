@@ -6,17 +6,7 @@ import { WalletDTO, TransactionDTO } from '../../types/wallet';
 import API from '../../services/httpClient';
 import { useTranslation } from 'react-i18next';
 import { Form } from 'antd';
-import EmptyState from '../../components/EmptyState';
-import { SkeletonCard, SkeletonTableRows } from '../../components/SkeletonLoader';
 
-const WalletEmptyIcon = (
-  <svg viewBox="0 0 64 64" fill="none" className="w-full h-full" stroke="currentColor">
-    <rect x="8" y="20" width="48" height="32" rx="4" strokeWidth="3"/>
-    <path strokeLinecap="round" strokeWidth="3" d="M8 28h48"/>
-    <circle cx="42" cy="40" r="6" strokeWidth="3"/>
-    <path strokeLinecap="round" strokeWidth="2" d="M8 12h40a4 4 0 014 4v4"/>
-  </svg>
-);
 
 const { TabPane } = Tabs;
 
@@ -101,33 +91,20 @@ const WalletPage: React.FC = () => {
     }
   };
 
-  if (loading.wallet && !wallet) {
-    return (
-      <div style={{ padding: '24px' }}>
-        <SkeletonCard height={120} />
-        <div style={{ marginTop: 16 }}>
-          <SkeletonTableRows rows={5} />
-        </div>
-      </div>
-    );
-  }
-
-  if (walletError && !wallet) {
-    return (
-      <EmptyState
-        icon={WalletEmptyIcon}
-        title="Portefeuille indisponible"
-        description="Impossible de charger les données du portefeuille. Le serveur ne répond pas."
-        onRetry={() => { setWalletError(false); fetchWallet(); fetchTransactions(); }}
-      />
-    );
-  }
+  // Always render — use empty defaults so page is never blank
+  const displayWallet = wallet ?? { availableBalance: '0.00', currency: 'CAD', isActive: true };
 
   return (
     <div style={{ padding: '24px' }}>
+      {walletError && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff7ed', border: '1px solid #fed7aa', borderRadius: 8, padding: '10px 16px', marginBottom: 16 }}>
+          <span style={{ fontSize: 13, color: '#c2410c' }}>⚠️ Impossible de charger le portefeuille. Le serveur ne répond pas.</span>
+          <button onClick={() => { setWalletError(false); fetchWallet(); fetchTransactions(); }} style={{ fontSize: 12, fontWeight: 600, color: '#c2410c', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer', marginLeft: 12 }}>Réessayer</button>
+        </div>
+      )}
       <Row gutter={[24, 24]}>
         <Col span={24}>
-          <WalletBalance wallet={wallet!} loading={loading.wallet} />
+          <WalletBalance wallet={displayWallet as any} loading={loading.wallet && !wallet} />
         </Col>
         <Col span={24}>
 

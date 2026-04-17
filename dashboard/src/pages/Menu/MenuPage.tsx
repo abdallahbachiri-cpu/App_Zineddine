@@ -1,16 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Dish } from "../../types/menu";
-import EmptyState from "../../components/EmptyState";
-import { SkeletonTableRows } from "../../components/SkeletonLoader";
 
-const MenuEmptyIcon = (
-  <svg viewBox="0 0 64 64" fill="none" className="w-full h-full" stroke="currentColor">
-    <circle cx="32" cy="32" r="22" strokeWidth="3"/>
-    <path strokeLinecap="round" strokeWidth="3" d="M20 32c0-6.627 5.373-12 12-12"/>
-    <path strokeLinecap="round" strokeWidth="3" d="M44 32c0 6.627-5.373 12-12 12"/>
-    <path strokeLinecap="round" strokeWidth="2" d="M16 40c2-2 4-3 6-3M48 24c-2 2-4 3-6 3"/>
-  </svg>
-);
 import {
   getDishes,
   createDish,
@@ -259,26 +249,6 @@ const MenuPage = () => {
     },
   ];
 
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div style={{ height: 32, width: 160, background: '#f0f0f0', borderRadius: 6, marginBottom: 20 }} />
-        <SkeletonTableRows rows={8} />
-      </div>
-    );
-  }
-
-  if (fetchError) {
-    return (
-      <EmptyState
-        icon={MenuEmptyIcon}
-        title="Menu indisponible"
-        description="Impossible de charger les plats. Le serveur ne répond pas."
-        onRetry={fetchDishes}
-      />
-    );
-  }
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
@@ -295,8 +265,16 @@ const MenuPage = () => {
         </Button>
       </div>
 
+      {fetchError && (
+        <div className="flex items-center justify-between bg-orange-50 border border-orange-200 rounded-lg px-4 py-3 mb-4">
+          <span className="text-sm text-orange-700">⚠️ Impossible de charger les plats. Le serveur ne répond pas.</span>
+          <button onClick={fetchDishes} className="text-xs font-semibold text-orange-700 underline ml-4 whitespace-nowrap">Réessayer</button>
+        </div>
+      )}
+
       <Card className="shadow-md">
         <Table
+          loading={loading}
           columns={columns}
           dataSource={dishes}
           rowKey="id"
