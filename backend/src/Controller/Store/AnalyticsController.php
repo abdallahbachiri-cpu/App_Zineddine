@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Controller\Store;
-
-
-namespace App\Controller;
-
+namespace App\Controller\Store;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\AllergenDTO;
 use App\DTO\CategoryDTO;
@@ -97,9 +94,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 #[Route('/api/seller', name: 'seller_')]
 class AnalyticsController extends BaseController
 {
@@ -379,9 +375,8 @@ class AnalyticsController extends BaseController
         } catch (\Exception $e) {
             return $this->json(['error' => 'An error occurred'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-
+    }
+
     #[Route('/food-store/vendor-agreement/accept', name: 'food_store_accept_vendor_agreement', methods: ['POST'])]
     #[OA\Post(
         summary: "Accept vendor agreement",

@@ -7,7 +7,8 @@ import {
   Button,
   Space,
   Card,
-  Avatar
+  Avatar,
+  Modal,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import type { ColumnsType } from "antd/es/table";
@@ -27,7 +28,9 @@ import {
   PhoneOutlined,
   EyeOutlined,
   CheckCircleOutlined,
-  CloseCircleOutlined
+  CloseCircleOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import api from '../../services/httpClient';
 const { Title, Text } = Typography;
@@ -189,7 +192,33 @@ const Users: React.FC = () => {
   const handleViewDetails = (userId: string) => {
     navigate(`/users/${userId}`);
   };
-  
+
+  const handleDeleteUser = (record: ClientData) => {
+    Modal.confirm({
+      title: "Supprimer ce compte ?",
+      icon: <ExclamationCircleOutlined style={{ color: '#ef4444' }} />,
+      content: (
+        <div>
+          <p>Vous êtes sur le point de supprimer définitivement le compte de :</p>
+          <p><strong>{record.firstName} {record.lastName}</strong> ({record.email})</p>
+          <p style={{ color: '#ef4444', marginTop: 8 }}>Cette action est irréversible.</p>
+        </div>
+      ),
+      okText: "Supprimer définitivement",
+      okButtonProps: { danger: true },
+      cancelText: "Annuler",
+      onOk: async () => {
+        try {
+          await api.delete(`/admin/users/${record.id}`);
+          message.success("Compte supprimé avec succès.");
+          setUsers(prev => prev.filter(u => u.id !== record.id));
+        } catch {
+          message.error("Erreur lors de la suppression.");
+        }
+      },
+    });
+  };
+
   const columns: ColumnsType<ClientData> = [
     {
       title: t("users.table.columns.user"),
@@ -368,6 +397,16 @@ const Users: React.FC = () => {
                 </Button>
               )}
             </>
+          )}
+          {record.type !== 'admin' && (
+            <Button
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => handleDeleteUser(record)}
+              title="Supprimer le compte"
+            >
+              Supprimer
+            </Button>
           )}
         </Space>
       ),

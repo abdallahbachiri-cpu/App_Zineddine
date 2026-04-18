@@ -4,6 +4,7 @@ import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 import { fetchAdminOrders, fetchAdminOrderById, cancelAdminOrder } from '../../services/adminOrderService';
 import { AdminOrder } from '../../types/order';
+import ChatModal from '../../components/Chat/ChatModal';
 
 const { Title } = Typography;
 
@@ -14,6 +15,8 @@ const AdminOrdersPage: React.FC = () => {
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [modalLoading, setModalLoading] = useState<boolean>(false);
+  const [chatOrderId, setChatOrderId] = useState<string | null>(null);
+  const [chatOrderNumber, setChatOrderNumber] = useState<string | undefined>();
 
   useEffect(() => {
     loadOrders();
@@ -175,14 +178,20 @@ const AdminOrdersPage: React.FC = () => {
             {t('adminOrders.viewDetails')}
           </Button>
           {canCancelOrder(record) && (
-            <Button 
-              type="link" 
+            <Button
+              type="link"
               danger
               onClick={() => handleCancelOrder(record)}
             >
               {t('adminOrders.cancel')}
             </Button>
           )}
+          <Button
+            style={{ borderColor: '#F97316', color: '#F97316' }}
+            onClick={() => { setChatOrderId(record.id); setChatOrderNumber(record.orderNumber); }}
+          >
+            💬 Chat
+          </Button>
         </Space>
       ),
     },
@@ -254,6 +263,15 @@ const AdminOrdersPage: React.FC = () => {
           </div>
         )}
       </Modal>
+
+      {chatOrderId && (
+        <ChatModal
+          orderId={chatOrderId}
+          orderNumber={chatOrderNumber}
+          open={!!chatOrderId}
+          onClose={() => { setChatOrderId(null); setChatOrderNumber(undefined); }}
+        />
+      )}
     </div>
   );
 };

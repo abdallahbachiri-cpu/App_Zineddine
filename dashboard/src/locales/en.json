@@ -1010,8 +1010,11 @@
   "users": {
     "title": "User Management",
     "vendorAgreement": {
-      "Accepted": "Accepted",
-      "Not Accepted": "Not Accepted"
+      "Accepted": "Contract accepted",
+      "Not Accepted": "Not Accepted",
+      "NotAccepted": "Contract not signed",
+      "Pending": "Pending",
+      "noFoodStore": "No store"
     },
     "messages": {
       "loading": "Loading users...",
@@ -1051,7 +1054,8 @@
         "no": "No"
       },
       "total": "Total {{total}} users",
-      "showing": "Showing {{count}} users"
+      "showing": "Showing {{count}} users",
+      "noFoodStore": "No store"
     },
     "search": {
       "placeholder": "Search users...",

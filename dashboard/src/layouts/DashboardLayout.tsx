@@ -16,7 +16,8 @@ import {
     StarIcon,
     UserCircleIcon,
     ChartBarIcon,
-    PlusIcon
+    PlusIcon,
+    CurrencyDollarIcon,
 } from "@heroicons/react/24/outline";
 
 const isNavigationActive = (currentPath: string, itemHref: string): boolean => {
@@ -26,7 +27,8 @@ const isNavigationActive = (currentPath: string, itemHref: string): boolean => {
         "/create-store",
         "/dishes",
         "/wallet",
-        "/statistiques"
+        "/statistiques",
+        "/vendor",
     ];
 
     if (startWithPaths.includes(itemHref)) {
@@ -56,6 +58,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
         { name: t("sidebar.admin.profile"), href: "/profile", icon: UserCircleIcon },
         { name: t("sidebar.admin.orders"), href: "/admin-orders", icon: ShoppingBagIcon },
         { name: t("sidebar.admin.category"), href: "/admin-category", icon: Squares2X2Icon },
+        { name: "Commissions", href: "/admin-commissions", icon: CurrencyDollarIcon },
         { name: t("sidebar.admin.wallet"), href: "/admin-wallet", icon: WalletIcon },
         { name: t("sidebar.admin.statistics"), href: "/admin-statistics", icon: ChartBarIcon },
         { name: t("sidebar.admin.createAdmin"), href: "/admin-create-admin", icon: UserCircleIcon },

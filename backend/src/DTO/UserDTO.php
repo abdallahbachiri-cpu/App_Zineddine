@@ -88,6 +88,12 @@ class UserDTO implements JsonSerializable
     #[Groups(["default"])]
     public readonly bool $isRegisteredFromGoogle;
 
+    #[Groups(["default"])]
+    public readonly bool $hasSignedVendorContract;
+
+    #[Groups(["default"])]
+    public readonly ?\DateTimeImmutable $contractSignedAt;
+
     // Constructor updated to allow flexible DateTimeImmutable input
     public function __construct(
         string $id,
@@ -109,7 +115,9 @@ class UserDTO implements JsonSerializable
         ?string $phoneNumber = null,
         ?\DateTimeImmutable $deletedAt = null,
         ?LocationDTO $defaultAddress = null,
-        ?string $profileImageUrl = null
+        ?string $profileImageUrl = null,
+        bool $hasSignedVendorContract = false,
+        ?\DateTimeImmutable $contractSignedAt = null
     ) {
         $this->id = $id;
         $this->firstName = $firstName;
@@ -123,7 +131,7 @@ class UserDTO implements JsonSerializable
         $this->isPhoneConfirmed = $isPhoneConfirmed;
         $this->isEmailConfirmed = $isEmailConfirmed;
         $this->isDeleted = $isDeleted;
-        
+
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
         $this->deletedAt = $deletedAt;
@@ -133,6 +141,8 @@ class UserDTO implements JsonSerializable
         $this->locale = $locale;
         $this->isRegisteredFromGoogle = $isRegisteredFromGoogle;
         $this->needsGoogleOnboarding = $needsGoogleOnboarding;
+        $this->hasSignedVendorContract = $hasSignedVendorContract;
+        $this->contractSignedAt = $contractSignedAt;
     }
 
     // Format the full name
@@ -190,6 +200,8 @@ class UserDTO implements JsonSerializable
             'isEmailConfirmed' => $this->isEmailConfirmed,
             'isRegisteredFromGoogle' => $this->isRegisteredFromGoogle,
             'needsGoogleOnboarding' => $this->needsGoogleOnboarding,
+            'hasSignedVendorContract' => $this->hasSignedVendorContract,
+            'contractSignedAt' => $this->contractSignedAt?->format('Y-m-d\TH:i:sP'),
             'isDeleted' => $this->isDeleted,
             'createdAt' => $this->getFormattedCreatedAt(),
             'updatedAt' => $this->getFormattedUpdatedAt(),

@@ -741,13 +741,6 @@ class AuthController extends BaseController
 
         $normalizedEmail = $this->validationHelper->normalizeEmail($email);
 
-        if (!$this->validationHelper->isAllowedEmailDomain($normalizedEmail)) {
-            return $this->json(
-                ['errors' => ['Please use a supported email provider (Gmail, Yahoo, Outlook, etc.).']],
-                JsonResponse::HTTP_BAD_REQUEST
-            );
-        }
-
         $existingUser = $this->userRepository->findUserByEmail($email);
 
         if ($existingUser instanceof User) {

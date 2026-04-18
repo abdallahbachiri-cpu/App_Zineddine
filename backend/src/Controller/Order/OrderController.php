@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Controller\Order;
-
-
-namespace App\Controller;
-
+namespace App\Controller\Order;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\AllergenDTO;
 use App\DTO\CategoryDTO;
@@ -97,9 +94,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 #[Route('/api/seller', name: 'seller_')]
 class OrderController extends BaseController
 {
@@ -300,9 +296,8 @@ class OrderController extends BaseController
                 if ($filters['deliveryStatus'] === null) {
                     throw new InvalidArgumentException('Invalid delivery status');
                 }
-            }
-
-
+            }
+
             $data = $this->orderService->getFilteredOrders(
                 $page,
                 $limit,
@@ -514,11 +509,8 @@ class OrderController extends BaseController
         } catch (ConflictHttpException $e) {
             return $this->json(['error' => $e->getMessage()], JsonResponse::HTTP_CONFLICT);
         }
-    }
-
-
-
-
+    }
+
     // Mark order as ready for pickup
     #[Route('/food-store/orders/{id}/ready', name: 'food_store_order_ready', methods: ['POST'])]
     #[OA\Post(
@@ -595,13 +587,8 @@ class OrderController extends BaseController
         } catch (\Exception $e) {
             return $this->json(['error' => $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-
-
-
-
-
+    }
+
     // Cancel order
     #[Route('/food-store/orders/{id}/cancel', name: 'food_store_order_cancel', methods: ['POST'])]
     #[OA\Post(

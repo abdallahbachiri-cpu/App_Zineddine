@@ -1,4 +1,6 @@
-export const API_BASE_URL = 'https://cuisinous-api.onrender.com';
+// Use VITE_API_URL from .env (defaults to Render production if not set)
+export const API_BASE_URL: string =
+  (import.meta as any).env?.VITE_API_URL || 'https://cuisinous-api.onrender.com';
 
 export const GOOGLE_CLIENT_ID = '692585298078-1tcp9trt0o51p2b5530j78gfjmcfr71v.apps.googleusercontent.com';
 

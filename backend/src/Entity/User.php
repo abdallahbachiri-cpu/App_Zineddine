@@ -19,6 +19,7 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     public const TYPE_BUYER = 'buyer';
     public const TYPE_SELLER = 'seller';
     public const TYPE_ADMIN = 'admin';
+    public const TYPE_SUPPORT = 'support';
 
     public const SEARCHABLE_FIELDS = ['firstName', 'lastName', 'email', 'phoneNumber'];
     public const ALLOWED_SORT_FIELDS = ['createdAt', 'updatedAt', 'firstName', 'lastName', 'email'];
@@ -109,6 +110,13 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $fcmToken = null;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $hasSignedVendorContract = false;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $contractSignedAt = null;
+
     #[ORM\OneToMany(mappedBy: 'receiver', targetEntity: Notification::class, cascade: ['persist', 'remove'])]
     private Collection $receivedNotifications;
     #[ORM\OneToMany(mappedBy: 'sender', targetEntity: Notification::class, cascade: ['persist', 'remove'])]
@@ -438,8 +446,10 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
                 $roles[] = 'ROLE_SELLER';
                 break;
             case self::TYPE_BUYER:
-                // default:
                 $roles[] = 'ROLE_BUYER';
+                break;
+            case self::TYPE_SUPPORT:
+                $roles[] = 'ROLE_SUPPORT';
                 break;
         }
 
@@ -499,6 +509,7 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
             self::TYPE_BUYER,
             self::TYPE_SELLER,
             self::TYPE_ADMIN,
+            self::TYPE_SUPPORT,
         ];
     }
 
@@ -610,6 +621,28 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     public function getSentNotifications(): Collection
     {
         return $this->sentNotifications;
+    }
+
+    public function isHasSignedVendorContract(): bool
+    {
+        return $this->hasSignedVendorContract;
+    }
+
+    public function setHasSignedVendorContract(bool $hasSignedVendorContract): self
+    {
+        $this->hasSignedVendorContract = $hasSignedVendorContract;
+        return $this;
+    }
+
+    public function getContractSignedAt(): ?\DateTimeImmutable
+    {
+        return $this->contractSignedAt;
+    }
+
+    public function setContractSignedAt(?\DateTimeImmutable $contractSignedAt): self
+    {
+        $this->contractSignedAt = $contractSignedAt;
+        return $this;
     }
 
 }

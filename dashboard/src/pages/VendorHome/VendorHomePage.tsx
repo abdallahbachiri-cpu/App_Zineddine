@@ -4,6 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { getBasicStats } from "../../services/analyticsService";
 import { SkeletonStatCard } from "../../components/SkeletonLoader";
 import { useBackendStatus } from "../../hooks/useBackendStatus";
+import API from "../../services/httpClient";
 
 interface SellerStats {
   totalOrders?: number | string;
@@ -40,6 +41,7 @@ const VendorHomePage: React.FC = () => {
   const [stats, setStats] = useState<SellerStats>(MOCK_STATS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [commissionRate, setCommissionRate] = useState<number | null>(null);
 
   const loadStats = useCallback(async () => {
     setLoading(true);
@@ -53,6 +55,13 @@ const VendorHomePage: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    API.get("/seller/food-store").then(res => {
+      const store = res.data;
+      setCommissionRate(store?.commissionRate ?? 15);
+    }).catch(() => setCommissionRate(null));
   }, []);
 
   useEffect(() => {
@@ -74,12 +83,27 @@ const VendorHomePage: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-800">Bonjour, {displayName} 👋</h1>
           <p className="text-sm text-gray-400 mt-1">Tableau de bord vendeur</p>
         </div>
-        <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border ${
-          backendUp ? "bg-green-50 border-green-200 text-green-700" : "bg-red-50 border-red-200 text-red-600"
-        }`}>
-          <span className={`w-2 h-2 rounded-full ${backendUp ? "bg-green-500 animate-pulse" : "bg-red-500"}`} />
-          {backendUp ? "Backend: En ligne" : "Backend: Hors ligne"}
-        </span>
+        <div className="flex items-center gap-2 flex-wrap">
+          {commissionRate !== null && (
+            <span
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border"
+              style={{
+                background: commissionRate === 15 ? "#f0fdf4" : "#fff7f0",
+                borderColor: commissionRate === 15 ? "#bbf7d0" : "#fed7aa",
+                color: commissionRate === 15 ? "#059669" : "#F97316",
+              }}
+              title="Pourcentage prélevé sur vos ventes"
+            >
+              💰 Ma commission : {commissionRate}%
+            </span>
+          )}
+          <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border ${
+            backendUp ? "bg-green-50 border-green-200 text-green-700" : "bg-red-50 border-red-200 text-red-600"
+          }`}>
+            <span className={`w-2 h-2 rounded-full ${backendUp ? "bg-green-500 animate-pulse" : "bg-red-500"}`} />
+            {backendUp ? "Backend: En ligne" : "Backend: Hors ligne"}
+          </span>
+        </div>
       </div>
 
       {/* Offline / error banner */}

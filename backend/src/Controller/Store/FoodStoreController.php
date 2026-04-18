@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Controller\Store;
-
-
-namespace App\Controller;
-
+namespace App\Controller\Store;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\AllergenDTO;
 use App\DTO\CategoryDTO;
@@ -97,9 +94,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 #[Route('/api/seller', name: 'seller_')]
 class FoodStoreController extends BaseController
 {
@@ -326,9 +322,8 @@ class FoodStoreController extends BaseController
             return $this->json(['error' => 'Food store with this name already exists.'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        $type = isset($data['type']) ? StoreType::from($data['type']) : StoreType::Home;
-
-
+        $type = isset($data['type']) ? StoreType::from($data['type']) : StoreType::Home;
+
         $foodStore = new FoodStore();
         $foodStore->setName($data['name'])
             ->setDescription($data['description'] ?? null)
@@ -616,9 +611,8 @@ class FoodStoreController extends BaseController
         $foodStoreDto = $this->foodStoreMapper->mapToDTO($foodStore);
 
         return $this->json($foodStoreDto, JsonResponse::HTTP_OK);
-    }
-
-
+    }
+
     #[Route('/food-store', name: 'delete_food_store', methods: ['DELETE'])]
     #[OA\Delete(
         summary: "Delete food store",
@@ -658,9 +652,8 @@ class FoodStoreController extends BaseController
         $this->entityManager->flush();
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
-    }
-
-
+    }
+
     // get food store dishes, create and manage them
 
     #[Route('/food-store/verification-requests', name: 'send_food_store_verification_request', methods: ['POST'])]
@@ -817,9 +810,8 @@ class FoodStoreController extends BaseController
             ]),
         ]);
 
-        $errors = $this->validator->validate($uploadedFiles, $constraints);
-
-
+        $errors = $this->validator->validate($uploadedFiles, $constraints);
+
         // $constraints = new Assert\Collection([
         //     'fields' => [
         //         'verificationDocument' => new Assert\File(

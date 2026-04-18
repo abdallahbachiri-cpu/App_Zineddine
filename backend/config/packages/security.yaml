@@ -53,6 +53,7 @@ security:
         # - { path: ^/api/dev, roles: PUBLIC_ACCESS }
         - { path: ^/api/admin, roles: ROLE_ADMIN } # Restricted to admins
         - { path: ^/api/seller, roles: ROLE_SELLER } # Restricted to sellers
+        - { path: ^/api/vendor, roles: ROLE_SELLER } # Vendor contract (seller only)
         - { path: ^/api/buyer, roles: ROLE_BUYER } # Restricted to buyers
         - { path: ^/api/user, roles: IS_AUTHENTICATED_FULLY } # Restricted to buyers
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY } # General API access

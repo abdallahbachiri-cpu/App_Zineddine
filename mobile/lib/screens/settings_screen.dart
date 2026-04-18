@@ -5,6 +5,7 @@ import 'package:cuisinous/core/routes/app_router.dart';
 import 'package:cuisinous/generated/l10n.dart';
 import 'package:cuisinous/providers/auth_provider.dart';
 import 'package:cuisinous/providers/settings_provider.dart';
+import 'package:cuisinous/screens/contact_support_screen.dart';
 import 'package:cuisinous/screens/privacy_policy_screen.dart';
 import 'package:cuisinous/screens/terms_and_conditions_screen.dart';
 import 'package:cuisinous/services/account_service.dart';
@@ -32,22 +33,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
         title: const Text(
-          'Delete Account?',
+          'Supprimer votre compte ?',
           style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
         ),
         content: const Text(
-          'This action is permanent and cannot be undone.\nAll your data will be deleted.',
+          'Cette action est permanente et irréversible. Toutes vos données seront supprimées.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+            child: const Text('Annuler', style: TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             onPressed: () => Navigator.pop(ctx, true),
             child: const Text(
-              'Delete Account',
+              'Supprimer le compte',
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -69,7 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to delete account: ${e.toString()}'),
+          content: Text('Échec de la suppression : ${e.toString()}'),
           backgroundColor: Colors.red,
         ),
       );
@@ -93,6 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
       {'key': 'Privacy Policy', 'icon': Icons.privacy_tip},
       {'key': 'Terms and conditions', 'icon': Icons.description},
+      {'key': 'Contact Support', 'icon': Icons.support_agent},
       {'key': 'Log out', 'icon': Icons.logout},
     ];
 
@@ -230,6 +232,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             );
                             break;
+                          case 'Contact Support':
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const ContactSupportScreen(),
+                              ),
+                            );
+                            break;
                           case 'Log out':
                             final auth = Provider.of<AuthProvider>(
                               context,
@@ -243,79 +253,81 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   );
                 }),
 
-                // ── Danger Zone ─────────────────────────────────────────
-                const SizedBox(height: 24),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFEF2F2),
-                    border: Border.all(color: const Color(0xFFFECACA)),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Row(
-                        children: [
-                          Icon(Icons.warning_amber_rounded,
-                              color: Colors.red, size: 20),
-                          SizedBox(width: 8),
-                          Text(
-                            'Danger Zone',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
+                // ── Danger Zone — hidden for admins ─────────────────────
+                if (authProvider.user?.type != UserType.admin.name) ...[
+                  const SizedBox(height: 24),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFEF2F2),
+                      border: Border.all(color: const Color(0xFFFECACA)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Row(
+                          children: [
+                            Icon(Icons.warning_amber_rounded,
+                                color: Colors.red, size: 20),
+                            SizedBox(width: 8),
+                            Text(
+                              'Zone dangereuse',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Permanently delete your account and all associated data.',
-                        style: TextStyle(fontSize: 13, color: Colors.black54),
-                      ),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Supprimer définitivement votre compte et toutes les données associées.',
+                          style: TextStyle(fontSize: 13, color: Colors.black54),
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
-                          ),
-                          onPressed:
+                            onPressed:
+                                _isDeletingAccount
+                                    ? null
+                                    : _showDeleteAccountDialog,
+                            icon:
+                                _isDeletingAccount
+                                    ? const SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : const Icon(Icons.delete_forever,
+                                        color: Colors.white),
+                            label: Text(
                               _isDeletingAccount
-                                  ? null
-                                  : _showDeleteAccountDialog,
-                          icon:
-                              _isDeletingAccount
-                                  ? const SizedBox(
-                                      width: 16,
-                                      height: 16,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : const Icon(Icons.delete_forever,
-                                      color: Colors.white),
-                          label: Text(
-                            _isDeletingAccount
-                                ? 'Deleting...'
-                                : 'Delete My Account',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
+                                  ? 'Suppression...'
+                                  : 'Supprimer mon compte',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                ],
                 const SizedBox(height: 16),
               ],
             ),
@@ -345,6 +357,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return S.of(context).privacyPolicy;
       case 'Terms and conditions':
         return S.of(context).termsAndConditions;
+      case 'Contact Support':
+        return 'Contacter le support';
       case 'Log out':
         return S.of(context).logout;
       default:

@@ -1,7 +1,9 @@
 import 'package:cuisinous/core/constants/app_consts.dart';
 import 'package:cuisinous/core/errors/failures.dart';
 import 'package:cuisinous/core/mixins/auto_refresh_mixin.dart';
+import 'package:cuisinous/core/routes/app_router.dart';
 import 'package:cuisinous/data/models/buyer_order.dart';
+import 'package:cuisinous/providers/chat_provider.dart';
 import 'package:cuisinous/data/models/full_buyer_order.dart';
 import 'package:cuisinous/generated/l10n.dart';
 import 'package:cuisinous/providers/vendor_order_provider.dart';
@@ -301,7 +303,6 @@ class _VendorOrderListItem extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -310,6 +311,33 @@ class _VendorOrderListItem extends StatelessWidget {
                   ),
                   const Icon(Icons.chevron_right),
                 ],
+              ),
+              const SizedBox(height: 8),
+              // ── Chat button ─────────────────────────────────────────────
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    context.read<ChatProvider>().clear();
+                    Navigator.pushNamed(
+                      context,
+                      AppRouter.chat,
+                      arguments: {
+                        'orderId': order.id,
+                        'orderNumber': order.orderNumber,
+                        'otherPartyName': order.buyerFullName,
+                      },
+                    );
+                  },
+                  icon: const Icon(Icons.chat_bubble_outline, size: 16),
+                  label: const Text('Répondre au client'),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    side: const BorderSide(color: Color(0xFFF97316)),
+                    foregroundColor: const Color(0xFFF97316),
+                    textStyle: const TextStyle(fontSize: 13),
+                  ),
+                ),
               ),
             ],
           ),

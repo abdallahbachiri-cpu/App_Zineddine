@@ -34,6 +34,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/notification_provider.dart';
+import 'providers/chat_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -125,6 +126,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => getIt<StripeProvider>()),
         ChangeNotifierProvider(create: (context) => getIt<NotificationProvider>()),
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
+        ChangeNotifierProvider(create: (_) => ChatProvider()),
       ],
       child: FutureBuilder(
         future: getIt.allReady(),
@@ -141,7 +143,7 @@ class MainApp extends StatelessWidget {
                   GlobalWidgetsLocalizations.delegate,
                   GlobalCupertinoLocalizations.delegate,
                 ],
-                supportedLocales: const [Locale('en'), Locale('fr')],
+                supportedLocales: const [Locale('fr', 'FR'), Locale('en', 'US')],
                 locale:
                     DevicePreview.locale(context) ??
                     _getLocale(settingsProvider),
@@ -173,6 +175,6 @@ class MainApp extends StatelessWidget {
     final savedLocale = Locale(settingsProvider.currentLanguage);
     return supportedLocales.contains(savedLocale)
         ? savedLocale
-        : const Locale('en');
+        : const Locale('fr', 'FR');
   }
 }

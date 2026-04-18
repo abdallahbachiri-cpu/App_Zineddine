@@ -217,13 +217,11 @@ const HomePage: React.FC = () => {
       )}
 
       {/* ── Users table ── */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-visible">
         <div className="px-5 py-4 border-b border-gray-100">
           <h2 className="text-base font-semibold text-gray-700">Utilisateurs</h2>
         </div>
-        <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
-          <Users />
-        </div>
+        <Users />
       </div>
     </div>
   );

@@ -421,6 +421,7 @@ class AuthProvider with ChangeNotifier, ErrorHandlingMixin {
     required String password,
     required String firstName,
     required String lastName,
+    String? type,
   }) async {
     devtools.log('[Registration] Starting registration for $email');
     _viewState = ViewState.loading;
@@ -428,16 +429,19 @@ class AuthProvider with ChangeNotifier, ErrorHandlingMixin {
     notifyListeners();
 
     try {
+      final body = {
+        'email': email,
+        'password': password,
+        'firstName': firstName,
+        'lastName': lastName,
+        'locale': settings?.currentLanguage,
+        'fcm_token': tokenDevice,
+      };
+      if (type != null) body['type'] = type;
+
       final response = await _apiClient.post(
         ApiEndpoints.authRegister,
-        body: {
-          'email': email,
-          'password': password,
-          'firstName': firstName,
-          'lastName': lastName,
-          'locale': settings?.currentLanguage,
-          'fcm_token': tokenDevice,
-        },
+        body: body,
         isPrivate: false,
       );
       await _handleAuthResponse(response);

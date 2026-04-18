@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Table, Button, Space, Modal, message, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import ChatModal from "../../components/Chat/ChatModal";
 import {
   fetchOrders,
   confirmOrder,
@@ -20,6 +21,8 @@ const OrdersPage: React.FC = () => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [newOrderId, setNewOrderId] = useState<string | null>(null);
+  const [chatOrderId, setChatOrderId] = useState<string | null>(null);
+  const [chatOrderNumber, setChatOrderNumber] = useState<string | undefined>();
   const { Title } = Typography;
 
   const { latestNotification } = useNotificationContext();
@@ -175,6 +178,12 @@ const OrdersPage: React.FC = () => {
               </Button>
             </>
           )}
+          <Button
+            style={{ borderColor: "#F97316", color: "#F97316" }}
+            onClick={() => { setChatOrderId(record.id); setChatOrderNumber(record.orderNumber); }}
+          >
+            💬 Chat
+          </Button>
         </Space>
       ),
     },
@@ -277,6 +286,14 @@ const OrdersPage: React.FC = () => {
           </div>
         )}
       </Modal>
+      {chatOrderId && (
+        <ChatModal
+          orderId={chatOrderId}
+          orderNumber={chatOrderNumber}
+          open={!!chatOrderId}
+          onClose={() => { setChatOrderId(null); setChatOrderNumber(undefined); }}
+        />
+      )}
     </div>
   );
 };

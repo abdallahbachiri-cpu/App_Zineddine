@@ -34,7 +34,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new OA\Property(property: "createdAt", type: "string", format: "date-time", description: "Food store creation date"),
         new OA\Property(property: "updatedAt", type: "string", format: "date-time", nullable: true, description: "Last update date"),
         new OA\Property(property: "vendorAgreementAccepted", type: "boolean", description: "Whether the vendor agreement has been accepted"),
-        new OA\Property(property: "vendorAgreementAcceptedAt", type: "string", format: "date-time", nullable: true, description: "Date when the vendor agreement was accepted")
+        new OA\Property(property: "vendorAgreementAcceptedAt", type: "string", format: "date-time", nullable: true, description: "Date when the vendor agreement was accepted"),
+        new OA\Property(property: "commissionRate", type: "number", format: "float", description: "Commission rate for this store"),
+        new OA\Property(property: "commissionOverride", type: "boolean", description: "Whether store uses a custom commission rate")
     ],
     type: "object"
 )]
@@ -71,6 +73,10 @@ class FoodStoreDTO implements JsonSerializable
     public readonly bool $vendorAgreementAccepted;
     #[Groups(["default", "output"])]
     public readonly ?\DateTimeImmutable $vendorAgreementAcceptedAt;
+    #[Groups(["default", "output"])]
+    public readonly float $commissionRate;
+    #[Groups(["default", "output"])]
+    public readonly bool $commissionOverride;
 
 
     public function __construct(
@@ -87,7 +93,9 @@ class FoodStoreDTO implements JsonSerializable
         ?string $profileImageUrl = null,
         bool $isStripeConnected = false,
         bool $vendorAgreementAccepted = false,
-        ?\DateTimeImmutable $vendorAgreementAcceptedAt = null
+        ?\DateTimeImmutable $vendorAgreementAcceptedAt = null,
+        float $commissionRate = 15.0,
+        bool $commissionOverride = false
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -103,6 +111,8 @@ class FoodStoreDTO implements JsonSerializable
         $this->isStripeConnected = $isStripeConnected;
         $this->vendorAgreementAccepted = $vendorAgreementAccepted;
         $this->vendorAgreementAcceptedAt = $vendorAgreementAcceptedAt;
+        $this->commissionRate = $commissionRate;
+        $this->commissionOverride = $commissionOverride;
 
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
@@ -133,6 +143,8 @@ class FoodStoreDTO implements JsonSerializable
             'isStripeConnected' => $this->isStripeConnected,
             'vendorAgreementAccepted' => $this->vendorAgreementAccepted,
             'vendorAgreementAcceptedAt' => $this->vendorAgreementAcceptedAt?->format('Y-m-d\TH:i:sP'),
+            'commissionRate' => $this->commissionRate,
+            'commissionOverride' => $this->commissionOverride,
             'address' => $this->address?->jsonSerialize(),
             'createdAt' => $this->getFormattedCreatedAt(),
             'updatedAt' => $this->getFormattedUpdatedAt(),

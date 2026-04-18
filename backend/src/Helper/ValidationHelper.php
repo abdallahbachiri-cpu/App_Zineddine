@@ -10,41 +10,6 @@ class ValidationHelper
 {
     public const MAXIMUM_ALLOWED_CART_DISH_QUANTITY = 50;
     public const MAXIMUM_ALLOWED_CART_DISH_INGREDIENT_QUANTITY = 30;
-    private const ALLOWED_EMAIL_DOMAINS = [
-        'gmail.com',
-        'yahoo.com',
-        'outlook.com',
-        'hotmail.com',
-        'live.com',
-        'icloud.com',
-        'me.com',
-        'msn.com',
-        'aol.com',
-
-        // privacy providers
-        'proton.me',
-        'protonmail.com',
-        'pm.me',
-
-        // others
-        'zoho.com',
-        'yandex.com',
-        'mail.com',
-        'gmx.com',
-        'gmx.net',
-
-        // Canadian ISPs
-        'rogers.com',
-        'bell.net',
-        'sympatico.ca',
-        'shaw.ca',
-        'telus.net',
-        'videotron.ca',
-        'cogeco.ca',
-        'eastlink.ca',
-        'mts.net',
-        'sasktel.net'
-    ];
 
     public static function trimFields(array &$data, array $whiteList = []): void
     {
@@ -95,9 +60,8 @@ class ValidationHelper
 
     public function isAllowedEmailDomain(string $email): bool
     {
-        $domain = substr(strrchr($email, "@"), 1);
-
-        return in_array($domain, self::ALLOWED_EMAIL_DOMAINS, true);
+        // Accept any valid email domain — no provider restriction.
+        return true;
     }
 
     // public function validateJsonPayload(Request $request): ?array

@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Controller\Store;
-
-
-namespace App\Controller;
-
+namespace App\Controller\Store;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\AllergenDTO;
 use App\DTO\CategoryDTO;
@@ -97,9 +94,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 #[Route('/api/seller', name: 'seller_')]
 class CategoryController extends BaseController
 {
@@ -382,7 +378,6 @@ class CategoryController extends BaseController
         } catch (NotFoundHttpException $e) {
             return $this->json(['error' => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
         }
-    }
-
-
+    }
+
 }

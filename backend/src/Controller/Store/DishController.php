@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Controller\Store;
-
-
-namespace App\Controller;
-
+namespace App\Controller\Store;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\AllergenDTO;
 use App\DTO\CategoryDTO;
@@ -97,9 +94,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 #[Route('/api/seller', name: 'seller_')]
 class DishController extends BaseController
 {
@@ -332,9 +328,8 @@ class DishController extends BaseController
         }
 
         $this->entityManager->persist($dish);
-        $this->entityManager->flush();
-
-
+        $this->entityManager->flush();
+
         $dishDto = $this->dishMapper->mapToDTO($dish);
 
         return $this->json($dishDto, JsonResponse::HTTP_CREATED);
@@ -1167,9 +1162,8 @@ class DishController extends BaseController
     // public function getIngredient(string $id): JsonResponse
     // {
     //     return $this->ingredientService->getIngredientById($id);
-    // }
-
-
+    // }
+
     #[Route('/food-store/dishes/{dishId}/categories', name: 'add_dish_category', methods: ['POST'])]
     #[OA\Post(
         summary: "Add category to dish",
@@ -1266,9 +1260,8 @@ class DishController extends BaseController
         if (count($errors) > 0) {
             $formattedErrors = ValidationHelper::formatErrors($errors);
             return $this->json(['errors' => $formattedErrors], JsonResponse::HTTP_BAD_REQUEST);
-        }
-
-
+        }
+
         try {
             $dishDTO = $this->dishService->addDishCategory(
                 $dishId,
@@ -1473,9 +1466,8 @@ class DishController extends BaseController
 
             if (!$dish instanceof Dish || $dish->getFoodStore() !== $foodStore) {
                 return $this->json(['message' => 'Dish not found'], JsonResponse::HTTP_NOT_FOUND);
-            }
-
-
+            }
+
             $constraints = new Assert\Collection([
                 "fields" => [
                     'allergenId' => [
@@ -1556,9 +1548,8 @@ class DishController extends BaseController
             }
 
             $this->entityManager->persist($dishAllergen);
-            $this->entityManager->flush();
-
-
+            $this->entityManager->flush();
+
             $dishAllergenDTO = $this->dishAllergenMapper->mapToDTO($dishAllergen);
             return $this->json($dishAllergenDTO, JsonResponse::HTTP_CREATED);
         } catch (InvalidArgumentException $e) {

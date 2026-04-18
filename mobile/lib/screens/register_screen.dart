@@ -12,7 +12,10 @@ import 'package:provider/provider.dart';
 import 'dart:developer' as devtools;
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  const RegisterScreen({super.key, this.accountType});
+
+  /// 'seller' | 'buyer' | null (null = no type pre-selected)
+  final String? accountType;
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -23,8 +26,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _acceptedConditions = false;
+  bool _showPassword = false;
+  bool _showConfirmPassword = false;
 
   late AuthProvider _authProvider;
 
@@ -49,6 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _lastNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -117,8 +124,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _buildHeader() {
+    final accountType = widget.accountType;
+    final badgeLabel = accountType == 'seller'
+        ? '🏪 Compte Vendeur'
+        : accountType == 'buyer'
+            ? '🛒 Compte Client'
+            : null;
+
     return Column(
       children: [
+        // Back arrow + badge row (only when coming from type selection)
+        if (badgeLabel != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF7F0),
+                    borderRadius: BorderRadius.circular(999),
+                    border: Border.all(color: const Color(0xFFFED7AA)),
+                  ),
+                  child: Text(
+                    badgeLabel,
+                    style: const TextStyle(
+                      color: Color(0xFFC2410C),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         Image.asset('assets/images/Logo.png', width: 100),
         const SizedBox(height: 8),
         Text(
@@ -180,7 +227,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 return S.of(context).register_validationEmailRequired;
               }
               if (!RegExp(
-                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
               ).hasMatch(value)) {
                 return S.of(context).register_validationEmailInvalid;
               }
@@ -188,11 +235,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
             },
           ),
           const SizedBox(height: 8),
-          CustomInputField(
-            hintText: S.of(context).register_passwordHint,
-            labelText: S.of(context).register_passwordLabel,
+          TextFormField(
             controller: _passwordController,
-            obscureText: true,
+            obscureText: !_showPassword,
+            decoration: InputDecoration(
+              labelText: S.of(context).register_passwordLabel,
+              hintText: S.of(context).register_passwordHint,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _showPassword ? Icons.visibility_off : Icons.visibility,
+                ),
+                onPressed: () => setState(() => _showPassword = !_showPassword),
+              ),
+            ),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return S.of(context).register_validationPasswordRequired;
@@ -200,7 +258,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
               if (value.length < 8) {
                 return S.of(context).register_validationPasswordLength;
               }
-
+              return null;
+            },
+          ),
+          const SizedBox(height: 8),
+          TextFormField(
+            controller: _confirmPasswordController,
+            obscureText: !_showConfirmPassword,
+            decoration: InputDecoration(
+              labelText: 'Confirmer le mot de passe',
+              hintText: 'Répétez votre mot de passe',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _showConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                ),
+                onPressed: () => setState(() => _showConfirmPassword = !_showConfirmPassword),
+              ),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Veuillez confirmer votre mot de passe';
+              }
+              if (value != _passwordController.text) {
+                return 'Les mots de passe ne correspondent pas';
+              }
               return null;
             },
           ),
@@ -234,6 +318,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             password: _passwordController.text,
                             firstName: _firstNameController.text,
                             lastName: _lastNameController.text,
+                            type: widget.accountType,
                           );
 
                           if (authProvider.user != null) {

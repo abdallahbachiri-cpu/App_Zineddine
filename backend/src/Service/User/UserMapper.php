@@ -29,7 +29,9 @@ class UserMapper
             $user->getPhoneNumber(),
             $user->getDeletedAt(),
             $user->getDefaultAddress(),
-            $user->getProfileImage() ? $user->getProfileImage()->getUrl() : null
+            $user->getProfileImage() ? $user->getProfileImage()->getUrl() : null,
+            $user->isHasSignedVendorContract(),
+            $user->getContractSignedAt()
         );
     }
 

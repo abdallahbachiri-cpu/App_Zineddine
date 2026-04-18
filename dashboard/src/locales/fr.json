@@ -1010,8 +1010,11 @@
   "users": {
     "title": "Gestion des Utilisateurs",
     "vendorAgreement": {
-      "Accepted": "Accepté",
-      "Not Accepted": "Non Accepté"
+      "Accepted": "Contrat accepté",
+      "Not Accepted": "Non Accepté",
+      "NotAccepted": "Contrat non signé",
+      "Pending": "En attente",
+      "noFoodStore": "Aucun magasin"
     },
     "messages": {
       "loading": "Chargement des utilisateurs...",
@@ -1051,7 +1054,8 @@
         "no": "Non"
       },
       "total": "Total {{total}} utilisateurs",
-      "showing": "Affichage de {{count}} utilisateurs"
+      "showing": "Affichage de {{count}} utilisateurs",
+      "noFoodStore": "Aucun magasin"
     },
     "search": {
       "placeholder": "Rechercher des utilisateurs...",

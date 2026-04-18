@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Controller\Payment;
-
-
-namespace App\Controller;
-
+namespace App\Controller\Payment;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\AllergenDTO;
 use App\DTO\CategoryDTO;
@@ -97,9 +94,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 #[Route('/api/seller', name: 'seller_')]
 class WalletController extends BaseController
 {
@@ -272,9 +268,8 @@ class WalletController extends BaseController
     //     } catch (NotFoundHttpException $e) {
     //         return $this->json(['error' => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
     //     }
-    // }
-
-
+    // }
+
     // #[Route('/food-store/bank-account', name: 'food_store_bank_account_upsert', methods: ['POST'])]
     // public function upsertBankAccount(Request $request): JsonResponse
     // {
@@ -443,9 +438,8 @@ class WalletController extends BaseController
     //     } catch (ApiErrorException $e) {
     //         return $this->json(['error' => 'Stripe verification failed: ' . $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
     //     }
-    // }
-
-
+    // }
+
     /**
      * POST /food-store/stripe/setup
      *

@@ -2,6 +2,7 @@ import 'package:cuisinous/core/constants/app_consts.dart';
 import 'package:cuisinous/core/errors/failures.dart';
 import 'package:cuisinous/core/routes/app_router.dart';
 import 'package:cuisinous/data/models/full_buyer_order.dart';
+import 'package:cuisinous/providers/chat_provider.dart';
 import 'package:cuisinous/core/enums/order_enums.dart';
 import 'package:cuisinous/generated/l10n.dart';
 import 'package:cuisinous/providers/auth_provider.dart';
@@ -706,6 +707,32 @@ class _BuyerOrderDetailScreenState extends State<BuyerOrderDetailScreen> {
               style: const TextStyle(color: Colors.red),
             ),
           ),
+        // ── Chat button ──────────────────────────────────────────────────
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 8, bottom: 4),
+          child: OutlinedButton.icon(
+            onPressed: () {
+              context.read<ChatProvider>().clear();
+              Navigator.pushNamed(
+                context,
+                AppRouter.chat,
+                arguments: {
+                  'orderId': order.id,
+                  'orderNumber': order.orderNumber,
+                  'otherPartyName': order.store.name,
+                },
+              );
+            },
+            icon: const Icon(Icons.chat_bubble_outline),
+            label: const Text('Contacter le vendeur'),
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              side: const BorderSide(color: Color(0xFFF97316)),
+              foregroundColor: const Color(0xFFF97316),
+            ),
+          ),
+        ),
       ],
     );
   }

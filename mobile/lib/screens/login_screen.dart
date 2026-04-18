@@ -23,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   late AuthProvider _authProvider;
+  bool _showPassword = false;
 
   @override
   void initState() {
@@ -129,11 +130,22 @@ class _LoginScreenState extends State<LoginScreen> {
           controller: _emailController,
         ),
         const SizedBox(height: 8),
-        CustomInputField(
-          hintText: S.of(context).login_passwordHint,
-          labelText: S.of(context).login_passwordLabel,
+        TextFormField(
           controller: _passwordController,
-          obscureText: true,
+          obscureText: !_showPassword,
+          decoration: InputDecoration(
+            labelText: S.of(context).login_passwordLabel,
+            hintText: S.of(context).login_passwordHint,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                _showPassword ? Icons.visibility_off : Icons.visibility,
+              ),
+              onPressed: () => setState(() => _showPassword = !_showPassword),
+            ),
+          ),
         ),
         const SizedBox(height: 8),
         Align(

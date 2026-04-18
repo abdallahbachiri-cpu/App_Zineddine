@@ -11,8 +11,10 @@ import {
   Avatar,
   Modal,
   Descriptions,
-  Image
+  Image,
+  InputNumber,
 } from "antd";
+import API from "../../services/httpClient";
 import type { ColumnsType } from "antd/es/table";
 import {
   getFoodStores,
@@ -53,6 +55,10 @@ const AdminStoresPage: React.FC = () => {
   const [selectedFoodStore ] = useState<FoodStoreData | null>(null);
   const [storeDishes] = useState<DishData[]>([]);
   const [dishesLoading] = useState(false);
+  // Commission quick-edit
+  const [commissionStore, setCommissionStore]   = useState<FoodStoreData | null>(null);
+  const [commissionRate, setCommissionRate]     = useState(15);
+  const [savingCommission, setSavingCommission] = useState(false);
 
   const fetchFoodStores = useCallback(async () => {
     setLoading(true);
@@ -160,26 +166,32 @@ const AdminStoresPage: React.FC = () => {
         </Space>
       ),
     },
-    // this column is commented because the verification request process was removed 
-    // {
-    //   title: t("foodStores.table.columns.status"),
-    //   key: "status",
-    //   render: (_, record) => (
-    //     <Space direction="vertical" size={0}>
-    //       <Space>
-    //         {/* {record.isActive ? (
-    //           <Tag color="green" icon={<PlayCircleOutlined />}>
-    //             {t("foodStores.status.active")}
-    //           </Tag>
-    //         ) : (
-    //           <Tag color="orange" icon={<StopOutlined />}>
-    //             {t("foodStores.status.inactive")}
-    //           </Tag>
-    //         )} */}
-    //       </Space>
-    //     </Space>
-    //   ),
-    // },
+    {
+      title: "Commission",
+      key: "commission",
+      render: (_, record: any) => {
+        const rate = record.commissionRate ?? 15;
+        const isCustom = rate !== 15;
+        return (
+          <Space size={6}>
+            <Tag color={isCustom ? "orange" : "green"} style={{ fontWeight: 700, fontSize: 13 }}>
+              {rate}%{isCustom ? " ✏️" : ""}
+            </Tag>
+            <Button
+              size="small"
+              style={{ fontSize: 11, padding: "0 6px" }}
+              onClick={e => {
+                e.stopPropagation();
+                setCommissionStore(record);
+                setCommissionRate(rate);
+              }}
+            >
+              ✏️
+            </Button>
+          </Space>
+        );
+      },
+    },
     {
       title: t("foodStores.table.columns.actions"),
       key: "actions",
@@ -384,6 +396,62 @@ const AdminStoresPage: React.FC = () => {
                   },
                 ]}
               />
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* Commission quick-edit modal */}
+      <Modal
+        open={!!commissionStore}
+        title={`💰 Commission — ${commissionStore?.name}`}
+        onCancel={() => setCommissionStore(null)}
+        footer={null}
+        width={420}
+      >
+        {commissionStore && (
+          <div style={{ padding: "8px 0" }}>
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ display: "block", fontWeight: 600, fontSize: 13, marginBottom: 8 }}>
+                Taux de commission (0 – 50 %)
+              </label>
+              <InputNumber
+                min={0} max={50} step={0.5}
+                value={commissionRate}
+                onChange={v => setCommissionRate(v ?? 15)}
+                addonAfter="%"
+                style={{ width: "100%" }}
+              />
+              <div style={{ fontSize: 12, color: "#6b7280", marginTop: 8 }}>
+                Sur 100 $ → commission : <strong>{commissionRate.toFixed(2)} $</strong> · vendeur : <strong>{(100 - commissionRate).toFixed(2)} $</strong>
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+              <Button onClick={() => setCommissionRate(15)}>Remettre à 15 %</Button>
+              <Button onClick={() => setCommissionStore(null)}>Annuler</Button>
+              <Button
+                type="primary"
+                loading={savingCommission}
+                style={{ background: "#F97316", borderColor: "#F97316" }}
+                onClick={async () => {
+                  setSavingCommission(true);
+                  try {
+                    await API.put(`/admin/stores/${commissionStore.id}/commission`, {
+                      commissionRate,
+                      commissionOverride: commissionRate !== 15,
+                    });
+                    message.success(`Commission mise à jour pour ${commissionStore.name}`);
+                    setCommissionStore(null);
+                    fetchFoodStores();
+                  } catch {
+                    message.error("Erreur lors de la mise à jour.");
+                  } finally {
+                    setSavingCommission(false);
+                  }
+                }}
+              >
+                Enregistrer
+              </Button>
             </div>
           </div>
         )}

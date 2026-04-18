@@ -22,7 +22,7 @@ interface UserData {
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
-  const { logout } = useAuth();
+  const { logout, user: authUser } = useAuth();
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState<UserData>({
     email: "",
@@ -44,7 +44,7 @@ const ProfilePage: React.FC = () => {
   const deleteInputRef = useRef<HTMLInputElement>(null);
 
   const handleDeleteAccount = async () => {
-    if (deleteConfirmText !== "DELETE") return;
+    if (deleteConfirmText !== "SUPPRIMER") return;
     setIsDeleting(true);
     try {
       await deleteAccount();
@@ -281,66 +281,70 @@ const ProfilePage: React.FC = () => {
         </div>
       </Card>
 
-      {/* ── Danger Zone ──────────────────────────────────────────────── */}
-      <div className="rounded-xl border border-red-200 bg-red-50 p-6">
-        <div className="flex items-center gap-2 mb-1">
-          <WarningOutlined className="text-red-500 text-lg" />
-          <h2 className="text-base font-semibold text-red-700 m-0">Danger Zone</h2>
-        </div>
-        <p className="text-sm text-red-600 mb-4">
-          Once you delete your account, all your data will be permanently removed and cannot be recovered.
-        </p>
-        <Button
-          danger
-          type="primary"
-          icon={<DeleteOutlined />}
-          onClick={() => { setDeleteModalOpen(true); setDeleteConfirmText(""); }}
-        >
-          Delete Account
-        </Button>
-      </div>
+      {/* ── Danger Zone — hidden for admins ──────────────────────────── */}
+      {(authUser as any)?.type !== 'admin' && (
+        <>
+          <div className="rounded-xl border border-red-200 bg-red-50 p-6">
+            <div className="flex items-center gap-2 mb-1">
+              <WarningOutlined className="text-red-500 text-lg" />
+              <h2 className="text-base font-semibold text-red-700 m-0">Zone dangereuse</h2>
+            </div>
+            <p className="text-sm text-red-600 mb-4">
+              Une fois votre compte supprimé, toutes vos données seront définitivement effacées et ne pourront pas être récupérées.
+            </p>
+            <Button
+              danger
+              type="primary"
+              icon={<DeleteOutlined />}
+              onClick={() => { setDeleteModalOpen(true); setDeleteConfirmText(""); }}
+            >
+              Supprimer mon compte
+            </Button>
+          </div>
 
-      {/* ── Delete confirmation modal ─────────────────────────────────── */}
-      <Modal
-        open={deleteModalOpen}
-        title={
-          <span className="text-red-600 font-bold flex items-center gap-2">
-            <WarningOutlined /> Permanently Delete Account
-          </span>
-        }
-        onCancel={() => { setDeleteModalOpen(false); setDeleteConfirmText(""); }}
-        footer={[
-          <Button key="cancel" onClick={() => { setDeleteModalOpen(false); setDeleteConfirmText(""); }}>
-            Cancel
-          </Button>,
-          <Button
-            key="delete"
-            danger
-            type="primary"
-            disabled={deleteConfirmText !== "DELETE"}
-            loading={isDeleting}
-            onClick={handleDeleteAccount}
+          {/* ── Delete confirmation modal ───────────────────────────── */}
+          <Modal
+            open={deleteModalOpen}
+            title={
+              <span className="text-red-600 font-bold flex items-center gap-2">
+                <WarningOutlined /> Supprimer définitivement le compte
+              </span>
+            }
+            onCancel={() => { setDeleteModalOpen(false); setDeleteConfirmText(""); }}
+            footer={[
+              <Button key="cancel" onClick={() => { setDeleteModalOpen(false); setDeleteConfirmText(""); }}>
+                Annuler
+              </Button>,
+              <Button
+                key="delete"
+                danger
+                type="primary"
+                disabled={deleteConfirmText !== "SUPPRIMER"}
+                loading={isDeleting}
+                onClick={handleDeleteAccount}
+              >
+                Supprimer définitivement
+              </Button>,
+            ]}
+            afterOpenChange={(open) => { if (open) deleteInputRef.current?.focus(); }}
           >
-            Permanently Delete Account
-          </Button>,
-        ]}
-        afterOpenChange={(open) => { if (open) deleteInputRef.current?.focus(); }}
-      >
-        <p className="text-gray-700 mb-4">
-          This action is <strong>irreversible</strong>. All your data — orders, profile, wallet — will be permanently deleted.
-        </p>
-        <p className="text-sm text-gray-500 mb-2">
-          Type <strong>DELETE</strong> to confirm:
-        </p>
-        <input
-          ref={deleteInputRef}
-          type="text"
-          value={deleteConfirmText}
-          onChange={(e) => setDeleteConfirmText(e.target.value)}
-          placeholder="DELETE"
-          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-red-400"
-        />
-      </Modal>
+            <p className="text-gray-700 mb-4">
+              Cette action est <strong>irréversible</strong>. Toutes vos données — commandes, profil, portefeuille — seront définitivement supprimées.
+            </p>
+            <p className="text-sm text-gray-500 mb-2">
+              Tapez <strong>SUPPRIMER</strong> pour confirmer :
+            </p>
+            <input
+              ref={deleteInputRef}
+              type="text"
+              value={deleteConfirmText}
+              onChange={(e) => setDeleteConfirmText(e.target.value)}
+              placeholder="SUPPRIMER"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-red-400"
+            />
+          </Modal>
+        </>
+      )}
     </div>
   );
 };

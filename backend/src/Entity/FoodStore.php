@@ -70,6 +70,14 @@ class FoodStore extends BaseEntity
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $vendorAgreementAcceptedAt = null;
 
+    /** Platform commission percentage for this store (0–50). */
+    #[ORM\Column(type: 'float', options: ['default' => 15.0])]
+    private float $commissionRate = 15.0;
+
+    /** When true, use commissionRate instead of the global default. */
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $commissionOverride = false;
+
 
     public function __construct()
     {
@@ -290,6 +298,28 @@ class FoodStore extends BaseEntity
     {
         $this->vendorAgreementAcceptedAt = $vendorAgreementAcceptedAt;
 
+        return $this;
+    }
+
+    public function getCommissionRate(): float
+    {
+        return $this->commissionRate;
+    }
+
+    public function setCommissionRate(float $commissionRate): self
+    {
+        $this->commissionRate = max(0.0, min(50.0, $commissionRate));
+        return $this;
+    }
+
+    public function isCommissionOverride(): bool
+    {
+        return $this->commissionOverride;
+    }
+
+    public function setCommissionOverride(bool $commissionOverride): self
+    {
+        $this->commissionOverride = $commissionOverride;
         return $this;
     }
 }

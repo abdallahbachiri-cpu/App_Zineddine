@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Controller\Order;
-
-
-namespace App\Controller;
-
+namespace App\Controller\Order;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\CartDTO;
 use App\DTO\DishDetailDTO;
@@ -90,9 +87,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\CardException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-
-
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+
 #[Route('/api/buyer', name: 'buyer_')]
 class BuyerOrderController extends BaseController
 {
@@ -217,10 +213,8 @@ class BuyerOrderController extends BaseController
                 if ($filters['deliveryStatus'] === null) {
                     throw new InvalidArgumentException('Invalid delivery status');
                 }
-            }
-
-
-
+            }
+
             $data = $this->orderService->getFilteredOrders(
                 $page,
                 $limit,
@@ -339,9 +333,8 @@ class BuyerOrderController extends BaseController
             $user = $this->getUser();
             if (!$user instanceof User) {
                 throw new NotFoundHttpException('User not found');
-            }
-
-
+            }
+
             // ownership validation before the lock transaction
             $order = $this->orderService->getOrderById($id);
 
@@ -472,15 +465,13 @@ class BuyerOrderController extends BaseController
 
             if (!$order instanceof Order || $order->getBuyer() !== $user) {
                 throw new NotFoundHttpException('Order not found');
-            }
-
-
+            }
+
             $this->orderService->requestRefund($order, USER::TYPE_BUYER);
             $this->twilioProxyService->closeProxySession($order);
 
-            $this->entityManager->flush();
-
-
+            $this->entityManager->flush();
+
             // Notify seller that buyer cancelled the order
             // $this->orderService->createAndSendNotification(
             //     $order->getBuyer(),
@@ -503,9 +494,8 @@ class BuyerOrderController extends BaseController
         } catch (\Exception $e) {
             return $this->json(['error' => 'An error occurred while cancelling the order.'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-
+    }
+
     #[Route('/orders/{id}/note', name: 'upsert_order_note', methods: ['POST'])]
     #[OA\Post(
         summary: "Add or update order note",
@@ -617,10 +607,8 @@ class BuyerOrderController extends BaseController
         } catch (ValidationException $e) {
             return new JsonResponse(['errors' => $e->getErrors()], JsonResponse::HTTP_BAD_REQUEST);
         }
-    }
-
-
-
+    }
+
     #[OA\Post(
         summary: "Add a tip to a completed order",
         description: "Allows the buyer to add a tip to a completed order. 
@@ -880,4 +868,19 @@ class BuyerOrderController extends BaseController
         ]
     )]
     public function resendOrderConfirmationCode(string $id, Request $request): JsonResponse
+    {
+        try {
+            /** @var User $user */
+            $user  = $this->getUser();
+            $order = $this->entityManager->getRepository(Order::class)->find($id);
+
+            if (!$order instanceof Order || $order->getBuyer()->getId() !== $user->getId()) {
+                return $this->json(['error' => 'Order not found'], JsonResponse::HTTP_NOT_FOUND);
+            }
+
+            return $this->json(['message' => 'Confirmation code resent successfully'], JsonResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Failed to resend confirmation code'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

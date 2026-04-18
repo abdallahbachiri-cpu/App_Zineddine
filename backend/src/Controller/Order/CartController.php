@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Controller\Order;
-
-
-namespace App\Controller;
-
+namespace App\Controller\Order;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\CartDTO;
 use App\DTO\DishDetailDTO;
@@ -90,9 +87,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\CardException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-
-
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+
 #[Route('/api/buyer', name: 'buyer_')]
 class CartController extends BaseController
 {
@@ -252,9 +248,8 @@ class CartController extends BaseController
             throw new InvalidArgumentException("Quantity must be a valid integer between 1 and $maximumQuantity.");
         }
 
-        $quantity = (int) $quantity;
-
-
+        $quantity = (int) $quantity;
+
         $dishId = $data['dishId'];
         if (!ValidationHelper::isCorrectUuid($dishId)) {
             throw new InvalidArgumentException('Invalid UUID format');
@@ -550,9 +545,8 @@ class CartController extends BaseController
 
         if (!$dishIngredient->isSupplement()) {
             return $this->json(['error' => 'Ingredient is not a supplement'], Response::HTTP_BAD_REQUEST);
-        }
-
-
+        }
+
         $cartDishIngredient = $this->cartDishIngredientRepository->findOneBy([
             'cartDish' => $cartDish,
             'dishIngredient' => $dishIngredient
@@ -807,4 +801,7 @@ class CartController extends BaseController
         ]
     )]
     public function checkout(Request $request): JsonResponse
+    {
+        return $this->json(['error' => 'Not implemented'], JsonResponse::HTTP_NOT_IMPLEMENTED);
+    }
 }

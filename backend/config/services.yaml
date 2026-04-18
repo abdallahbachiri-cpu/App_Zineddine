@@ -57,7 +57,7 @@ services:
             $platformSecretKey: "%env(STRIPE_SECRET_KEY)%"
             $publishableKey: "%env(STRIPE_PUBLIC_KEY)%"
 
-    App\Controller\StripeController:
+    App\Controller\Payment\StripeController:
         arguments:
             $onboardingFrontendReturnUrl: "%env(STRIPE_ONBOARDING_RETURN_URL)%"
             $onboardingFrontendRefreshUrl: "%env(STRIPE_ONBOARDING_REFRESH_URL)%"
@@ -66,7 +66,7 @@ services:
         arguments:
             $defaultFrom: "%mailer_from%"
 
-    App\Controller\UserController:
+    App\Controller\User\UserController:
         arguments:
             $frontendPasswordResetUrl: "%frontend_password_reset_url%"
 
@@ -75,7 +75,7 @@ services:
             $twig: "@twig"
             $translator: "@translator"
 
-    App\Controller\Webhook\StripeWebhookController:
+    App\Controller\Payment\Webhook\StripeWebhookController:
         arguments:
             $stripeWebhookSecret: "%stripe_webhook_secret%"
         tags: ["controller.service_arguments"]

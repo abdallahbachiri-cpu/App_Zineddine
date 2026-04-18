@@ -39,7 +39,9 @@ class FoodStoreMapper
             $foodStore->getProfileImage() ? $foodStore->getProfileImage()->getUrl() : null,
             $isStripeConnected,
             $foodStore->isVendorAgreementAccepted(),
-            $foodStore->getVendorAgreementAcceptedAt()
+            $foodStore->getVendorAgreementAcceptedAt(),
+            $foodStore->getCommissionRate(),
+            $foodStore->isCommissionOverride()
         );
     }
 

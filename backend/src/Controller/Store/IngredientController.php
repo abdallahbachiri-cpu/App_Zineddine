@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Controller\Store;
-
-
-namespace App\Controller;
-
+namespace App\Controller\Store;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\AllergenDTO;
 use App\DTO\CategoryDTO;
@@ -97,9 +94,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 #[Route('/api/seller', name: 'seller_')]
 class IngredientController extends BaseController
 {
@@ -859,9 +855,8 @@ class IngredientController extends BaseController
             ->setPrice($data['price'] ?? 0);
 
         $this->entityManager->persist($dishIngredient);
-        $this->entityManager->flush();
-
-
+        $this->entityManager->flush();
+
         $dishIngredientDTO = $this->dishIngredientMapper->mapToDTO($dishIngredient);
         return $this->json($dishIngredientDTO, JsonResponse::HTTP_CREATED);
     }

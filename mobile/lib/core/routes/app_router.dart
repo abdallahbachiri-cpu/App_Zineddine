@@ -25,6 +25,7 @@ import 'package:cuisinous/screens/google_register_screen.dart';
 import 'package:cuisinous/screens/user_info_screen.dart';
 import 'package:cuisinous/screens/password_recovery_screen.dart';
 import 'package:cuisinous/screens/vendor_notifications_screen.dart';
+import 'package:cuisinous/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -76,6 +77,7 @@ class AppRouter {
   static const String googleRegister = '/google-register';
   static const String passwordRecovery = '/password-recovery';
   static const String notificationSeller = '/notification-seller';
+  static const String chat = '/chat';
 
   static Route<dynamic> mainScreenRoute(NavigationItem? initialTab) {
     return MaterialPageRoute(
@@ -175,6 +177,23 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     case AppRouter.notificationSeller:
       return MaterialPageRoute(
         builder: (_) => const VendorNotificationsScreen(),
+      );
+
+    case AppRouter.register:
+      final args = settings.arguments as Map<String, dynamic>?;
+      final accountType = args?['accountType'] as String?;
+      return MaterialPageRoute(
+        builder: (_) => RegisterScreen(accountType: accountType),
+      );
+
+    case AppRouter.chat:
+      final args = settings.arguments as Map<String, dynamic>;
+      return MaterialPageRoute(
+        builder: (_) => ChatScreen(
+          orderId: args['orderId'] as String,
+          orderNumber: args['orderNumber'] as String? ?? '',
+          otherPartyName: args['otherPartyName'] as String? ?? 'Interlocuteur',
+        ),
       );
 
     default:
