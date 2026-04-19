@@ -18,6 +18,7 @@ import {
     ChartBarIcon,
     PlusIcon,
     CurrencyDollarIcon,
+    ChatBubbleLeftEllipsisIcon,
 } from "@heroicons/react/24/outline";
 
 const isNavigationActive = (currentPath: string, itemHref: string): boolean => {
@@ -62,7 +63,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
         { name: t("sidebar.admin.wallet"), href: "/admin-wallet", icon: WalletIcon },
         { name: t("sidebar.admin.statistics"), href: "/admin-statistics", icon: ChartBarIcon },
         { name: t("sidebar.admin.createAdmin"), href: "/admin-create-admin", icon: UserCircleIcon },
-
+        { name: "📧 Contacter le support", href: "/support", icon: ChatBubbleLeftEllipsisIcon },
     ];
 
     const sellerNavigation = [
@@ -74,6 +75,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
         { name: t("sidebar.seller.recipes"), href: "/dishes", icon: Squares2X2Icon },
         { name: t("sidebar.seller.wallet"), href: "/wallet", icon: WalletIcon },
         { name: t("sidebar.admin.statistics"), href: "/statistiques", icon: ChartBarIcon },
+        { name: "📧 Contacter le support", href: "/support", icon: ChatBubbleLeftEllipsisIcon },
     ];
 
     const navigation = user?.type === "admin" ? adminNavigation : sellerNavigation;

@@ -57,13 +57,20 @@ const LoginPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   /** Navigate to the right page based on user type after login. */
-  const navigateAfterLogin = (userType: string) => {
+  const navigateAfterLogin = (userType: string, userData: any = {}) => {
     switch (userType) {
-      case "admin":   navigate("/");                break;
+      case "admin":   navigate("/");                  break;
       case "support": navigate("/support-dashboard"); break;
-      case "seller":  navigate("/dishes");           break; // VendorContractGuard handles the contract check
-      case "buyer":   navigate("/client/orders");    break;
-      default:        navigate("/");
+      case "buyer":   navigate("/client/orders");     break;
+      case "seller": {
+        // Check contract signature: from API response OR from demo-mode localStorage flag
+        const signed =
+          userData?.hasSignedVendorContract === true ||
+          localStorage.getItem("vendorContractSigned") === "true";
+        navigate(signed ? "/dishes" : "/vendor/contract");
+        break;
+      }
+      default: navigate("/");
     }
   };
 
@@ -78,8 +85,14 @@ const LoginPage: React.FC = () => {
         } else {
           localStorage.removeItem("staySignedIn");
         }
-        const userType = (data as any)?.user?.type || (data as any)?.type || "admin";
-        navigateAfterLogin(userType);
+        // Use redirectTo from AuthContext when available (seller contract check)
+        if ((data as any)?.redirectTo) {
+          navigate((data as any).redirectTo);
+        } else {
+          const userData = (data as any)?.user ?? (data as any) ?? {};
+          const userType = userData?.type || "";
+          navigateAfterLogin(userType, userData);
+        }
         antdMessage.success(t("login.success.googleLoggedIn"));
       } catch (err) {
         setError(t("login.errors.googleLoginFailed"));
@@ -105,8 +118,14 @@ const LoginPage: React.FC = () => {
       } else {
         localStorage.removeItem("staySignedIn");
       }
-      const userType = (data as any)?.user?.type || "admin";
-      navigateAfterLogin(userType);
+      // Use redirectTo from AuthContext when available (seller contract check)
+      if (data.redirectTo) {
+        navigate(data.redirectTo);
+      } else {
+        const userData = (data as any)?.user ?? {};
+        const userType = userData?.type || "";
+        navigateAfterLogin(userType, userData);
+      }
       antdMessage.success(t("login.success.loggedIn"));
     } catch (err) {
       setError(t("login.errors.invalidCredentials"));

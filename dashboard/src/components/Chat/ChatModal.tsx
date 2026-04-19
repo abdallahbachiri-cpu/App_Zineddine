@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Modal, Input, Button, Spin, message as antdMessage } from "antd";
 import { SendOutlined } from "@ant-design/icons";
-import { ChatMessage, getMessages, sendMessage, markAsRead, subscribeToChat } from "../../services/chatService";
+import {
+  ChatMessage,
+  getMessages,
+  sendMessage,
+  markAsRead,
+  subscribeToChat,
+  isChatDemoMode,
+} from "../../services/chatService";
 import { useAuth } from "../../contexts/AuthContext";
 
 interface Props {
@@ -15,11 +22,13 @@ export const ChatModal: React.FC<Props> = ({ orderId, orderNumber, open, onClose
   const { user } = useAuth();
   const currentUserId = (user as any)?.id ?? (user as any)?.userId ?? "";
 
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [text, setText] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [sending, setSending] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const [messages, setMessages]     = useState<ChatMessage[]>([]);
+  const [text, setText]             = useState("");
+  const [loading, setLoading]       = useState(false);
+  const [sending, setSending]       = useState(false);
+  const [demoMode, setDemoMode]     = useState(false);
+  const demoToastShown              = useRef(false);
+  const bottomRef                   = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -30,6 +39,7 @@ export const ChatModal: React.FC<Props> = ({ orderId, orderNumber, open, onClose
     try {
       const data = await getMessages(orderId);
       setMessages(data);
+      setDemoMode(isChatDemoMode());
       await markAsRead(orderId);
     } catch {
       // silent
@@ -60,8 +70,22 @@ export const ChatModal: React.FC<Props> = ({ orderId, orderNumber, open, onClose
     if (!trimmed) return;
     setSending(true);
     try {
-      await sendMessage(orderId, trimmed);
+      const sent = await sendMessage(orderId, trimmed);
       setText("");
+
+      // Detect demo mode after first send attempt
+      const nowDemo = isChatDemoMode();
+      setDemoMode(nowDemo);
+
+      if (nowDemo) {
+        // In demo mode Mercure is offline — add message to state directly
+        setMessages(prev => prev.some(m => m.id === sent.id) ? prev : [...prev, sent]);
+        // Show the toast once per modal session
+        if (!demoToastShown.current) {
+          demoToastShown.current = true;
+          antdMessage.warning("Mode démo — messages non sauvegardés en DB", 4);
+        }
+      }
     } catch {
       antdMessage.error("Impossible d'envoyer le message.");
     } finally {
@@ -83,13 +107,34 @@ export const ChatModal: React.FC<Props> = ({ orderId, orderNumber, open, onClose
       onCancel={onClose}
       footer={null}
       title={
-        <span style={{ color: "#F97316", fontWeight: 700 }}>
-          💬 Chat — Commande #{orderNumber ?? orderId.slice(0, 8)}
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ color: "#F97316", fontWeight: 700 }}>
+            💬 Chat — Commande #{orderNumber ?? orderId.slice(0, 8)}
+          </span>
+          {demoMode && (
+            <span style={{
+              padding: "2px 8px", background: "#fde047", borderRadius: 999,
+              fontSize: 11, fontWeight: 700, color: "#78350f",
+            }}>
+              DÉMO
+            </span>
+          )}
+        </div>
       }
       width={480}
       styles={{ body: { padding: 0 } }}
     >
+      {/* Demo banner */}
+      {demoMode && (
+        <div style={{
+          background: "#fefce8", borderBottom: "1px solid #fde047",
+          padding: "8px 16px", fontSize: 12, color: "#92400e",
+          display: "flex", alignItems: "center", gap: 6,
+        }}>
+          🧪 <strong>Mode démo</strong> — messages sauvegardés localement uniquement
+        </div>
+      )}
+
       {/* Messages area */}
       <div
         style={{
@@ -162,7 +207,7 @@ export const ChatModal: React.FC<Props> = ({ orderId, orderNumber, open, onClose
           value={text}
           onChange={e => setText(e.target.value)}
           onPressEnter={handleSend}
-          placeholder="Écrivez un message..."
+          placeholder={demoMode ? "Message (mode démo)…" : "Écrivez un message..."}
           disabled={sending}
           style={{ borderRadius: 20 }}
         />

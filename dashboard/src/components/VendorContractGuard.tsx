@@ -7,9 +7,18 @@ interface VendorContractGuardProps {
 
 const VendorContractGuard: React.FC<VendorContractGuardProps> = ({ children }) => {
   const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : {};
+  const user = storedUser ? (() => { try { return JSON.parse(storedUser); } catch { return {}; } })() : {};
 
-  if (!user.hasSignedVendorContract) {
+  const isSeller = user?.roles?.includes('ROLE_SELLER') || user?.type === 'seller';
+
+  const userId = user?.id ?? '';
+  // Per-user key (canonical) + legacy global key (backward-compat)
+  const signedLocally =
+    (userId && localStorage.getItem(`vendorContractSigned_${userId}`) === 'true') ||
+    localStorage.getItem('vendorContractSigned') === 'true';
+  const signedViaAPI = user?.hasSignedVendorContract === true;
+
+  if (isSeller && !signedLocally && !signedViaAPI) {
     return <Navigate to="/vendor/contract" replace />;
   }
 

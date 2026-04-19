@@ -8,6 +8,7 @@ interface StoreCommission {
   id: string;
   name: string;
   sellerName: string;
+  ownerEmail: string;
   commissionRate: number;
   isActive: boolean;
 }
@@ -29,15 +30,42 @@ const CommissionPage: React.FC = () => {
     setLoading(true);
     setFetchError(null);
     try {
-      const res = await API.get("/admin/stores/commissions");
-      const list = res.data.stores || [];
-      setStores(list);
-      if (res.data.error) {
-        setFetchError(res.data.error);
-      }
+      // Fetch stores and users in parallel
+      const [storesRes, usersRes] = await Promise.all([
+        API.get("/admin/food-stores"),
+        API.get("/admin/users"),
+      ]);
+
+      const rawStores: any[] = storesRes.data?.data ?? storesRes.data ?? [];
+      const rawUsers: any[]  = usersRes.data?.data  ?? usersRes.data  ?? [];
+
+      // Build sellerId → user map
+      const userMap = new Map<string, { name: string; email: string }>();
+      rawUsers.forEach((u: any) => {
+        if (u.id) {
+          userMap.set(u.id, {
+            name:  [u.firstName, u.lastName].filter(Boolean).join(" ") || u.email || "—",
+            email: u.email ?? "",
+          });
+        }
+      });
+
+      const mapped: StoreCommission[] = rawStores.map((s: any) => {
+        const owner = userMap.get(s.sellerId ?? "");
+        return {
+          id:             String(s.id ?? ""),
+          name:           s.name ?? "—",
+          sellerName:     owner?.name  ?? "—",
+          ownerEmail:     owner?.email ?? "—",
+          commissionRate: typeof s.commissionRate === "number" ? s.commissionRate : DEFAULT_RATE,
+          isActive:       s.isActive ?? false,
+        };
+      });
+
+      setStores(mapped);
     } catch (err: any) {
       const detail = err?.response?.data?.error || err?.message || "Erreur inconnue";
-      setFetchError(`Impossible de charger les commissions : ${detail}`);
+      setFetchError(`Impossible de charger les données : ${detail}`);
       setStores([]);
     } finally {
       setLoading(false);
@@ -82,8 +110,17 @@ const CommissionPage: React.FC = () => {
       message.success(`Commission mise à jour pour ${modalStore.name}`);
       setModalStore(null);
       fetchData();
-    } catch {
-      message.error("Erreur lors de la mise à jour.");
+    } catch (err: any) {
+      if (err?.response?.status === 404) {
+        // Route not yet deployed — update locally only
+        setStores(prev =>
+          prev.map(s => s.id === modalStore.id ? { ...s, commissionRate: modalRate } : s)
+        );
+        message.warning(`Commission mise à jour localement (route backend indisponible)`);
+        setModalStore(null);
+      } else {
+        message.error("Erreur lors de la mise à jour.");
+      }
     } finally {
       setSavingStore(false);
     }
@@ -105,7 +142,7 @@ const CommissionPage: React.FC = () => {
       <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#111827", marginBottom: 4 }}>
         💰 Gestion des commissions
       </h1>
-      <p style={{ color: "#6b7280", fontSize: 14, marginBottom: 28 }}>
+      <p style={{ color: "#6b7280", fontSize: 14, marginBottom: 20 }}>
         Configurez le taux de commission individuellement pour chaque vendeur.
       </p>
 
@@ -119,11 +156,6 @@ const CommissionPage: React.FC = () => {
           <div>
             <span style={{ fontWeight: 700, color: "#dc2626", fontSize: 14 }}>⚠️ Erreur de chargement</span>
             <p style={{ margin: "2px 0 0", color: "#b91c1c", fontSize: 13 }}>{fetchError}</p>
-            {fetchError.includes("migration") && (
-              <p style={{ margin: "4px 0 0", color: "#7f1d1d", fontSize: 12 }}>
-                Exécutez : <code style={{ background: "#fee2e2", padding: "1px 6px", borderRadius: 4 }}>php bin/console doctrine:migrations:migrate</code>
-              </p>
-            )}
           </div>
           <button
             onClick={fetchData}
@@ -177,6 +209,7 @@ const CommissionPage: React.FC = () => {
               <tr style={{ background: "#f9fafb" }}>
                 <th style={thStyle}>Magasin</th>
                 <th style={thStyle}>Propriétaire</th>
+                <th style={thStyle}>Email</th>
                 <th style={thStyle}>Commission actuelle</th>
                 <th style={thStyle}>Statut</th>
                 <th style={thStyle}>Actions</th>
@@ -185,7 +218,7 @@ const CommissionPage: React.FC = () => {
             <tbody>
               {visible.length === 0 ? (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: "center", padding: 40, color: "#9ca3af" }}>
+                  <td colSpan={6} style={{ textAlign: "center", padding: 40, color: "#9ca3af" }}>
                     {stores.length === 0
                       ? <span>Aucun magasin trouvé.{" "}<button onClick={fetchData} style={{ color: "#F97316", background: "none", border: "none", cursor: "pointer", textDecoration: "underline", fontSize: 13 }}>Réessayer</button></span>
                       : "Aucun résultat pour cette recherche."}
@@ -197,6 +230,9 @@ const CommissionPage: React.FC = () => {
                     <span style={{ fontWeight: 600, color: "#111827" }}>{store.name}</span>
                   </td>
                   <td style={tdStyle}>{store.sellerName}</td>
+                  <td style={tdStyle}>
+                    <span style={{ fontSize: 13, color: "#6b7280" }}>{store.ownerEmail}</span>
+                  </td>
                   <td style={tdStyle}>
                     <span style={{
                       display: "inline-flex", alignItems: "center", gap: 6,

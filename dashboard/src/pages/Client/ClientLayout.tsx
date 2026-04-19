@@ -4,7 +4,9 @@ import { useAuth } from "../../contexts/AuthContext";
 import logo from "../../assets/logo.svg";
 
 const navItems = [
-  { label: "Mes Commandes", href: "/client/orders", icon: "🛒" },
+  { label: "Accueil",       href: "/client/home",    icon: "🏠" },
+  { label: "Commander",     href: "/client/home",    icon: "🛒" },
+  { label: "Mes Commandes", href: "/client/orders",  icon: "📋" },
   { label: "Profil",        href: "/client/profile", icon: "👤" },
   { label: "Support",       href: "/client/support", icon: "📧" },
 ];

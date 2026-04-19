@@ -48,11 +48,14 @@ import { GOOGLE_CLIENT_ID } from "./config/apiConfig";
 
 import SupportDashboard from "./pages/Support/SupportDashboard";
 import ClientLayout from "./pages/Client/ClientLayout";
+import ClientHomePage from "./pages/Client/ClientHomePage";
+import ClientStorePage from "./pages/Client/ClientStorePage";
 import ClientOrdersPage from "./pages/Client/ClientOrdersPage";
 import ClientProfilePage from "./pages/Client/ClientProfilePage";
 import ContactSupportPage from "./pages/Client/ContactSupportPage";
 import VendorContractPage from "./pages/Vendor/VendorContractPage";
 import CommissionPage from "./pages/Admin/CommissionPage";
+import SupportPage from "./pages/Support/SupportPage";
 
 // ── Inline DashboardLayout wrapper ────────────────────────────────────────────
 const DL = ({ children }: { children: React.ReactNode }) => (
@@ -62,7 +65,8 @@ const DL = ({ children }: { children: React.ReactNode }) => (
 // ── Route guards (type-based, no /unauthorized) ───────────────────────────────
 const AdminRoute  = ({ el }: { el: JSX.Element }) => <ProtectedRoute allowedRoles={["admin"]}>{el}</ProtectedRoute>;
 const SellerRoute = ({ el }: { el: JSX.Element }) => <ProtectedRoute allowedRoles={["seller"]}>{el}</ProtectedRoute>;
-const CommonRoute = ({ el }: { el: JSX.Element }) => <ProtectedRoute allowedRoles={["admin", "seller"]}>{el}</ProtectedRoute>;
+// CommonRoute kept for reference but replaced by FlexRoute for contract-guarded access
+// const CommonRoute = ({ el }: { el: JSX.Element }) => <ProtectedRoute allowedRoles={["admin", "seller"]}>{el}</ProtectedRoute>;
 
 // Seller + VendorContractGuard (requires signed contract)
 const GuardedSellerRoute = ({ el }: { el: JSX.Element }) => (
@@ -70,6 +74,12 @@ const GuardedSellerRoute = ({ el }: { el: JSX.Element }) => (
     <VendorContractGuard>{el}</VendorContractGuard>
   </ProtectedRoute>
 );
+
+// Admin or guarded seller — used for routes shared by both roles
+const FlexRoute = ({ el, type }: { el: JSX.Element; type: string | null }) =>
+  type === "admin"
+    ? <AdminRoute el={el} />
+    : <GuardedSellerRoute el={el} />;
 
 function App() {
   const { user, type } = useAuth();
@@ -111,13 +121,15 @@ function App() {
             /* ── BUYER portal ──────────────────────────────────────────────── */
             <>
               <Route path="/client" element={<ClientLayout />}>
-                <Route index         element={<Navigate to="orders" replace />} />
-                <Route path="orders"  element={<ClientOrdersPage />} />
-                <Route path="profile" element={<ClientProfilePage />} />
-                <Route path="support" element={<ContactSupportPage />} />
-                <Route path="*"       element={<Navigate to="orders" replace />} />
+                <Route index              element={<ClientHomePage />} />
+                <Route path="home"        element={<ClientHomePage />} />
+                <Route path="store/:id"   element={<ClientStorePage />} />
+                <Route path="orders"      element={<ClientOrdersPage />} />
+                <Route path="profile"     element={<ClientProfilePage />} />
+                <Route path="support"     element={<ContactSupportPage />} />
+                <Route path="*"           element={<ClientHomePage />} />
               </Route>
-              <Route path="*" element={<Navigate to="/client/orders" replace />} />
+              <Route path="*" element={<Navigate to="/client/home" replace />} />
             </>
           ) : type === "support" ? (
             /* ── SUPPORT ───────────────────────────────────────────────────── */
@@ -131,7 +143,10 @@ function App() {
               <DL>
                 <Routes>
                   {/* ── Dashboard home ─────────────────────────────────── */}
-                  <Route path="/"    element={<CommonRoute el={type === "admin" ? <HomePage /> : <VendorHomePage />} />} />
+                  <Route path="/"    element={type === "admin"
+                    ? <AdminRoute el={<HomePage />} />
+                    : <GuardedSellerRoute el={<VendorHomePage />} />
+                  } />
 
                   {/* ── Vendor contract (seller, NO guard — page itself) ─ */}
                   <Route path="/vendor/contract" element={<SellerRoute el={<VendorContractPage />} />} />
@@ -162,14 +177,15 @@ function App() {
                   <Route path="/support-dashboard"            element={<AdminRoute el={<SupportDashboard />} />} />
                   <Route path="/users/:id"                    element={<AdminRoute el={<UserDetails />} />} />
 
-                  {/* ── Common admin+seller ─────────────────────────────── */}
-                  <Route path="/users"        element={<CommonRoute el={<Users />} />} />
-                  <Route path="/orders"       element={<CommonRoute el={<OrdersPage />} />} />
-                  <Route path="/profile"      element={<CommonRoute el={<ProfilePage />} />} />
-                  <Route path="/settings"     element={<CommonRoute el={<SettingsPage />} />} />
-                  <Route path="/statistiques" element={<CommonRoute el={<SellerStatistics />} />} />
-                  <Route path="/privacy-legal" element={<CommonRoute el={<PrivacyLegal />} />} />
-                  <Route path="/security"     element={<CommonRoute el={<Security />} />} />
+                  {/* ── Common admin+seller (seller routes go through VendorContractGuard) ── */}
+                  <Route path="/users"         element={<FlexRoute el={<Users />}           type={type} />} />
+                  <Route path="/orders"        element={<FlexRoute el={<OrdersPage />}      type={type} />} />
+                  <Route path="/profile"       element={<FlexRoute el={<ProfilePage />}     type={type} />} />
+                  <Route path="/settings"      element={<FlexRoute el={<SettingsPage />}    type={type} />} />
+                  <Route path="/statistiques"  element={<FlexRoute el={<SellerStatistics />} type={type} />} />
+                  <Route path="/privacy-legal" element={<FlexRoute el={<PrivacyLegal />}    type={type} />} />
+                  <Route path="/security"      element={<FlexRoute el={<Security />}        type={type} />} />
+                  <Route path="/support"       element={<FlexRoute el={<SupportPage />}     type={type} />} />
 
                   <Route path="/login" element={<Navigate to="/" replace />} />
                   <Route path="*"      element={<NotFoundPage />} />

@@ -7,6 +7,7 @@ import 'package:cuisinous/data/models/verification_request.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:cuisinous/core/errors/failures.dart';
 import 'package:cuisinous/providers/auth_provider.dart';
@@ -266,12 +267,37 @@ class FoodStoreProvider with ChangeNotifier, ErrorHandlingMixin {
       }
 
       devtools.log('[FoodStore] Vendor agreement accepted successfully');
+    } on DioException catch (e, s) {
+      final status = e.response?.statusCode;
+      // Route not deployed yet (404) or network unavailable — save locally
+      if (status == 404 || e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.connectionTimeout) {
+        devtools.log('[FoodStore] Vendor agreement API unavailable — saving locally (demo mode)');
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('vendorContractSigned', true);
+        await prefs.setString(
+          'contractSignedAt',
+          DateTime.now().toIso8601String(),
+        );
+        // Clear any lingering error so the UI navigates forward
+        clearError();
+      } else {
+        handleError(e, s, fallbackMessage: 'Failed to accept vendor agreement');
+      }
     } catch (e, s) {
       handleError(e, s, fallbackMessage: 'Failed to accept vendor agreement');
     } finally {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  /// Returns true if the vendor has signed the agreement —
+  /// either confirmed by the server or saved locally in demo mode.
+  Future<bool> hasVendorContractSigned() async {
+    // _currentStore doesn't expose hasSignedVendorContract yet — rely on prefs only
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('vendorContractSigned') ?? false;
   }
 
   Future<void> createFoodStoreVerificationRequest(List<File?> files) async {

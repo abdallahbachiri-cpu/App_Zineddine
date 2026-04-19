@@ -71,7 +71,13 @@
       "Read(//c/laragon/bin/**)",
       "Bash(curl *)",
       "Bash(\"C:/xampp/php/php.exe\" -r \"echo PHP_VERSION;\")",
-      "Bash(composer require *)"
+      "Bash(composer require *)",
+      "Read(//tmp/**)",
+      "Bash(cp -rf \"C:/Users/Zineddine/Desktop/CUISININOUS_ADBO/backend/src/.\" src/)",
+      "Bash(cp -f \"C:/Users/Zineddine/Desktop/CUISININOUS_ADBO/backend/migrations/\"*.php migrations/)",
+      "Bash(cp -f \"C:/Users/Zineddine/Desktop/CUISININOUS_ADBO/backend/config/packages/security.yaml\" config/packages/security.yaml)",
+      "Bash(cp -f \"C:/Users/Zineddine/Desktop/CUISININOUS_ADBO/backend/config/services.yaml\" config/services.yaml)",
+      "Bash(ls *)"
     ]
   }
 }

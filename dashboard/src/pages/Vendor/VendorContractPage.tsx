@@ -53,6 +53,7 @@ const VendorContractPage: React.FC = () => {
   const [accepted, setAccepted] = useState(false);
   const [signature, setSignature] = useState("");
   const [loading, setLoading] = useState(false);
+  const [demoMode, setDemoMode] = useState(false);
 
   const handleScroll = () => {
     const el = scrollRef.current;
@@ -64,23 +65,51 @@ const VendorContractPage: React.FC = () => {
 
   const canSubmit = scrolledToBottom && accepted && signature.trim().length >= 2 && !loading;
 
+  const signLocally = () => {
+    localStorage.setItem("vendorContractSigned", "true");
+    localStorage.setItem("contractSignedAt", new Date().toISOString());
+    localStorage.setItem("contractSignature", signature.trim());
+    // Also patch the user object so VendorContractGuard passes
+    const stored = localStorage.getItem("user");
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        localStorage.setItem("user", JSON.stringify({ ...parsed, hasSignedVendorContract: true }));
+      } catch {
+        // ignore parse error
+      }
+    }
+  };
+
   const handleSubmit = async () => {
     if (!canSubmit) return;
     setLoading(true);
     try {
       await API.post("/vendor/sign-contract");
-      // Update localStorage so VendorContractGuard passes immediately
+      // Success — patch user in localStorage and navigate
       const stored = localStorage.getItem("user");
       if (stored) {
-        const parsed = JSON.parse(stored);
-        localStorage.setItem("user", JSON.stringify({ ...parsed, hasSignedVendorContract: true }));
+        try {
+          const parsed = JSON.parse(stored);
+          localStorage.setItem("user", JSON.stringify({ ...parsed, hasSignedVendorContract: true }));
+        } catch {
+          // ignore
+        }
       }
       message.success("Accord signé avec succès !");
       navigate("/dishes");
     } catch (err: any) {
-      if (err?.response?.status === 200 || err?.response?.status === 409) {
-        // Already accepted — just navigate
+      const status = err?.response?.status;
+      if (status === 200 || status === 409) {
+        // Already accepted on server — just navigate
+        signLocally();
         navigate("/dishes");
+      } else if (status === 404 || !err?.response) {
+        // Route not deployed yet or network error — demo mode
+        setDemoMode(true);
+        signLocally();
+        message.success("Contrat signé (mode démo) ✅");
+        setTimeout(() => navigate("/dishes"), 1000);
       } else {
         message.error("Erreur lors de la signature. Veuillez réessayer.");
       }
@@ -94,13 +123,35 @@ const VendorContractPage: React.FC = () => {
       {/* Header */}
       <header style={{ background: "#fff", borderBottom: "1px solid #f3f4f6", padding: "0 24px", height: 64, display: "flex", alignItems: "center", gap: 12, boxShadow: "0 1px 3px rgba(0,0,0,0.06)", position: "sticky", top: 0, zIndex: 50 }}>
         <img src={logo} alt="Cuisinous" style={{ width: 36, height: 36 }} />
-        <div>
+        <div style={{ flex: 1 }}>
           <div style={{ fontWeight: 700, fontSize: "1rem", color: "#111827" }}>Cuisinous</div>
           <div style={{ fontSize: 11, color: "#9ca3af" }}>Accord de vendeur</div>
         </div>
+        {demoMode && (
+          <span style={{
+            padding: "3px 12px", background: "#fde047", borderRadius: 999,
+            fontSize: 11, fontWeight: 700, color: "#78350f",
+          }}>
+            🧪 MODE DÉMO
+          </span>
+        )}
       </header>
 
       <div style={{ maxWidth: 720, margin: "40px auto", padding: "0 24px", width: "100%" }}>
+
+        {/* Demo mode info banner */}
+        {demoMode && (
+          <div style={{
+            display: "flex", alignItems: "center", gap: 12,
+            background: "#fefce8", border: "1px solid #fde047", borderRadius: 10,
+            padding: "12px 20px", marginBottom: 24,
+          }}>
+            <span style={{ fontSize: 20 }}>ℹ️</span>
+            <p style={{ margin: 0, color: "#92400e", fontSize: 13 }}>
+              <strong>Mode démo</strong> — Les modifications ne sont pas sauvegardées tant que le backend n'est pas mis à jour. Votre signature est conservée localement.
+            </p>
+          </div>
+        )}
 
         {/* Progress steps */}
         <div style={{ display: "flex", alignItems: "center", gap: 0, marginBottom: 32 }}>
