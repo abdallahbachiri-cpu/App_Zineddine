@@ -173,6 +173,176 @@ class NotificationController extends BaseController
         ], Response::HTTP_CREATED);
     }
 
+    #[Route('/app-update', name: 'notification_app_update', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    #[OA\Post(
+        summary: "Send an app update push notification to active users",
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "title", type: "string"),
+                    new OA\Property(property: "body", type: "string"),
+                    new OA\Property(property: "title_fr", type: "string", nullable: true),
+                    new OA\Property(property: "body_fr", type: "string", nullable: true),
+                    new OA\Property(property: "updateUrl", type: "string", nullable: true),
+                    new OA\Property(property: "latestVersion", type: "string", nullable: true),
+                    new OA\Property(property: "forceUpdate", type: "boolean", nullable: true),
+                    new OA\Property(property: "targetType", type: "string", nullable: true),
+                ],
+                required: ["title", "body"]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Update notification sent"),
+            new OA\Response(response: 400, description: "Invalid input"),
+            new OA\Response(response: 403, description: "Forbidden")
+        ]
+    )]
+    public function sendAppUpdate(Request $request): JsonResponse
+    {
+        $data = $this->getRequestData($request);
+        if (!$data || !isset($data['title'], $data['body'])) {
+            return $this->json(['error' => 'Missing required fields (title, body)'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $title = $data['title'];
+        $body = $data['body'];
+        $titleFr = $data['title_fr'] ?? null;
+        $bodyFr = $data['body_fr'] ?? null;
+        $updateUrl = $data['updateUrl'] ?? '';
+        $latestVersion = $data['latestVersion'] ?? '';
+        $forceUpdate = isset($data['forceUpdate']) ? (bool) $data['forceUpdate'] : false;
+        $targetType = $data['targetType'] ?? null;
+
+        $users = $this->userRepository->findUsersWithFcmToken($targetType);
+        $sent = 0;
+
+        foreach ($users as $user) {
+            $token = $user->getFcmToken();
+            if (!$token) {
+                continue;
+            }
+
+            $payload = [
+                'update_available' => 'true',
+                'force_update' => $forceUpdate ? 'true' : 'false',
+                'latest_version' => $latestVersion,
+                'update_url' => $updateUrl,
+                'message_type' => 'app_update',
+            ];
+
+            if ($titleFr !== null) {
+                $payload['title_fr'] = $titleFr;
+            }
+            if ($bodyFr !== null) {
+                $payload['body_fr'] = $bodyFr;
+            }
+
+            try {
+                $this->fcmNotificationService->sendNotification($token, $title, $body, $payload);
+                $sent++;
+            } catch (\Exception $e) {
+                // Keep going if a push to a single device fails.
+            }
+        }
+
+        return $this->json([
+            'message' => "Update notification sent to $sent users",
+            'sent' => $sent,
+        ], Response::HTTP_CREATED);
+    }
+
+    #[Route('/broadcast', name: 'notification_broadcast', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    #[OA\Post(
+        summary: "Send a broadcast push notification to active users",
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "title", type: "string"),
+                    new OA\Property(property: "body", type: "string"),
+                    new OA\Property(property: "title_fr", type: "string", nullable: true),
+                    new OA\Property(property: "body_fr", type: "string", nullable: true),
+                    new OA\Property(property: "actionUrl", type: "string", nullable: true),
+                    new OA\Property(property: "targetType", type: "string", nullable: true),
+                ],
+                required: ["title", "body"]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Broadcast notification sent"),
+            new OA\Response(response: 400, description: "Invalid input"),
+            new OA\Response(response: 403, description: "Forbidden")
+        ]
+    )]
+    public function broadcast(Request $request): JsonResponse
+    {
+        $data = $this->getRequestData($request);
+        if (!$data || !isset($data['title'], $data['body'])) {
+            return $this->json(['error' => 'Missing required fields (title, body)'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $sender = $this->getUser();
+        if (!$sender instanceof User) {
+            return $this->json(['error' => 'Unable to identify sender'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $title = $data['title'];
+        $body = $data['body'];
+        $titleFr = $data['title_fr'] ?? null;
+        $bodyFr = $data['body_fr'] ?? null;
+        $actionUrl = $data['actionUrl'] ?? '';
+        $targetType = $data['targetType'] ?? null;
+
+        $users = $this->userRepository->findUsersWithFcmToken($targetType);
+        $sent = 0;
+
+        foreach ($users as $user) {
+            $receiver = $user;
+            $notification = new Notification();
+            $notification->setTitle($title);
+            $notification->setBody($body);
+            $notification->setTitleFr($titleFr);
+            $notification->setBodyFr($bodyFr);
+            $notification->setSender($sender);
+            $notification->setReceiver($receiver);
+            $notification->setIsShow(false);
+            $this->entityManager->persist($notification);
+
+            $token = $receiver->getFcmToken();
+            if (!$token) {
+                continue;
+            }
+
+            $payload = [
+                'broadcast_message' => 'true',
+                'message_type' => 'broadcast',
+                'action_url' => $actionUrl,
+            ];
+
+            if ($titleFr !== null) {
+                $payload['title_fr'] = $titleFr;
+            }
+            if ($bodyFr !== null) {
+                $payload['body_fr'] = $bodyFr;
+            }
+
+            try {
+                $this->fcmNotificationService->sendNotification($token, $title, $body, $payload);
+                $sent++;
+            } catch (\Exception $e) {
+                // Keep going if a push to a single device fails.
+            }
+        }
+
+        $this->entityManager->flush();
+
+        return $this->json([
+            'message' => "Broadcast notification sent to $sent users",
+            'sent' => $sent,
+        ], Response::HTTP_CREATED);
+    }
+
     #[Route('/receiver/{id}', name: 'notification_get_by_receiver', methods: ['GET'])]
     #[OA\Get(
         summary: "Get notifications by receiver ID",

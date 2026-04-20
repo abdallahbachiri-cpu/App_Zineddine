@@ -18,6 +18,7 @@ import {
     ChartBarIcon,
     PlusIcon,
     CurrencyDollarIcon,
+    BellIcon,
     ChatBubbleLeftEllipsisIcon,
 } from "@heroicons/react/24/outline";
 
@@ -61,15 +62,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
         { name: t("sidebar.admin.category"), href: "/admin-category", icon: Squares2X2Icon },
         { name: "Commissions", href: "/admin-commissions", icon: CurrencyDollarIcon },
         { name: t("sidebar.admin.wallet"), href: "/admin-wallet", icon: WalletIcon },
-        { name: t("sidebar.admin.statistics"), href: "/admin-statistics", icon: ChartBarIcon },
-        { name: t("sidebar.admin.createAdmin"), href: "/admin-create-admin", icon: UserCircleIcon },
-        { name: "📧 Contacter le support", href: "/support", icon: ChatBubbleLeftEllipsisIcon },
-    ];
-
-    const sellerNavigation = [
-        { name: t("sidebar.seller.dashboard"), href: "/", icon: HomeIcon },
-        { name: t("sidebar.seller.ratings"), href: "/seller-ratings", icon: StarIcon },
-        { name: t("sidebar.seller.stores"), href: "/create-store", icon: HomeIcon },
+        { name: "Broadcasts", href: "/admin-broadcast", icon: BellIcon },
         { name: t("sidebar.seller.profile"), href: "/profile", icon: UserCircleIcon },
         { name: t("sidebar.seller.orders"), href: "/orders", icon: ShoppingBagIcon },
         { name: t("sidebar.seller.recipes"), href: "/dishes", icon: Squares2X2Icon },

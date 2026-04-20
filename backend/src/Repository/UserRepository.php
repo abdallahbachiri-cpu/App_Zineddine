@@ -181,6 +181,23 @@ class UserRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function findUsersWithFcmToken(?string $userType = null): array
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->andWhere('u.fcmToken IS NOT NULL')
+            ->andWhere('u.fcmToken != :emptyToken')
+            ->andWhere('u.isActive = true')
+            ->andWhere('u.deletedAt IS NULL')
+            ->setParameter('emptyToken', '');
+
+        if ($userType) {
+            $qb->andWhere('u.type = :type')
+               ->setParameter('type', $userType);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function countUsersByType(string $type): int
     {
         return $this->createQueryBuilder('u')

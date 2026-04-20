@@ -42,6 +42,7 @@ import AdminStoresPage from "./pages/Admin/AdminStoresPage";
 import AdminStoreDetailPage from "./pages/Admin/AdminStoreDetailPage";
 import FoodStoreDishes from "./pages/Admin/FoodStoreDishes";
 import CreateAdmin from "./pages/Admin/CreateAdmin";
+import AdminBroadcastNotification from "./pages/Admin/AdminBroadcastNotification";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GOOGLE_CLIENT_ID } from "./config/apiConfig";

@@ -35,6 +35,7 @@ export const API_ENDPOINTS = {
       WALLET_TRANSACTIONS: (storeId: string) => `/admin/food-stores/${storeId}/wallet/transactions`,
       WALLET_BLOCK: (storeId: string) => `/admin/food-stores/${storeId}/wallet/block`,
       WALLET_UNBLOCK: (storeId: string) => `/admin/food-stores/${storeId}/wallet/unblock`,
+      BROADCAST_NOTIFICATIONS: '/notifications/broadcast',
     }
 };
 
