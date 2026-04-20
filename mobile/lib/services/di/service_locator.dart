@@ -29,6 +29,7 @@ import '../../providers/user_provider.dart';
 import '../network/api_client_service.dart';
 import '../firebase_messaging_service.dart';
 import '../app_service.dart';
+import '../app_update_service.dart';
 
 final getIt = GetIt.instance;
 
@@ -140,6 +141,9 @@ void _registerCoreDependencies() {
     () => AppService(
       firebaseMessagingService: getIt<FirebaseMessagingService>(),
     ),
+  );
+  getIt.registerLazySingleton<AppUpdateService>(
+    () => AppUpdateService(),
   );
   getIt.registerLazySingleton<NotificationProvider>(
     () => NotificationProvider(

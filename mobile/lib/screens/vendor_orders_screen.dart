@@ -1,6 +1,5 @@
 import 'package:cuisinous/core/constants/app_consts.dart';
 import 'package:cuisinous/core/errors/failures.dart';
-import 'package:cuisinous/core/mixins/auto_refresh_mixin.dart';
 import 'package:cuisinous/core/routes/app_router.dart';
 import 'package:cuisinous/data/models/buyer_order.dart';
 import 'package:cuisinous/providers/chat_provider.dart';
@@ -12,7 +11,6 @@ import 'package:cuisinous/widgets/call_now_button.dart';
 import 'package:cuisinous/widgets/order_filter_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'dart:async';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,15 +21,9 @@ class VendorOrdersScreen extends StatefulWidget {
   State<VendorOrdersScreen> createState() => _VendorOrdersScreenState();
 }
 
-class _VendorOrdersScreenState extends State<VendorOrdersScreen>
-    with WidgetsBindingObserver, AutoRefreshMixin {
+class _VendorOrdersScreenState extends State<VendorOrdersScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-
-  @override
-  void onAutoRefresh() {
-    context.read<VendorOrderProvider>().fetchOrders(silent: true);
-  }
 
   @override
   void initState() {

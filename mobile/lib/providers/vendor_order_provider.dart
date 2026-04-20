@@ -44,6 +44,7 @@ class VendorOrderProvider with ChangeNotifier, ErrorHandlingMixin {
   bool get isProcessing => _isProcessing;
   bool get isProxyCallLoading => _isProxyCallLoading;
   bool get canLoadMore => _currentPage < _totalPages;
+  int get currentPage => _currentPage;
   int get totalItems => _totalItems;
 
   String get search => _search;
@@ -289,6 +290,10 @@ class VendorOrderProvider with ChangeNotifier, ErrorHandlingMixin {
     if (!canLoadMore || _viewState == ViewState.loading) return;
     _currentPage++;
     await fetchOrders(page: _currentPage);
+  }
+
+  Future<void> refreshOrders({bool silent = true}) async {
+    await fetchOrders(page: _currentPage, silent: silent);
   }
 
   void setFilters({

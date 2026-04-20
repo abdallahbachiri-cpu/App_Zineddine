@@ -1,6 +1,5 @@
 import 'package:cuisinous/core/constants/app_consts.dart';
 import 'dart:developer' as devtools;
-import 'package:cuisinous/core/mixins/auto_refresh_mixin.dart';
 import 'package:cuisinous/data/models/buyer_order.dart';
 import 'package:cuisinous/generated/l10n.dart';
 import 'package:cuisinous/providers/buyer_order_provider.dart';
@@ -16,7 +15,6 @@ import 'package:flutter_stripe/flutter_stripe.dart'
         PaymentSheetApplePay,
         SetupPaymentSheetParameters;
 import 'package:intl/intl.dart';
-import 'dart:async';
 import 'package:provider/provider.dart';
 
 class BuyerOrderScreen extends StatefulWidget {
@@ -26,16 +24,9 @@ class BuyerOrderScreen extends StatefulWidget {
   State<BuyerOrderScreen> createState() => _BuyerOrderScreenState();
 }
 
-class _BuyerOrderScreenState extends State<BuyerOrderScreen>
-    with WidgetsBindingObserver, AutoRefreshMixin {
+class _BuyerOrderScreenState extends State<BuyerOrderScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-
-  @override
-  void onAutoRefresh() {
-    devtools.log('BuyerOrderScreen: Auto refreshing orders. Mounted: $mounted');
-    context.read<BuyerOrderProvider>().fetchOrders(silent: true);
-  }
 
   @override
   void initState() {

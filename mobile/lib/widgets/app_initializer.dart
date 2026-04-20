@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/settings_provider.dart';
 import '../services/app_service.dart';
+import '../services/app_update_service.dart';
 import '../services/di/service_locator.dart';
 import '../screens/splash_screen.dart';
 import 'auth_wrapper.dart';
@@ -44,6 +45,10 @@ class _AppInitializerState extends State<AppInitializer> {
         auth.initialize(),
         Future.delayed(const Duration(seconds: 3)), // Enforce minimum splash screen display time
       ]);
+
+      final updateService = getIt<AppUpdateService>();
+      await updateService.initialize();
+      await updateService.checkForUpdate(context);
 
       // 3. Request permissions only ONCE tracking via SharedPreferences
       final prefs = await SharedPreferences.getInstance();

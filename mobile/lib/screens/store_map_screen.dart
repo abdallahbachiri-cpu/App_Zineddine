@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer' as devtools;
 
 import 'package:cuisinous/core/constants/app_consts.dart';
-import 'package:cuisinous/core/mixins/auto_refresh_mixin.dart';
 import 'package:cuisinous/core/utils/map_marker_utils.dart';
 import 'package:cuisinous/data/models/food_store.dart';
 import 'package:cuisinous/generated/l10n.dart';
@@ -29,8 +28,7 @@ class StoreMapScreen extends StatefulWidget {
   State<StoreMapScreen> createState() => _StoreMapScreenState();
 }
 
-class _StoreMapScreenState extends State<StoreMapScreen>
-    with WidgetsBindingObserver, AutoRefreshMixin {
+class _StoreMapScreenState extends State<StoreMapScreen> {
   final Completer<GoogleMapController> _mapController = Completer();
   final TextEditingController _addressController = TextEditingController();
   bool _isSearchLoading = false;
@@ -41,12 +39,6 @@ class _StoreMapScreenState extends State<StoreMapScreen>
   LatLng _currentLocation = AppConsts.defaultMapLocation;
   Set<Marker> _markers = {};
   FoodStoreProvider? _foodStoreProvider;
-
-  @override
-  void onAutoRefresh() {
-    if (_foodStoreProvider == null) return;
-    _refreshDataInBackground();
-  }
 
   Future<void> _refreshDataInBackground() async {
     try {
