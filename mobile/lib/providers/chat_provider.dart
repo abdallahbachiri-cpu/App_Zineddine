@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:cuisinous/services/di/service_locator.dart';
-import 'package:cuisinous/services/api_client_service.dart';
+import 'package:cuisinous/services/network/api_client_service.dart';
+import 'package:get_it/get_it.dart';
 
 class ChatMessageModel {
   final String id;
@@ -40,7 +41,7 @@ class ChatMessageModel {
 }
 
 class ChatProvider extends ChangeNotifier {
-  final ApiClientService _api = sl<ApiClientService>();
+  final ApiClient _api = getIt<ApiClient>();
 
   List<ChatMessageModel> _messages = [];
   bool _isLoading = false;
@@ -73,7 +74,7 @@ class ChatProvider extends ChangeNotifier {
 
   Future<ChatMessageModel?> sendMessage(String orderId, String text) async {
     try {
-      final response = await _api.post('/chat/$orderId', data: {'message': text});
+      final response = await _api.post('/chat/$orderId', body: {'message': text});
       final msg = ChatMessageModel.fromJson(response.data as Map<String, dynamic>);
       _messages = [..._messages, msg];
       notifyListeners();
