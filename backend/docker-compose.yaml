@@ -6,7 +6,11 @@ services:
     environment:
       - APP_ENV=dev
       - APP_SECRET=${APP_SECRET}
-      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?serverVersion=15&charset=utf8
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:${DB_PORT}/${DB_NAME}?serverVersion=15&charset=utf8
     volumes:
       - .:/var/www/cuiz
       # Mount local override files if they exist
