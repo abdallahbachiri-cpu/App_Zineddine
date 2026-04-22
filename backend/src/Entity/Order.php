@@ -95,10 +95,6 @@ class Order extends BaseEntity
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $stripeSessionId = null;
 
-    // // PayPal
-    // private ?string $paypalOrderId;
-    // private ?string $paypalTransactionId;
-
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?DateTimeImmutable $refundedAt = null;
 
