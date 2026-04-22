@@ -1,5 +1,4 @@
 import 'package:cuisinous/core/constants/app_consts.dart';
-import 'package:cuisinous/core/errors/failures.dart';
 import 'package:cuisinous/core/routes/app_router.dart';
 import 'package:cuisinous/data/models/buyer_order.dart';
 import 'package:cuisinous/providers/chat_provider.dart';
@@ -7,12 +6,10 @@ import 'package:cuisinous/data/models/full_buyer_order.dart';
 import 'package:cuisinous/generated/l10n.dart';
 import 'package:cuisinous/providers/vendor_order_provider.dart';
 import 'package:cuisinous/core/enums/order_enums.dart';
-import 'package:cuisinous/widgets/call_now_button.dart';
 import 'package:cuisinous/widgets/order_filter_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class VendorOrdersScreen extends StatefulWidget {
   const VendorOrdersScreen({super.key});
@@ -305,32 +302,35 @@ class _VendorOrderListItem extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              // ── Chat button ─────────────────────────────────────────────
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    context.read<ChatProvider>().clear();
-                    Navigator.pushNamed(
-                      context,
-                      AppRouter.chat,
-                      arguments: {
-                        'orderId': order.id,
-                        'orderNumber': order.orderNumber,
-                        'otherPartyName': order.buyerFullName,
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.chat_bubble_outline, size: 16),
-                  label: const Text('Répondre au client'),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    side: const BorderSide(color: Color(0xFFF97316)),
-                    foregroundColor: const Color(0xFFF97316),
-                    textStyle: const TextStyle(fontSize: 13),
+              // ── Chat button (only when order is confirmed or later) ──────
+              if (parseOrderStatus(order.status) == OrderStatus.confirmed ||
+                  parseOrderStatus(order.status) == OrderStatus.ready ||
+                  parseOrderStatus(order.status) == OrderStatus.completed)
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      context.read<ChatProvider>().clear();
+                      Navigator.pushNamed(
+                        context,
+                        AppRouter.chat,
+                        arguments: {
+                          'orderId': order.id,
+                          'orderNumber': order.orderNumber,
+                          'otherPartyName': order.buyerFullName,
+                        },
+                      );
+                    },
+                    icon: const Icon(Icons.chat_bubble_outline, size: 16),
+                    label: const Text('Répondre au client'),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      side: const BorderSide(color: Color(0xFFF97316)),
+                      foregroundColor: const Color(0xFFF97316),
+                      textStyle: const TextStyle(fontSize: 13),
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
@@ -385,64 +385,6 @@ class _VendorOrderDetailScreenState extends State<VendorOrderDetailScreen> {
         ),
       ),
     );
-  }
-
-  bool _shouldShowProxyCall(FullOrder order) {
-    final paymentStatus = parseOrderPaymentStatus(order.paymentStatus);
-    final orderStatus = parseOrderStatus(order.status);
-
-    final isPaid = paymentStatus == OrderPaymentStatus.paid;
-    final isDelivered = orderStatus == OrderStatus.completed;
-
-    return isPaid && !isDelivered;
-  }
-
-  Future<void> _handleProxyCall(
-    VendorOrderProvider provider,
-    FullOrder order,
-  ) async {
-    try {
-      final proxyNumbers = await provider.fetchProxyNumbers(order.id);
-      if (!mounted) return;
-      await _launchDialer(proxyNumbers.buyerProxyNumber);
-    } on ApiFailure catch (failure) {
-      if (!mounted) return;
-      _showErrorSnackBar(context, _mapProxyCallError(failure));
-    } catch (e) {
-      if (!mounted) return;
-      _showErrorSnackBar(context, S.of(context).proxyCallUnableToInitiate);
-    }
-  }
-
-  Future<void> _launchDialer(String phoneNumber) async {
-    final uri = Uri(scheme: 'tel', path: phoneNumber);
-
-    if (!await canLaunchUrl(uri)) {
-      if (!mounted) return;
-      _showErrorSnackBar(context, S.of(context).proxyCallNotSupported);
-      return;
-    }
-
-    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!mounted) return;
-    if (!launched) {
-      _showErrorSnackBar(context, S.of(context).proxyCallUnableToInitiate);
-    }
-  }
-
-  String _mapProxyCallError(ApiFailure failure) {
-    switch (failure.statusCode) {
-      case 400:
-        return S.of(context).proxyCallNotAvailable;
-      case 404:
-        return S.of(context).proxyCallOrderNotFound;
-      case 500:
-        return S.of(context).proxyCallServerError;
-      default:
-        return failure.message.isNotEmpty
-            ? failure.message
-            : S.of(context).proxyCallUnableToInitiate;
-    }
   }
 
   @override
@@ -965,15 +907,6 @@ class _VendorOrderDetailScreenState extends State<VendorOrderDetailScreen> {
 
     return Column(
       children: [
-        CallNowButton(
-          visible: _shouldShowProxyCall(order),
-          isLoading: provider.isProxyCallLoading,
-          onPressed: () => _handleProxyCall(provider, order),
-          backgroundColor: AppConsts.secondaryAccentColor,
-          foregroundColor: Colors.white,
-          margin: const EdgeInsets.only(bottom: 12),
-          label: S.of(context).callBuyer,
-        ),
         if (showConfirmOrder)
           ElevatedButton(
             onPressed:

@@ -5,14 +5,12 @@ import 'package:cuisinous/data/models/full_buyer_order.dart';
 import 'package:cuisinous/providers/chat_provider.dart';
 import 'package:cuisinous/core/enums/order_enums.dart';
 import 'package:cuisinous/generated/l10n.dart';
-import 'package:cuisinous/providers/auth_provider.dart';
 import 'package:cuisinous/providers/buyer_order_provider.dart';
 import 'package:cuisinous/providers/buyer_rating_provider.dart';
 import 'package:cuisinous/providers/payment_creds_provider.dart';
 import 'package:cuisinous/widgets/custom_input_field.dart';
 
 import 'package:cuisinous/widgets/tip_modal.dart';
-import 'package:cuisinous/widgets/call_now_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart'
     show
@@ -25,7 +23,6 @@ import 'package:flutter_stripe/flutter_stripe.dart'
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:cuisinous/screens/menu_item_reviews_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cuisinous/core/utils/map_marker_utils.dart';
 
@@ -200,104 +197,6 @@ class _BuyerOrderDetailScreenState extends State<BuyerOrderDetailScreen> {
 
   Future<void> _refetchOrder() async {
     await context.read<BuyerOrderProvider>().getOrderById(widget.orderId);
-  }
-
-  bool _shouldShowProxyCall(FullOrder order) {
-    final paymentStatus = parseOrderPaymentStatus(order.paymentStatus);
-    final orderStatus = parseOrderStatus(order.status);
-
-    final isPaid = paymentStatus == OrderPaymentStatus.paid;
-    final isDelivered = orderStatus == OrderStatus.completed;
-
-    return isPaid && !isDelivered;
-  }
-
-  bool _hasValidPhoneNumber() {
-    final user = context.read<AuthProvider>().user;
-    if (user?.phoneNumber == null || user!.phoneNumber!.isEmpty) {
-      return false;
-    }
-
-    final phoneNumber = user.phoneNumber!;
-
-    if (!phoneNumber.startsWith('+')) {
-      return false;
-    }
-
-    final digitsOnly = phoneNumber
-        .substring(1)
-        .replaceAll(RegExp(r'[^\d]'), '');
-
-    if (digitsOnly.length < 10 || digitsOnly.length > 13) {
-      return false;
-    }
-
-    final phoneDigits =
-        digitsOnly.length > 9
-            ? digitsOnly.substring(digitsOnly.length - 9)
-            : digitsOnly;
-    return phoneDigits.length == 9 &&
-        RegExp(r'^[0-9]{9}$').hasMatch(phoneDigits);
-  }
-
-  void _navigateToProfile() {
-    Navigator.of(context).pushNamed(AppRouter.profile);
-  }
-
-  Future<void> _handleProxyCall(
-    BuyerOrderProvider provider,
-    FullOrder order,
-  ) async {
-    try {
-      final proxyNumbers = await provider.fetchProxyNumbers(order.id);
-      if (!mounted) return;
-      await _launchDialer(proxyNumbers.sellerProxyNumber);
-    } on ApiFailure catch (failure) {
-      _scaffoldMessengerShowSnackBar(
-        _mapProxyCallError(failure),
-        color: Colors.red,
-      );
-    } catch (e) {
-      _scaffoldMessengerShowSnackBar(
-        S.of(context).proxyCallUnableToInitiate,
-        color: Colors.red,
-      );
-    }
-  }
-
-  Future<void> _launchDialer(String phoneNumber) async {
-    final uri = Uri(scheme: 'tel', path: phoneNumber);
-
-    if (!await canLaunchUrl(uri)) {
-      _scaffoldMessengerShowSnackBar(
-        S.of(context).proxyCallNotSupported,
-        color: Colors.red,
-      );
-      return;
-    }
-
-    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!launched) {
-      _scaffoldMessengerShowSnackBar(
-        S.of(context).proxyCallUnableToInitiate,
-        color: Colors.red,
-      );
-    }
-  }
-
-  String _mapProxyCallError(ApiFailure failure) {
-    switch (failure.statusCode) {
-      case 400:
-        return S.of(context).proxyCallNotAvailable;
-      case 404:
-        return S.of(context).proxyCallOrderNotFound;
-      case 500:
-        return S.of(context).proxyCallServerError;
-      default:
-        return failure.message.isNotEmpty
-            ? failure.message
-            : S.of(context).proxyCallUnableToInitiate;
-    }
   }
 
   Widget _buildMiniMap(Store store) {
@@ -643,27 +542,8 @@ class _BuyerOrderDetailScreenState extends State<BuyerOrderDetailScreen> {
     final showTipButton =
         orderStatus == OrderStatus.completed && order.tipAmount == null;
 
-    final hasValidPhone = _hasValidPhoneNumber();
-    final showProxyCall = _shouldShowProxyCall(order);
-
     return Column(
       children: [
-        CallNowButton(
-          visible: showProxyCall,
-          isLoading: provider.isProxyCallLoading,
-          onPressed:
-              hasValidPhone
-                  ? () => _handleProxyCall(provider, order)
-                  : () => _navigateToProfile(),
-          backgroundColor: AppConsts.secondaryAccentColor,
-          foregroundColor: Colors.white,
-          margin: const EdgeInsets.only(bottom: 12),
-
-          label:
-              hasValidPhone
-                  ? S.of(context).callSeller
-                  : S.of(context).verifyYourNumberInProfile,
-        ),
         if (showPaymentButton)
           ElevatedButton(
             onPressed:
@@ -707,32 +587,35 @@ class _BuyerOrderDetailScreenState extends State<BuyerOrderDetailScreen> {
               style: const TextStyle(color: Colors.red),
             ),
           ),
-        // ── Chat button ──────────────────────────────────────────────────
-        Container(
-          width: double.infinity,
-          margin: const EdgeInsets.only(top: 8, bottom: 4),
-          child: OutlinedButton.icon(
-            onPressed: () {
-              context.read<ChatProvider>().clear();
-              Navigator.pushNamed(
-                context,
-                AppRouter.chat,
-                arguments: {
-                  'orderId': order.id,
-                  'orderNumber': order.orderNumber,
-                  'otherPartyName': order.store.name,
-                },
-              );
-            },
-            icon: const Icon(Icons.chat_bubble_outline),
-            label: const Text('Contacter le vendeur'),
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              side: const BorderSide(color: Color(0xFFF97316)),
-              foregroundColor: const Color(0xFFF97316),
+        // ── Chat button (only when order is confirmed or later) ──────────
+        if (orderStatus == OrderStatus.confirmed ||
+            orderStatus == OrderStatus.ready ||
+            orderStatus == OrderStatus.completed)
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.only(top: 8, bottom: 4),
+            child: OutlinedButton.icon(
+              onPressed: () {
+                context.read<ChatProvider>().clear();
+                Navigator.pushNamed(
+                  context,
+                  AppRouter.chat,
+                  arguments: {
+                    'orderId': order.id,
+                    'orderNumber': order.orderNumber,
+                    'otherPartyName': order.store.name,
+                  },
+                );
+              },
+              icon: const Icon(Icons.chat_bubble_outline),
+              label: const Text('Contacter le vendeur'),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                side: const BorderSide(color: Color(0xFFF97316)),
+                foregroundColor: const Color(0xFFF97316),
+              ),
             ),
           ),
-        ),
       ],
     );
   }

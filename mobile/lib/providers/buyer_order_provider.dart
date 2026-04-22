@@ -2,7 +2,6 @@ import 'package:cuisinous/core/errors/failures.dart';
 import 'package:cuisinous/data/models/buyer_order.dart';
 import 'package:cuisinous/data/models/full_buyer_order.dart';
 import 'package:cuisinous/core/enums/order_enums.dart';
-import 'package:cuisinous/data/models/proxy_call_numbers.dart';
 import 'package:cuisinous/services/network/api_client_service.dart';
 import 'package:cuisinous/core/constants/api_endpoints.dart';
 
@@ -23,7 +22,6 @@ class BuyerOrderProvider with ChangeNotifier, ErrorHandlingMixin {
   FullOrder? _selectedOrder;
   ViewState _viewState = ViewState.initial;
   bool _isProcessing = false;
-  bool _isProxyCallLoading = false;
 
   int _currentPage = 1;
   int _totalPages = 1;
@@ -46,7 +44,6 @@ class BuyerOrderProvider with ChangeNotifier, ErrorHandlingMixin {
   ViewState get viewState => _viewState;
   bool get isLoading => _viewState == ViewState.loading;
   bool get isProcessing => _isProcessing;
-  bool get isProxyCallLoading => _isProxyCallLoading;
   bool get canLoadMore => _currentPage < _totalPages;
   int get currentPage => _currentPage;
 
@@ -200,37 +197,6 @@ class BuyerOrderProvider with ChangeNotifier, ErrorHandlingMixin {
       handleError(e, stackTrace, fallbackMessage: 'Failed to load order');
     }
     notifyListeners();
-  }
-
-  Future<ProxyCallNumbers> fetchProxyNumbers(String orderId) async {
-    _isProxyCallLoading = true;
-    notifyListeners();
-
-    try {
-      final response = await _apiClient.get(
-        ApiEndpoints.buyerOrderProxyNumbers(orderId),
-      );
-
-      final data = response.data;
-      if (response.statusCode == 200 && data is Map<String, dynamic>) {
-        return ProxyCallNumbers.fromMap(data);
-      }
-
-      devtools.log(
-        '[Orders] Unexpected proxy call response: ${response.statusCode} ${response.data.runtimeType}',
-      );
-      throw ApiFailure('Invalid response from server', response.statusCode);
-    } catch (e, stackTrace) {
-      handleError(
-        e,
-        stackTrace,
-        fallbackMessage: 'Unable to fetch proxy numbers',
-      );
-      rethrow;
-    } finally {
-      _isProxyCallLoading = false;
-      notifyListeners();
-    }
   }
 
   Future<Map<String, dynamic>?> payOrder(String orderId) async {

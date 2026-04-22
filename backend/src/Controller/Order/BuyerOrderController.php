@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Controller\Order;
-
+namespace App\Controller\Order;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\CartDTO;
 use App\DTO\DishDetailDTO;
@@ -66,7 +66,6 @@ use App\Service\Order\OrderService;
 use App\Service\Stripe\StripeService;
 use App\Service\Statistics\StatisticsService;
 use App\Service\Tax\TaxCalculatorService;
-use App\Service\Twilio\TwilioProxyService;
 use App\Service\User\UserMapper;
 use App\Service\User\UserService;
 use Brick\Math\BigDecimal;
@@ -87,8 +86,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\CardException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+
 #[Route('/api/buyer', name: 'buyer_')]
 class BuyerOrderController extends BaseController
 {
@@ -124,7 +123,6 @@ class BuyerOrderController extends BaseController
         private CategoryService $categoryService,
         private DishRatingService $dishRatingService,
         private DishRatingMapper $dishRatingMapper,
-        private TwilioProxyService $twilioProxyService,
         private TaxCalculatorService $taxCalculator,
         private StatisticsService $statisticsService,
         private readonly LoggerInterface $logger,
@@ -213,8 +211,8 @@ class BuyerOrderController extends BaseController
                 if ($filters['deliveryStatus'] === null) {
                     throw new InvalidArgumentException('Invalid delivery status');
                 }
-            }
-
+            }
+
             $data = $this->orderService->getFilteredOrders(
                 $page,
                 $limit,
@@ -333,8 +331,8 @@ class BuyerOrderController extends BaseController
             $user = $this->getUser();
             if (!$user instanceof User) {
                 throw new NotFoundHttpException('User not found');
-            }
-
+            }
+
             // ownership validation before the lock transaction
             $order = $this->orderService->getOrderById($id);
 
@@ -465,13 +463,12 @@ class BuyerOrderController extends BaseController
 
             if (!$order instanceof Order || $order->getBuyer() !== $user) {
                 throw new NotFoundHttpException('Order not found');
-            }
-
-            $this->orderService->requestRefund($order, USER::TYPE_BUYER);
-            $this->twilioProxyService->closeProxySession($order);
+            }
 
-            $this->entityManager->flush();
-
+            $this->orderService->requestRefund($order, USER::TYPE_BUYER);
+
+            $this->entityManager->flush();
+
             // Notify seller that buyer cancelled the order
             // $this->orderService->createAndSendNotification(
             //     $order->getBuyer(),
@@ -494,8 +491,8 @@ class BuyerOrderController extends BaseController
         } catch (\Exception $e) {
             return $this->json(['error' => 'An error occurred while cancelling the order.'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
+    }
+
     #[Route('/orders/{id}/note', name: 'upsert_order_note', methods: ['POST'])]
     #[OA\Post(
         summary: "Add or update order note",
@@ -607,8 +604,8 @@ class BuyerOrderController extends BaseController
         } catch (ValidationException $e) {
             return new JsonResponse(['errors' => $e->getErrors()], JsonResponse::HTTP_BAD_REQUEST);
         }
-    }
-
+    }
+
     #[OA\Post(
         summary: "Add a tip to a completed order",
         description: "Allows the buyer to add a tip to a completed order. 

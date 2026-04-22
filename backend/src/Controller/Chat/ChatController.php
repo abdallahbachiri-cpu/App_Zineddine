@@ -4,6 +4,7 @@ namespace App\Controller\Chat;
 
 use App\Controller\Abstract\BaseController;
 use App\Entity\ChatMessage;
+use App\Entity\Enum\OrderStatus;
 use App\Entity\Order;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -118,6 +119,10 @@ class ChatController extends BaseController
             return $this->json(['error' => 'Order not found'], Response::HTTP_NOT_FOUND);
         }
 
+        if (!$this->canAccessChat($order, $currentUser)) {
+            return $this->json(['error' => 'Forbidden'], Response::HTTP_FORBIDDEN);
+        }
+
         // Mark messages where receiver = currentUser as read
         $this->em->createQuery(
             'UPDATE App\Entity\ChatMessage m SET m.isRead = true
@@ -134,11 +139,16 @@ class ChatController extends BaseController
 
     private function canAccessChat(Order $order, User $user): bool
     {
+        // Chat is only available once the seller has confirmed the order
+        $allowedStatuses = [OrderStatus::Confirmed, OrderStatus::Ready, OrderStatus::Completed];
+        if (!in_array($order->getStatus(), $allowedStatuses, true)) {
+            return false;
+        }
+
         $buyerId  = $order->getBuyer()->getId();
         $sellerId = $order->getStore()->getSeller()->getId();
         $userId   = $user->getId();
 
-        // Admins and support agents can access any conversation
         $roles = $user->getRoles();
         return $userId === $buyerId
             || $userId === $sellerId

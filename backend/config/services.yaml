@@ -15,9 +15,6 @@ parameters:
     google_client_id: "%env(GOOGLE_CLIENT_ID)%"
     google_client_secret: "%env(GOOGLE_CLIENT_SECRET)%"
     apple_bundle_id: "%env(APPLE_BUNDLE_ID)%"
-    twilio_account_sid: "%env(TWILIO_ACCOUNT_SID)%"
-    twilio_auth_token: "%env(TWILIO_AUTH_TOKEN)%"
-    twilio_proxy_service_sid: "%env(TWILIO_PROXY_SERVICE_SID)%"
 
 services:
     # default configuration for services in *this* file
@@ -83,12 +80,6 @@ services:
     App\Service\User\Auth\AuthService:
         arguments:
             $tokenTtl: "%lexik_jwt_authentication.token_ttl%"
-
-    App\Service\Twilio\TwilioProxyService:
-        arguments:
-            $twilioAccountSid: "%twilio_account_sid%"
-            $twilioAuthToken: "%twilio_auth_token%"
-            $twilioProxyServiceSid: "%twilio_proxy_service_sid%"
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

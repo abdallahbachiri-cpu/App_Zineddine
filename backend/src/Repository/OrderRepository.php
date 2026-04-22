@@ -19,29 +19,6 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
-    /**
-     * Find orders with active Twilio sessions where the buyer or seller phone number
-     * matches one of the given phone numbers, excluding the current order.
-     *
-     * @param string $currentOrderId
-     * @param string[] $phoneNumbers
-     * @return Order[]
-     */
-    public function findOrdersWithConflictingTwilioSessions(string $currentOrderId, array $phoneNumbers): array
-    {
-        return $this->createQueryBuilder('o')
-            ->join('o.buyer', 'b')
-            ->join('o.foodStore', 'fs')
-            ->join('fs.seller', 's')
-            ->where('o.id != :currentOrderId')
-            ->andWhere('o.twilioSessionSid IS NOT NULL')
-            ->andWhere('b.phoneNumber IN (:phones) OR s.phoneNumber IN (:phones)')
-            ->setParameter('currentOrderId', $currentOrderId)
-            ->setParameter('phones', $phoneNumbers)
-            ->getQuery()
-            ->getResult();
-    }
-
     public function findFilteredOrders(?string $buyerId, ?string $foodStoreId, ?string $search, string $sortBy, string $sortOrder, int $limit, int $offset, ?string $minPrice, ?string $maxPrice, array $filters = []): array
     {
         $qb = $this->createQueryBuilder('o');

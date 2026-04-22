@@ -2,8 +2,6 @@ import 'dart:developer' as devtools;
 
 import 'package:cuisinous/data/models/buyer_order.dart';
 import 'package:cuisinous/data/models/full_buyer_order.dart';
-import 'package:cuisinous/data/models/proxy_call_numbers.dart';
-
 import 'package:flutter/foundation.dart';
 import 'package:cuisinous/core/enums/order_enums.dart';
 import 'package:cuisinous/core/errors/failures.dart';
@@ -21,7 +19,6 @@ class VendorOrderProvider with ChangeNotifier, ErrorHandlingMixin {
   FullOrder? _selectedOrder;
   ViewState _viewState = ViewState.initial;
   bool _isProcessing = false;
-  bool _isProxyCallLoading = false;
 
   int _currentPage = 1;
   int _totalPages = 1;
@@ -42,7 +39,6 @@ class VendorOrderProvider with ChangeNotifier, ErrorHandlingMixin {
   ViewState get viewState => _viewState;
   bool get isLoading => _viewState == ViewState.loading;
   bool get isProcessing => _isProcessing;
-  bool get isProxyCallLoading => _isProxyCallLoading;
   bool get canLoadMore => _currentPage < _totalPages;
   int get currentPage => _currentPage;
   int get totalItems => _totalItems;
@@ -141,37 +137,6 @@ class VendorOrderProvider with ChangeNotifier, ErrorHandlingMixin {
     notifyListeners();
   }
 
-  Future<ProxyCallNumbers> fetchProxyNumbers(String orderId) async {
-    _isProxyCallLoading = true;
-    notifyListeners();
-
-    try {
-      final response = await _apiClient.get(
-        ApiEndpoints.sellerOrderProxyNumbers(orderId),
-      );
-
-      final data = response.data;
-      if (response.statusCode == 200 && data is Map<String, dynamic>) {
-        return ProxyCallNumbers.fromMap(data);
-      }
-
-      devtools.log(
-        '[Orders] Unexpected proxy response: ${response.statusCode} ${response.data.runtimeType}',
-      );
-      throw ApiFailure('Invalid response from server', response.statusCode);
-    } catch (e, stackTrace) {
-      handleError(
-        e,
-        stackTrace,
-        fallbackMessage: 'Unable to fetch proxy numbers',
-      );
-      rethrow;
-    } finally {
-      _isProxyCallLoading = false;
-      notifyListeners();
-    }
-  }
-
   Future<void> confirmOrder(String orderId) async {
     try {
       _isProcessing = true;
@@ -203,11 +168,11 @@ class VendorOrderProvider with ChangeNotifier, ErrorHandlingMixin {
       );
 
       if (response.statusCode == 200) {
-        _updateOrderStatus(orderId, status: OrderStatus.confirmed);
-        devtools.log('[Orders] Confirmed order $orderId');
+        _updateOrderStatus(orderId, status: OrderStatus.ready);
+        devtools.log('[Orders] Marked order $orderId as ready');
       }
     } catch (e, stackTrace) {
-      handleError(e, stackTrace, fallbackMessage: 'Failed to confirm order');
+      handleError(e, stackTrace, fallbackMessage: 'Failed to mark order as ready');
     } finally {
       _isProcessing = false;
       notifyListeners();

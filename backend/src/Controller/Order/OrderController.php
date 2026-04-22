@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Controller\Order;
-
+namespace App\Controller\Order;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\AllergenDTO;
 use App\DTO\CategoryDTO;
@@ -71,7 +71,6 @@ use App\Service\FoodStore\FoodStoreVerificationService;
 use App\Service\Ingredient\IngredientMapper;
 use App\Service\Statistics\StatisticsService;
 use App\Service\Stripe\StripeService;
-use App\Service\Twilio\TwilioProxyService;
 use App\Service\Wallet\WalletMapper;
 use App\Service\Wallet\WalletTransaction\WalletTransactionMapper;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -94,8 +93,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 #[Route('/api/seller', name: 'seller_')]
 class OrderController extends BaseController
 {
@@ -132,7 +131,6 @@ class OrderController extends BaseController
         private WalletTransactionMapper $walletTransactionMapper,
         private StripeService $stripeService,
         private IngredientMapper $ingredientMapper,
-        private TwilioProxyService $twilioProxyService,
         private AllergenMapper $allergenMapper,
         private StatisticsService $statisticsService,
         private readonly LoggerInterface $logger,
@@ -296,8 +294,8 @@ class OrderController extends BaseController
                 if ($filters['deliveryStatus'] === null) {
                     throw new InvalidArgumentException('Invalid delivery status');
                 }
-            }
-
+            }
+
             $data = $this->orderService->getFilteredOrders(
                 $page,
                 $limit,
@@ -509,8 +507,8 @@ class OrderController extends BaseController
         } catch (ConflictHttpException $e) {
             return $this->json(['error' => $e->getMessage()], JsonResponse::HTTP_CONFLICT);
         }
-    }
-
+    }
+
     // Mark order as ready for pickup
     #[Route('/food-store/orders/{id}/ready', name: 'food_store_order_ready', methods: ['POST'])]
     #[OA\Post(
@@ -587,8 +585,8 @@ class OrderController extends BaseController
         } catch (\Exception $e) {
             return $this->json(['error' => $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
+    }
+
     // Cancel order
     #[Route('/food-store/orders/{id}/cancel', name: 'food_store_order_cancel', methods: ['POST'])]
     #[OA\Post(
@@ -677,7 +675,6 @@ class OrderController extends BaseController
 
             //process refund
             $this->orderService->requestRefund($order, USER::TYPE_SELLER);
-            $this->twilioProxyService->closeProxySession($order);
 
             $this->entityManager->flush();
 
@@ -837,8 +834,6 @@ class OrderController extends BaseController
             //get paid amount and add it to seller food store wallet
             $order->setDeliveryStatus(OrderDeliveryStatus::Delivered);
             $order->setStatus(OrderStatus::Completed);
-
-            $this->twilioProxyService->closeProxySession($order);
 
             $this->walletService->creditOrderIncome($order);
 

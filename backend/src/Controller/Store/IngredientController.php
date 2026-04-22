@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Controller\Store;
-
+namespace App\Controller\Store;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\AllergenDTO;
 use App\DTO\CategoryDTO;
@@ -71,7 +71,6 @@ use App\Service\FoodStore\FoodStoreVerificationService;
 use App\Service\Ingredient\IngredientMapper;
 use App\Service\Statistics\StatisticsService;
 use App\Service\Stripe\StripeService;
-use App\Service\Twilio\TwilioProxyService;
 use App\Service\Wallet\WalletMapper;
 use App\Service\Wallet\WalletTransaction\WalletTransactionMapper;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -94,8 +93,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 #[Route('/api/seller', name: 'seller_')]
 class IngredientController extends BaseController
 {
@@ -132,7 +131,6 @@ class IngredientController extends BaseController
         private WalletTransactionMapper $walletTransactionMapper,
         private StripeService $stripeService,
         private IngredientMapper $ingredientMapper,
-        private TwilioProxyService $twilioProxyService,
         private AllergenMapper $allergenMapper,
         private StatisticsService $statisticsService,
         private readonly LoggerInterface $logger,
@@ -855,8 +853,8 @@ class IngredientController extends BaseController
             ->setPrice($data['price'] ?? 0);
 
         $this->entityManager->persist($dishIngredient);
-        $this->entityManager->flush();
-
+        $this->entityManager->flush();
+
         $dishIngredientDTO = $this->dishIngredientMapper->mapToDTO($dishIngredient);
         return $this->json($dishIngredientDTO, JsonResponse::HTTP_CREATED);
     }

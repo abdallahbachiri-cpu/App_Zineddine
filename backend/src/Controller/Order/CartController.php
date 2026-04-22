@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Controller\Order;
-
+namespace App\Controller\Order;
+
 use App\Controller\Abstract\BaseController;
 use App\DTO\CartDTO;
 use App\DTO\DishDetailDTO;
@@ -66,7 +66,6 @@ use App\Service\Order\OrderService;
 use App\Service\Stripe\StripeService;
 use App\Service\Statistics\StatisticsService;
 use App\Service\Tax\TaxCalculatorService;
-use App\Service\Twilio\TwilioProxyService;
 use App\Service\User\UserMapper;
 use App\Service\User\UserService;
 use Brick\Math\BigDecimal;
@@ -87,8 +86,8 @@ use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\CardException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+
 #[Route('/api/buyer', name: 'buyer_')]
 class CartController extends BaseController
 {
@@ -124,7 +123,6 @@ class CartController extends BaseController
         private CategoryService $categoryService,
         private DishRatingService $dishRatingService,
         private DishRatingMapper $dishRatingMapper,
-        private TwilioProxyService $twilioProxyService,
         private TaxCalculatorService $taxCalculator,
         private StatisticsService $statisticsService,
         private readonly LoggerInterface $logger,
@@ -248,8 +246,8 @@ class CartController extends BaseController
             throw new InvalidArgumentException("Quantity must be a valid integer between 1 and $maximumQuantity.");
         }
 
-        $quantity = (int) $quantity;
-
+        $quantity = (int) $quantity;
+
         $dishId = $data['dishId'];
         if (!ValidationHelper::isCorrectUuid($dishId)) {
             throw new InvalidArgumentException('Invalid UUID format');
@@ -545,8 +543,8 @@ class CartController extends BaseController
 
         if (!$dishIngredient->isSupplement()) {
             return $this->json(['error' => 'Ingredient is not a supplement'], Response::HTTP_BAD_REQUEST);
-        }
-
+        }
+
         $cartDishIngredient = $this->cartDishIngredientRepository->findOneBy([
             'cartDish' => $cartDish,
             'dishIngredient' => $dishIngredient

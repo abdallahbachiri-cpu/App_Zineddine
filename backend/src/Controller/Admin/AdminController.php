@@ -62,7 +62,6 @@ use App\Service\Order\OrderMapper;
 use App\Service\Order\OrderService;
 use App\Service\Payout\PayoutConfigMapper;
 use App\Service\Statistics\StatisticsService;
-use App\Service\Twilio\TwilioProxyService;
 use App\Service\Wallet\WalletMapper;
 use App\Service\Wallet\WalletService;
 use App\Service\Wallet\WalletTransaction\WalletTransactionMapper;
@@ -107,7 +106,6 @@ class AdminController extends BaseController
         private PayoutConfigurationRepository $payoutConfigurationRepository,
         private PayoutConfigMapper $payoutConfigMapper,
         private StatisticsService $statisticsService,
-        private TwilioProxyService $twilioProxyService
     ) {}
 
 
@@ -1401,7 +1399,6 @@ class AdminController extends BaseController
             }
 
             $this->orderService->requestRefund($order, USER::TYPE_ADMIN);
-            $this->twilioProxyService->closeProxySession($order);
 
             $this->entityManager->flush();
 

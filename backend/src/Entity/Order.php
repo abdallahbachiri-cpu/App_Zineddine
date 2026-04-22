@@ -109,16 +109,6 @@ class Order extends BaseEntity
     private OrderDeliveryMethod $deliveryMethod = OrderDeliveryMethod::Pickup;
 
 
-    #[ORM\Column(type: 'string', nullable: true)]
-    private ?string $twilioSessionSid = null;
-
-    #[ORM\Column(type: 'string', nullable: true)]
-    private ?string $twilioBuyerParticipantSid = null;
-
-    #[ORM\Column(type: 'string', nullable: true)]
-    private ?string $twilioSellerParticipantSid = null;
-
-
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private ?string $tipAmount = null;
 
@@ -437,39 +427,6 @@ class Order extends BaseEntity
     public function setTipAmount(?string $tipAmount): self
     {
         $this->tipAmount = $tipAmount;
-        return $this;
-    }
-
-    public function getTwilioSessionSid(): ?string
-    {
-        return $this->twilioSessionSid;
-    }
-
-    public function setTwilioSessionSid(?string $twilioSessionSid): self
-    {
-        $this->twilioSessionSid = $twilioSessionSid;
-        return $this;
-    }
-
-    public function getTwilioBuyerParticipantSid(): ?string
-    {
-        return $this->twilioBuyerParticipantSid;
-    }
-
-    public function setTwilioBuyerParticipantSid(?string $twilioBuyerParticipantSid): self
-    {
-        $this->twilioBuyerParticipantSid = $twilioBuyerParticipantSid;
-        return $this;
-    }
-
-    public function getTwilioSellerParticipantSid(): ?string
-    {
-        return $this->twilioSellerParticipantSid;
-    }
-
-    public function setTwilioSellerParticipantSid(?string $twilioSellerParticipantSid): self
-    {
-        $this->twilioSellerParticipantSid = $twilioSellerParticipantSid;
         return $this;
     }
 

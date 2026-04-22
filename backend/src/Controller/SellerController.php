@@ -71,7 +71,6 @@ use App\Service\FoodStore\FoodStoreVerificationService;
 use App\Service\Ingredient\IngredientMapper;
 use App\Service\Statistics\StatisticsService;
 use App\Service\Stripe\StripeService;
-use App\Service\Twilio\TwilioProxyService;
 use App\Service\Wallet\WalletMapper;
 use App\Service\Wallet\WalletTransaction\WalletTransactionMapper;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -135,7 +134,6 @@ class SellerController extends BaseController
         // private BankAccountMapper $bankAccountMapper,
         private StripeService $stripeService,
         private IngredientMapper $ingredientMapper,
-        private TwilioProxyService $twilioProxyService,
         private AllergenMapper $allergenMapper,
         private StatisticsService $statisticsService,
         private readonly LoggerInterface $logger,
@@ -3756,7 +3754,6 @@ class SellerController extends BaseController
 
             //process refund
             $this->orderService->requestRefund($order, USER::TYPE_SELLER);
-            $this->twilioProxyService->closeProxySession($order);
 
             $this->entityManager->flush();
 
@@ -3916,8 +3913,6 @@ class SellerController extends BaseController
             //get paid amount and add it to seller food store wallet
             $order->setDeliveryStatus(OrderDeliveryStatus::Delivered);
             $order->setStatus(OrderStatus::Completed);
-
-            $this->twilioProxyService->closeProxySession($order);
 
             $this->walletService->creditOrderIncome($order);
 
@@ -6368,124 +6363,6 @@ class SellerController extends BaseController
                 ['error' => 'An internal error occurred while processing your payout.', 'code' => 'server_error'],
                 JsonResponse::HTTP_INTERNAL_SERVER_ERROR
             );
-        }
-    }
-
-    /**
-     * Get proxy phone numbers for order communication
-     */
-    #[Route('/orders/{id}/proxy-numbers', name: 'order_proxy_numbers', methods: ['GET'])]
-    #[OA\Get(
-        summary: "Get proxy phone numbers for order",
-        description: "Retrieves the proxy phone numbers for buyer-seller communication for a specific order. The order must be paid before proxy numbers can be accessed.",
-        tags: ["Seller - Orders"],
-        parameters: [
-            new OA\Parameter(
-                name: "id",
-                in: "path",
-                required: true,
-                description: "The ID of the order",
-                schema: new OA\Schema(type: "string", format: "uuid")
-            )
-        ],
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: "Successful response with proxy numbers",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "buyer_proxy_number", type: "string", description: "Proxy phone number for the buyer", example: "+1234567890"),
-                        new OA\Property(property: "seller_proxy_number", type: "string", description: "Proxy phone number for the seller", example: "+1234567891"),
-                        new OA\Property(property: "session_sid", type: "string", description: "Twilio proxy session SID")
-                    ]
-                )
-            ),
-            new OA\Response(
-                response: 400,
-                description: "Bad request - Order not paid or invalid order ID",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "error", type: "string", example: "Order must be paid to access communication")
-                    ]
-                )
-            ),
-            new OA\Response(
-                response: 404,
-                description: "Order or user not found",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "error", type: "string", example: "Order not found")
-                    ]
-                )
-            ),
-            new OA\Response(response: 503, description: "Service unavailable - Twilio proxy pool exhausted, try again shortly"),
-            new OA\Response(
-                response: 500,
-                description: "Internal server error",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "error", type: "string", example: "Failed to get proxy numbers")
-                    ]
-                )
-            )
-        ]
-    )]
-    public function getOrderProxyNumbers(string $id): JsonResponse
-    {
-        // TODO: Move this function to a service as it's shared between buyer and seller controllers
-        try {
-            /** @var User $user */
-            $user = $this->getUser();
-            if (!$user instanceof User) {
-                throw new NotFoundHttpException('User not found');
-            }
-            $order = $this->orderService->getOrderById($id);
-
-            if ($order->getPaymentStatus() !== OrderPaymentStatus::Paid) {
-                throw new BadRequestHttpException('Order must be paid to access communication');
-            }
-
-            // TODO: Temporary fallback — Twilio Proxy is currently disabled due to service issues.
-            //       Return direct phone numbers instead of proxy numbers.
-            //       Revert to $this->twilioProxyService->getProxyNumbers($order) once resolved.
-            $buyer = $order->getBuyer();
-            $seller = $order->getStore()->getSeller();
-
-            if (!$buyer->getPhoneNumber() || !$seller->getPhoneNumber()) {
-                throw new BadRequestHttpException('Both buyer and seller must have phone numbers');
-            }
-
-            return $this->json(
-                [
-                    'buyer_proxy_number' => $buyer->getPhoneNumber(),
-                    'seller_proxy_number' => $seller->getPhoneNumber(),
-                    'session_sid' => "tmp-session-sid"
-                ]
-            );
-
-            // $proxyNumbers = $this->twilioProxyService->getProxyNumbers($order);
-
-            // return $this->json(
-            //     [
-            //         'buyer_proxy_number' => $proxyNumbers['buyer_proxy_number'],
-            //         'seller_proxy_number' => $proxyNumbers['seller_proxy_number'],
-            //         'session_sid' => $proxyNumbers['session_sid'],
-            //     ]
-            // );
-        } catch (NotFoundHttpException $e) {
-            return $this->json(['error' => $e->getMessage()], JsonResponse::HTTP_NOT_FOUND);
-        } catch (InvalidArgumentException | BadRequestHttpException $e) {
-            return $this->json(['error' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
-        } catch (\RuntimeException $e) {
-            // Pool exhausted or Twilio service unavailable
-            return $this->json(['error' => $e->getMessage()], JsonResponse::HTTP_SERVICE_UNAVAILABLE); // 503
-        } catch (\Exception $e) {
-            // return $this->json(['error' => $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-            return $this->json(['error' => 'Failed to get proxy numbers'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

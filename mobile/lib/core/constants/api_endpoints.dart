@@ -53,8 +53,6 @@ class ApiEndpoints {
       '/api/buyer/orders/$orderId/cancel';
   static String buyerOrderTip(String orderId) =>
       '/api/buyer/orders/$orderId/tip';
-  static String buyerOrderProxyNumbers(String orderId) =>
-      '/api/buyer/orders/$orderId/proxy-numbers';
 
   static const String buyerDishes = '/api/buyer/dishes';
   static const String buyerFoodStores = '/api/buyer/food-stores';
@@ -98,8 +96,6 @@ class ApiEndpoints {
       '/api/seller/food-store/orders/$orderId/cancel';
   static String sellerOrderConfirmDelivery(String orderId) =>
       '/api/seller/food-store/orders/$orderId/confirm-delivery';
-  static String sellerOrderProxyNumbers(String orderId) =>
-      '/api/seller/orders/$orderId/proxy-numbers';
 
   static const String sellerDishes = '/api/seller/food-store/dishes';
 
