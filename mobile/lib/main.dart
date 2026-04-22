@@ -1,5 +1,6 @@
 import 'package:cuisinous/core/config/environment_config.dart';
 import 'package:cuisinous/firebase_options.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cuisinous/core/routes/app_router.dart';
 import 'package:cuisinous/generated/l10n.dart';
 import 'package:cuisinous/providers/auth_provider.dart';
@@ -36,9 +37,19 @@ import 'package:provider/provider.dart';
 import 'providers/notification_provider.dart';
 import 'providers/chat_provider.dart';
 
+/// Must be a top-level function — called by Firebase when a message arrives
+/// while the app is in the background or terminated.
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // No provider access here; FCM stores the notification and delivers it
+  // via getInitialMessage / onMessageOpenedApp when the app resumes.
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await EnvironmentConfig.load();
 
   Stripe.publishableKey = EnvironmentConfig.stripePublishableKey;

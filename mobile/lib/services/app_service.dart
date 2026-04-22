@@ -93,10 +93,10 @@ class AppService {
   }
 
   void _refreshOrderLists({bool silent = true}) {
-    final authProvider = getIt<AuthProvider>();
-    final isSeller = authProvider.currentUserType == 'seller';
+    final userType = getIt<AuthProvider>().currentUserType;
+    if (userType == null) return; // not logged in yet
 
-    if (isSeller) {
+    if (userType == 'seller') {
       getIt<VendorOrderProvider>().refreshOrders(silent: silent);
     } else {
       getIt<BuyerOrderProvider>().refreshOrders(silent: silent);

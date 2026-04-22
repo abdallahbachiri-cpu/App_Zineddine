@@ -79,12 +79,10 @@ class _BuyerOrderScreenState extends State<BuyerOrderScreen> {
 
       await Stripe.instance.presentPaymentSheet();
 
-      
-      await provider.fetchOrders();
-
       if (mounted) {
         _showSnackBar("Payment completed successfully!");
       }
+      // FCM notification from the backend will trigger refreshOrders automatically
     } on StripeException catch (e) {
       _showSnackBar("Stripe error: ${e.error.localizedMessage}");
     } catch (e) {

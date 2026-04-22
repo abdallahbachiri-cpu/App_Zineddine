@@ -33,11 +33,15 @@ class _ChatScreenState extends State<ChatScreen> {
       await provider.loadMessages(widget.orderId);
       await provider.markAsRead(widget.orderId);
       _scrollToBottom();
+      // Open real-time SSE connection after messages are loaded
+      await provider.subscribeToMercure(widget.orderId);
     });
   }
 
   @override
   void dispose() {
+    // Close SSE connection when leaving the chat screen
+    context.read<ChatProvider>().unsubscribeFromMercure();
     _inputController.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -66,6 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
     await provider.sendMessage(widget.orderId, text);
 
     setState(() => _isSending = false);
+    // Scroll after send — SSE echo or local fallback will add the bubble
     _scrollToBottom();
   }
 

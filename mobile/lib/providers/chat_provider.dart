@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:cuisinous/core/config/environment_config.dart';
 import 'package:cuisinous/services/di/service_locator.dart';
 import 'package:cuisinous/services/network/api_client_service.dart';
-import 'package:get_it/get_it.dart';
+import 'dart:developer' as devtools;
 
 class ChatMessageModel {
   final String id;
@@ -48,6 +51,11 @@ class ChatProvider extends ChangeNotifier {
   String? _error;
   int _unreadCount = 0;
 
+  // SSE state
+  StreamSubscription<String>? _sseSubscription;
+  String _sseBuffer = '';
+  String? _subscribedOrderId;
+
   List<ChatMessageModel> get messages => _messages;
   bool get isLoading => _isLoading;
   String? get error => _error;
@@ -76,8 +84,12 @@ class ChatProvider extends ChangeNotifier {
     try {
       final response = await _api.post('/chat/$orderId', body: {'message': text});
       final msg = ChatMessageModel.fromJson(response.data as Map<String, dynamic>);
-      _messages = [..._messages, msg];
-      notifyListeners();
+      // Don't add locally — the SSE event will deliver it back so we avoid duplicates.
+      // If SSE is not connected, fall back to adding it immediately.
+      if (_sseSubscription == null) {
+        _messages = [..._messages, msg];
+        notifyListeners();
+      }
       return msg;
     } catch (e) {
       _error = e.toString();
@@ -102,10 +114,101 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ── Mercure SSE ────────────────────────────────────────────────────────────
+
+  /// Opens a persistent SSE connection to the Mercure hub for [orderId].
+  /// Automatically reuses an existing connection for the same order.
+  Future<void> subscribeToMercure(String orderId) async {
+    if (_subscribedOrderId == orderId && _sseSubscription != null) return;
+
+    unsubscribeFromMercure();
+    _subscribedOrderId = orderId;
+
+    final token = await getIt<SecureStorageService>().getAccessToken();
+    final mercureUrl = _buildMercureUrl(orderId);
+
+    devtools.log('[Chat SSE] Connecting to $mercureUrl');
+
+    try {
+      final dio = Dio();
+      final response = await dio.get<ResponseBody>(
+        mercureUrl,
+        options: Options(
+          responseType: ResponseType.stream,
+          headers: {
+            'Accept': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            if (token != null) 'Authorization': 'Bearer $token',
+          },
+          sendTimeout: null,
+          receiveTimeout: null,
+        ),
+      );
+
+      _sseSubscription = response.data!.stream
+          .cast<Uint8List>()
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .listen(
+            _processSseLine,
+            onError: (Object e) => devtools.log('[Chat SSE] Stream error: $e'),
+            onDone: () => devtools.log('[Chat SSE] Connection closed'),
+            cancelOnError: false,
+          );
+
+      devtools.log('[Chat SSE] Connected for order $orderId');
+    } catch (e) {
+      devtools.log('[Chat SSE] Failed to connect: $e');
+    }
+  }
+
+  /// Closes the SSE connection.
+  void unsubscribeFromMercure() {
+    _sseSubscription?.cancel();
+    _sseSubscription = null;
+    _subscribedOrderId = null;
+    _sseBuffer = '';
+    devtools.log('[Chat SSE] Disconnected');
+  }
+
+  void _processSseLine(String line) {
+    if (line.startsWith('data: ')) {
+      _sseBuffer += line.substring(6);
+    } else if (line.isEmpty && _sseBuffer.isNotEmpty) {
+      _handleSseData(_sseBuffer);
+      _sseBuffer = '';
+    }
+  }
+
+  void _handleSseData(String data) {
+    try {
+      final json = jsonDecode(data) as Map<String, dynamic>;
+      final msg = ChatMessageModel.fromJson(json);
+      addIncomingMessage(msg);
+    } catch (e) {
+      devtools.log('[Chat SSE] Failed to parse event: $e');
+    }
+  }
+
+  String _buildMercureUrl(String orderId) {
+    final base = EnvironmentConfig.apiBaseUrl.replaceAll(RegExp(r'/$'), '');
+    final topic = Uri.encodeComponent('/chat/$orderId');
+    return '$base/.well-known/mercure?topic=$topic';
+  }
+
+  // ── Lifecycle ──────────────────────────────────────────────────────────────
+
   void clear() {
+    unsubscribeFromMercure();
     _messages = [];
     _error = null;
     _unreadCount = 0;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    unsubscribeFromMercure();
+    super.dispose();
   }
 }
