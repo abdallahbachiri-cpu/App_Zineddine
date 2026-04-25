@@ -16,11 +16,11 @@ final class Version20260421000001 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE `order` DROP COLUMN twilio_session_sid, DROP COLUMN twilio_buyer_participant_sid, DROP COLUMN twilio_seller_participant_sid');
+        $this->addSql('ALTER TABLE "orders" DROP COLUMN twilio_session_sid, DROP COLUMN twilio_buyer_participant_sid, DROP COLUMN twilio_seller_participant_sid');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE `order` ADD twilio_session_sid VARCHAR(255) DEFAULT NULL, ADD twilio_buyer_participant_sid VARCHAR(255) DEFAULT NULL, ADD twilio_seller_participant_sid VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE "orders" ADD twilio_session_sid VARCHAR(255) DEFAULT NULL, ADD twilio_buyer_participant_sid VARCHAR(255) DEFAULT NULL, ADD twilio_seller_participant_sid VARCHAR(255) DEFAULT NULL');
     }
 }
