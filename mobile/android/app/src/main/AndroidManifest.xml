@@ -10,7 +10,8 @@
     <application
         android:label="cuisinous"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
 
         <meta-data
             android:name="com.google.android.gms.auth.api.signin.CLIENT_ID"

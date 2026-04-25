@@ -5,6 +5,7 @@ import 'package:cuisinous/generated/l10n.dart';
 import 'package:cuisinous/providers/auth_provider.dart';
 import 'package:cuisinous/widgets/custom_input_field.dart';
 import 'package:cuisinous/widgets/terms_flow_dialog.dart';
+import 'package:cuisinous/widgets/role_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -33,10 +34,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _showConfirmPassword = false;
 
   late AuthProvider _authProvider;
+  final _roleController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _roleController.text = widget.accountType ?? '';
     devtools.log('[RegisterScreen] Initialized');
   }
 
@@ -56,6 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _roleController.dispose();
     super.dispose();
   }
 
@@ -185,6 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       key: _formKey,
       child: Column(
         children: [
+
           Row(
             children: [
               Expanded(
@@ -289,6 +294,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
             },
           ),
           const SizedBox(height: 20),
+                    RoleSelector(
+            controller: _roleController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Veuillez choisir un rôle";
+              }
+              return null;
+            },
+            onRoleSelected: (role) {
+              setState(() {}); // Force rebuild for badge update if needed
+            },
+          ),
+          const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -318,7 +336,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             password: _passwordController.text,
                             firstName: _firstNameController.text,
                             lastName: _lastNameController.text,
-                            type: widget.accountType,
+                            type: _roleController.text,
                           );
 
                           if (authProvider.user != null) {

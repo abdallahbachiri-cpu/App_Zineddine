@@ -147,7 +147,7 @@ class ChatProvider extends ChangeNotifier {
 
       _sseSubscription = response.data!.stream
           .cast<Uint8List>()
-          .transform(utf8.decoder)
+          .transform(utf8.decoder as StreamTransformer<Uint8List, dynamic>)
           .transform(const LineSplitter())
           .listen(
             _processSseLine,
