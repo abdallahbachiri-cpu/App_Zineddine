@@ -28,16 +28,6 @@ class FirebaseMessagingService {
   }
 
   Future<void> initialize() async {
-    // Handling foreground messages
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (message.notification != null) {
-        devtools.log(
-          'Message also contained a notification: ${message.notification}',
-        );
-        // Here you can use a snackbar or a notification service to show the message
-      }
-    });
-
     // Handling background message click
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       devtools.log('Notification tapped (background): ${message.data}');

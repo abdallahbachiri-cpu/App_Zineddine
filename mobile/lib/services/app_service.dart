@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cuisinous/providers/auth_provider.dart';
 import 'package:cuisinous/providers/buyer_order_provider.dart';
+import 'package:cuisinous/providers/notification_provider.dart';
 import 'package:cuisinous/providers/vendor_order_provider.dart';
 import 'package:cuisinous/screens/buyer_order_details_screen.dart';
 import 'package:cuisinous/screens/vendor_orders_screen.dart';
@@ -50,6 +51,7 @@ class AppService {
     }
 
     _refreshOrderLists();
+    _refreshNotifications();
 
     final orderId = message.data['key'] ?? message.data['orderId'];
     if (orderId != null) {
@@ -81,6 +83,7 @@ class AppService {
 
       if (notification.data['key'] != null || notification.data['orderId'] != null) {
         _refreshOrderLists(silent: true);
+        _refreshNotifications();
       }
 
       if (notification.notification != null) {
@@ -100,6 +103,14 @@ class AppService {
       getIt<VendorOrderProvider>().refreshOrders(silent: silent);
     } else {
       getIt<BuyerOrderProvider>().refreshOrders(silent: silent);
+    }
+  }
+
+  void _refreshNotifications() {
+    try {
+      getIt<NotificationProvider>().fetchNotifications();
+    } catch (_) {
+      // Provider may not be ready yet if user is not logged in
     }
   }
 
