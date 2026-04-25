@@ -26,6 +26,9 @@ RUN apk add --no-cache \
 # Copy custom php.ini configuration
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 
+# Allow PHP-FPM to inherit Docker environment variables
+COPY docker/php/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
+
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 

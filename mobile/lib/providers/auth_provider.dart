@@ -237,7 +237,7 @@ class AuthProvider with ChangeNotifier, ErrorHandlingMixin {
           'firstName': firstName,
           'lastName': lastName,
           'email': email,
-          'local': settings?.currentLanguage,
+          'locale': settings?.currentLanguage ?? 'en',
           'rememberMe': true,
         },
         isPrivate: false,
@@ -324,7 +324,7 @@ class AuthProvider with ChangeNotifier, ErrorHandlingMixin {
         body: {
           'fcm_token': tokenDevice,
           'googleToken': googleToken,
-          'local': settings?.currentLanguage,
+          'locale': settings?.currentLanguage ?? 'en',
           'rememberMe': true,
         },
         isPrivate: false,
@@ -386,7 +386,7 @@ class AuthProvider with ChangeNotifier, ErrorHandlingMixin {
       final response = await _apiClient.post(
         ApiEndpoints.authLogin,
         body: {
-          'email': email,
+          'email': email.trim().toLowerCase(),
           'password': password,
           'rememberMe': true,
           "fcm_token": tokenDevice,
@@ -430,11 +430,11 @@ class AuthProvider with ChangeNotifier, ErrorHandlingMixin {
 
     try {
       final body = {
-        'email': email,
+        'email': email.trim().toLowerCase(),
         'password': password,
-        'firstName': firstName,
-        'lastName': lastName,
-        'locale': settings?.currentLanguage,
+        'firstName': firstName.trim(),
+        'lastName': lastName.trim(),
+        'locale': settings?.currentLanguage ?? 'en',
         'fcm_token': tokenDevice,
       };
       if (type != null) body['type'] = type;

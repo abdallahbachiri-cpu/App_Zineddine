@@ -458,6 +458,8 @@ class ApiClient {
         );
       case 401:
         return UnauthorizedException(message);
+      case 403:
+        return ApiException(403, message ?? 'Account is inactive or has been deleted.');
       case 404:
         return NotFoundException(message);
       case 409:

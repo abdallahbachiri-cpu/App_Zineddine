@@ -659,7 +659,7 @@ class AuthController extends BaseController
                 return $this->generateRegistrationSuccessResponse($existingByEmail, false, true);
             }
 
-            $appleData['locale'] = $data['local'] ?? 'en';
+            $appleData['locale'] = $data['locale'] ?? 'en';
             $fcmToken = $data['fcm_token'] ?? null;
             $user = $this->authService->createUserFromAppleData($appleData, $fcmToken);
 

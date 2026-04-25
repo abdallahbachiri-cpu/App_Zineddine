@@ -83,7 +83,8 @@ class FcmNotificationService
         ];
 
         // Bypass SSL verification for local Windows dev environment
-        if ($_ENV['APP_ENV'] === 'dev' || !isset($_SERVER['APP_ENV'])) {
+        $appEnv = $_ENV['APP_ENV'] ?? getenv('APP_ENV') ?: 'prod';
+        if ($appEnv === 'dev') {
             $options['verify_peer'] = false;
             $options['verify_host'] = false;
         }

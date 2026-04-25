@@ -364,21 +364,35 @@ class NotificationController extends BaseController
         $notifications = $this->notificationRepository->findBy(['receiver' => $receiver], ['createdAt' => 'DESC']);
         
         $data = array_map(function(Notification $n) {
-            $sender = $n->getSender();
+            try {
+                $sender = $n->getSender();
+                $senderId = $sender->getId();
+                $senderData = [
+                    'id' => $sender->getId(),
+                    'firstName' => $sender->getFirstName(),
+                    'lastName' => $sender->getLastName(),
+                    'email' => $sender->getEmail(),
+                ];
+            } catch (\Throwable $e) {
+                $senderId = null;
+                $senderData = null;
+            }
+
+            try {
+                $orderId = $n->getOrder()?->getId();
+            } catch (\Throwable $e) {
+                $orderId = null;
+            }
+
             return [
                 'id' => $n->getId(),
                 'title' => $n->getTitle(),
                 'body' => $n->getBody(),
                 'titleFr' => $n->getTitleFr(),
                 'bodyFr' => $n->getBodyFr(),
-                'senderId' => $sender->getId(),
-                'orderId' => $n->getOrder()?->getId(),
-                'sender' => [
-                    'id' => $sender->getId(),
-                    'firstName' => $sender->getFirstName(),
-                    'lastName' => $sender->getLastName(),
-                    'email' => $sender->getEmail(),
-                ],
+                'senderId' => $senderId,
+                'orderId' => $orderId,
+                'sender' => $senderData,
                 'isShow' => $n->isShow(),
                 'createdAt' => $n->getCreatedAt()?->format(\DateTimeInterface::ATOM),
             ];

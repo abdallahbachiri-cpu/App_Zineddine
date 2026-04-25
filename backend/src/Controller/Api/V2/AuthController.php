@@ -7,10 +7,12 @@ use App\DTO\UserDTO;
 use App\Entity\User;
 use App\Service\User\Auth\AuthService;
 use App\Service\GoogleOAuthService;
+use App\Service\AppleOAuthService;
 use App\Helper\ValidationHelper;
 use App\Repository\UserRepository;
 use App\Service\User\UserMapper;
 use App\Exception\ValidationException;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +30,8 @@ class AuthController extends BaseController
     public function __construct(
         private AuthService $authService,
         private GoogleOAuthService $googleOAuthService,
+        private AppleOAuthService $appleOAuthService,
+        private EntityManagerInterface $entityManager,
         private UserRepository $userRepository,
         private ValidatorInterface $validator,
         private ValidationHelper $validationHelper,
@@ -65,9 +69,26 @@ class AuthController extends BaseController
         }
 
         $fcmToken = $data['fcm_token'] ?? null;
-        $isGoogleAuth = isset($data['googleToken']);
+        $password = null;
+        $isGoogleAuth = false;
+        $isAppleAuth = false;
 
-        if ($isGoogleAuth) {
+        if (isset($data['appleToken']) && is_string($data['appleToken'])) {
+            try {
+                $appleUserData = $this->appleOAuthService->validateAppleToken($data['appleToken'], $data);
+            } catch (\Exception $e) {
+                return $this->json(['error' => 'Apple authentication failed.'], Response::HTTP_BAD_REQUEST);
+            }
+            $user = $this->userRepository->findOneBy(['appleId' => $appleUserData['appleId']]);
+            if (!$user) {
+                $user = $this->userRepository->findUserByEmail($appleUserData['email']);
+                if ($user instanceof User) {
+                    $user->setAppleId($appleUserData['appleId']);
+                    $this->entityManager->flush();
+                }
+            }
+            $isAppleAuth = true;
+        } elseif (isset($data['googleToken'])) {
             try {
                 $googleUserInfo = $this->googleOAuthService->fetchUserInfo($data['googleToken']);
                 $email = (string) $googleUserInfo->email;
@@ -75,6 +96,7 @@ class AuthController extends BaseController
             } catch (\Exception $e) {
                 return $this->json(['error' => 'Google authentication failed.'], Response::HTTP_BAD_REQUEST);
             }
+            $isGoogleAuth = true;
         } else {
             $email = $data['email'] ?? null;
             $password = $data['password'] ?? null;
@@ -86,8 +108,9 @@ class AuthController extends BaseController
             $user = $this->userRepository->findUserByEmail($email);
         }
 
+        $isOAuth = $isGoogleAuth || $isAppleAuth;
 
-        if (!$user instanceof User || (!$isGoogleAuth && !$this->authService->isPasswordValid($user, $password))) {
+        if (!$user instanceof User || (!$isOAuth && !$this->authService->isPasswordValid($user, $password))) {
             return $this->json(['error' => 'Invalid credentials.'], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -103,6 +126,7 @@ class AuthController extends BaseController
         $rememberMe = (bool)($data['rememberMe'] ?? false);
         $result = $this->authService->generateTokens($user, $rememberMe);
         $result['isGoogleAuth'] = $isGoogleAuth;
+        $result['isAppleAuth'] = $isAppleAuth;
         $result['user'] = $this->userMapper->mapToDTO($user);
 
         return $this->json($result);
@@ -142,8 +166,37 @@ class AuthController extends BaseController
         $fcmToken = $data['fcm_token'] ?? null;
 
         try {
-            if (isset($data['googleToken'])) {
+            $isGoogleAuth = false;
+            $isAppleAuth = false;
+
+            if (isset($data['appleToken']) && is_string($data['appleToken'])) {
+                try {
+                    $appleData = $this->appleOAuthService->validateAppleToken($data['appleToken'], $data);
+                } catch (\Exception $e) {
+                    return $this->json(['errors' => ['Apple authentication failed: ' . $e->getMessage()]], Response::HTTP_BAD_REQUEST);
+                }
+
+                $existingUser = $this->userRepository->findOneBy(['appleId' => $appleData['appleId']]);
+                if ($existingUser) {
+                    return $this->json(['errors' => ['An account associated with this Apple ID already exists.']], Response::HTTP_CONFLICT);
+                }
+
+                $existingByEmail = $this->userRepository->findUserByEmail($appleData['email']);
+                if ($existingByEmail) {
+                    $existingByEmail->setAppleId($appleData['appleId']);
+                    if ($fcmToken) {
+                        $existingByEmail->setFcmToken($fcmToken);
+                    }
+                    $this->entityManager->flush();
+                    $user = $existingByEmail;
+                } else {
+                    $appleData['locale'] = $data['locale'] ?? 'en';
+                    $user = $this->authService->createUserFromAppleData($appleData, $fcmToken);
+                }
+                $isAppleAuth = true;
+            } elseif (isset($data['googleToken'])) {
                 $googleData = $this->googleOAuthService->validateGoogleToken($data['googleToken']);
+                $googleData['locale'] = $data['locale'] ?? 'en';
 
                 $existingUser = $this->userRepository->findOneBy(['googleId' => $googleData['googleId']]);
                 if ($existingUser) {
@@ -153,7 +206,6 @@ class AuthController extends BaseController
                 $user = $this->authService->createUserFromGoogleData($googleData, $fcmToken);
                 $isGoogleAuth = true;
             } else {
-                // Inline validation for demo/simplicity, mirroring the refactored logic
                 $this->validateRegistrationData($data);
 
                 $existingUser = $this->userRepository->findUserByEmail($data['email']);
@@ -162,11 +214,11 @@ class AuthController extends BaseController
                 }
 
                 $user = $this->authService->createUserFromFormData($data, $fcmToken);
-                $isGoogleAuth = false;
             }
 
             $result = $this->authService->generateTokens($user);
             $result['isGoogleAuth'] = $isGoogleAuth;
+            $result['isAppleAuth'] = $isAppleAuth;
             $result['user'] = $this->userMapper->mapToDTO($user);
 
             return $this->json($result, JsonResponse::HTTP_CREATED);
@@ -192,7 +244,7 @@ class AuthController extends BaseController
 
         $errors = $this->validator->validate($data, $constraints);
         if (count($errors) > 0) {
-            throw new ValidationException(ValidationHelper::formatErrors($errors));
+            throw new ValidationException($errors);
         }
     }
 }
